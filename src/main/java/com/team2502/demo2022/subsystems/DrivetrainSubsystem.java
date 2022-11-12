@@ -4,10 +4,12 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-import com.team2502.demo2022.Constants;
+import com.team2502.demo2022.Constants.HardwareMap;
+import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
@@ -15,25 +17,37 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class DrivetrainSubsystem extends SubsystemBase{
     private SwerveDriveKinematics kinematics;
 
-    private WPI_TalonFX drivetrainBackLeft;
-    private WPI_TalonFX drivetrainFrontLeft;
-    private WPI_TalonFX drivetrainBackRight;
-    private WPI_TalonFX drivetrainFrontRight;
+    private WPI_TalonFX drivetrainPowerBackLeft;
+    private WPI_TalonFX drivetrainPowerFrontLeft;
+    private WPI_TalonFX drivetrainPowerBackRight;
+    private WPI_TalonFX drivetrainPowerFrontRight;
+
+    private WPI_TalonFX drivetrainTurnBackLeft;
+    private WPI_TalonFX drivetrainTurnFrontLeft;
+    private WPI_TalonFX drivetrainTurnBackRight;
+    private WPI_TalonFX drivetrainTurnFrontRight;
 
     private AHRS navX = new AHRS();
 
     private Solenoid solenoid;
 
     public DrivetrainSubsystem(){
-       // drivetrainBackLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_LEFT);
-       // drivetrainFrontLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_LEFT);
-       // drivetrainFrontRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_RIGHT);
-       // drivetrainBackRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_RIGHT);
+        drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR);
+        drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR);
+        drivetrainPowerFrontRight = new WPI_TalonFX(HardwareMap.FR_DRIVE_MOTOR);
+        drivetrainPowerBackRight = new WPI_TalonFX(HardwareMap.BR_DRIVE_MOTOR);
+        
+        drivetrainTurnBackLeft = new WPI_TalonFX(HardwareMap.BL_TURN_MOTOR);
+        drivetrainTurnFrontLeft = new WPI_TalonFX(HardwareMap.FL_TURN_MOTOR);
+        drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
+        drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
 
-       // Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-       // Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-       // Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-       // Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+        Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
+        Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
+        Translation2d m_backLeftLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
+        Translation2d m_backRightLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
+
+        //kinematics = new SwerveDriveKinematics
 
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
@@ -98,10 +112,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 //        return Math.IEEEremainder(-navX.getAngle(), 360D);
 //    }
 //
-//    public void resetHeading()
-//    {
-//        navX.reset();
-//    }
+    public void resetHeading() {
+        navX.reset();
+    }
 //
 //    public boolean getGear() {
 //        double highGear;
