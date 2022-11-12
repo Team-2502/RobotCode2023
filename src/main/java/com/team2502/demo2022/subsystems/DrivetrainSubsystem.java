@@ -1,5 +1,6 @@
 package com.team2502.demo2022.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -112,7 +113,17 @@ public class DrivetrainSubsystem extends SubsystemBase{
             );
 
 
+        // TODO: create logic to prevent a snap at 180deg
+        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
+        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
+        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
+        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
 
+
+        drivetrainPowerFrontLeft.set(ControlMode.Velocity, FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+        drivetrainPowerFrontRight.set(ControlMode.Velocity, FRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+        drivetrainPowerBackLeft.set(ControlMode.Velocity, BLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+        drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
 
     }
 
