@@ -5,6 +5,8 @@
 
 package com.team2502.demo2022;
 
+import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -15,7 +17,15 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    protected final DrivetrainSubsystem DRIVETRAIN = new DrivetrainSubsystem();
+
+    protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
+    protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
+
     public RobotContainer() {
+        // TODO Set default command
+        // DRIVETRAIN.setDefaultCommand();
+
         configureButtonBindings();
     }
 
