@@ -23,4 +23,26 @@ public final class Constants {
         // Driver Right
         public static final int RESET_GYRO = 2;
     }
+
+    public final class HardwareMap {
+        // Front Left Module
+        public static final int FL_DRIVE_MOTOR = 1;
+        public static final int FL_TURN_MOTOR = 2;
+        public static final int FL_TURN_ENCODER = 3;
+
+        // Front Right Module
+        public static final int FR_DRIVE_MOTOR = 4;
+        public static final int FR_TURN_MOTOR = 5;
+        public static final int FR_TURN_ENCODER = 6;
+
+        // Back Left Module
+        public static final int BL_DRIVE_MOTOR = 7;
+        public static final int BL_TURN_MOTOR = 8;
+        public static final int BL_TURN_ENCODER = 9;
+
+        // Back Right Module
+        public static final int BR_DRIVE_MOTOR = 10;
+        public static final int BR_TURN_MOTOR = 11;
+        public static final int BR_TURN_ENCODER = 12;
+    }
 }
