@@ -14,4 +14,13 @@ package com.team2502.demo2022;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    public final class OI {
+        public static final int JOYSTICK_DRIVE_RIGHT = 0;
+        public static final int JOYSTICK_DRIVE_LEFT = 1;
+
+        // Buttons
+
+        // Driver Right
+        public static final int RESET_GYRO = 2;
+    }
 }
