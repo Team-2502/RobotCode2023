@@ -82,15 +82,36 @@ public class DrivetrainSubsystem extends SubsystemBase{
     public void setSpeeds(ChassisSpeeds speed, Translation2d centerOfRotation) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speed, centerOfRotation);
         
-        SwerveModuleState FLState = SwerveModuleState.optimize(
+        SwerveModuleState FLState = 
+            SwerveModuleState.optimize(
                 moduleStates[0], 
                 Rotation2d.fromDegrees(
                         drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
                     )
-                );
-        SwerveModuleState FRState = moduleStates[1];
-        SwerveModuleState BLState = moduleStates[2];
-        SwerveModuleState BRState = moduleStates[3];
+            );
+        SwerveModuleState FRState = 
+            SwerveModuleState.optimize(
+                moduleStates[1], 
+                Rotation2d.fromDegrees(
+                        drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                    )
+            );
+        SwerveModuleState BLState = 
+            SwerveModuleState.optimize(
+                moduleStates[2], 
+                Rotation2d.fromDegrees(
+                        drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                    )
+            );
+        SwerveModuleState BRState = 
+            SwerveModuleState.optimize(
+                moduleStates[3], 
+                Rotation2d.fromDegrees(
+                        drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                    )
+            );
+
+
 
 
     }
