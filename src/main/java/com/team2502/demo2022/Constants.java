@@ -21,7 +21,7 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_GYRO = 2;
+        public static final int RESET_HEADING = 2;
     }
 
     public final class HardwareMap {
