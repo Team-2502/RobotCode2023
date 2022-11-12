@@ -51,6 +51,8 @@ public final class Constants {
             // distance between swerve modules (meters)
             public static final double SWERVE_LENGTH = 0.762;
             public static final double SWERVE_WIDTH = 0.752;
+
+            public static final int SWERVE_ENCODER_COUNTS_PER_REV = 4096; // TODO: research this
         }
     }
 }

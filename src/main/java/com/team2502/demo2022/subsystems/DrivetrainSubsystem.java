@@ -9,9 +9,14 @@ import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
 
 public class DrivetrainSubsystem extends SubsystemBase{
@@ -26,6 +31,11 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private WPI_TalonFX drivetrainTurnFrontLeft;
     private WPI_TalonFX drivetrainTurnBackRight;
     private WPI_TalonFX drivetrainTurnFrontRight;
+
+    private CANSparkMax drivetrainEncoderBackLeft;
+    private CANSparkMax drivetrainEncoderFrontLeft;
+    private CANSparkMax drivetrainEncoderBackRight;
+    private CANSparkMax drivetrainEncoderFrontRight;
 
     private AHRS navX = new AHRS();
 
@@ -42,12 +52,22 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
 
+        drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
         Translation2d m_backLeftLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_backRightLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
 
-        //kinematics = new SwerveDriveKinematics
+        kinematics = new SwerveDriveKinematics(
+                m_frontLeftLocation,
+                m_frontRightLocation,
+                m_backLeftLocation,
+                m_backRightLocation
+        );
 
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
@@ -57,6 +77,25 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //drive = new DifferentialDrive(drivetrainFrontLeft, drivetrainFrontRight);
 
         //drive.setSafetyEnabled(false); // suppress "watchdog not fed" errors
+    }
+
+    public void setSpeeds(ChassisSpeeds speed, Translation2d centerOfRotation) {
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speed, centerOfRotation);
+        
+        SwerveModuleState FLState = SwerveModuleState.optimize(
+                moduleStates[0], 
+                Rotation2d.fromDegrees(
+                        drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                    )
+                );
+        SwerveModuleState FRState = moduleStates[1];
+        SwerveModuleState BLState = moduleStates[2];
+        SwerveModuleState BRState = moduleStates[3];
+
+
+    }
+
+    public void stop() {
     }
 
 //    public DifferentialDrive getDrive(){
