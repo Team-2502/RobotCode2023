@@ -48,8 +48,9 @@ public final class Constants {
 
     public final class Subsystems {
         public final class Drivetrain {
-            // distance between swerve modules (square configuration)
-            public static final double SWERVE_SPACING = 0.762;
+            // distance between swerve modules (meters)
+            public static final double SWERVE_LENGTH = 0.762;
+            public static final double SWERVE_WIDTH = 0.752;
         }
     }
 }
