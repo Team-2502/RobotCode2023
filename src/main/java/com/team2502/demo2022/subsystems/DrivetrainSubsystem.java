@@ -7,13 +7,13 @@ import com.kauailabs.navx.frc.AHRS;
 import com.team2502.demo2022.Constants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
 
 public class DrivetrainSubsystem extends SubsystemBase{
-    private DifferentialDrive drive;
+    private SwerveDriveKinematics kinematics;
 
     private WPI_TalonFX drivetrainBackLeft;
     private WPI_TalonFX drivetrainFrontLeft;
@@ -25,15 +25,16 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private Solenoid solenoid;
 
     public DrivetrainSubsystem(){
-        //drivetrainBackLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_LEFT);
-        //drivetrainFrontLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_LEFT);
-        //drivetrainFrontRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_RIGHT);
-        //drivetrainBackRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_RIGHT);
+       // drivetrainBackLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_LEFT);
+       // drivetrainFrontLeft = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_LEFT);
+       // drivetrainFrontRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_FRONT_RIGHT);
+       // drivetrainBackRight = new WPI_TalonFX(Constants.RobotMap.Motors.DRIVE_BACK_RIGHT);
 
-        //solenoid = new Solenoid(PneumaticsModuleType.REVPH, Constants.RobotMap.Solenoids.DRIVETRAIN);
+       // Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
+       // Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
+       // Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
+       // Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-        //drivetrainBackLeft.follow(drivetrainFrontLeft);//backleft follows front left motor
-        //drivetrainBackRight.follow(drivetrainFrontRight);
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
         //drivetrainBackLeft.setInverted(TalonFXInvertType.CounterClockwise);

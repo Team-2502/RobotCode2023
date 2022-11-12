@@ -45,4 +45,11 @@ public final class Constants {
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
     }
+
+    public final class Subsystems {
+        public final class Drivetrain {
+            // distance between swerve modules (square configuration)
+            public static final double SWERVE_SPACING = 0.762;
+        }
+    }
 }
