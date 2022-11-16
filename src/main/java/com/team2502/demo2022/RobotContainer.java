@@ -5,6 +5,7 @@
 
 package com.team2502.demo2022;
 
+import com.team2502.demo2022.commands.DriveCommand;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,8 +25,7 @@ public class RobotContainer {
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
 
     public RobotContainer() {
-        // TODO Set default command
-        // DRIVETRAIN.setDefaultCommand();
+        DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
 
         configureButtonBindings();
     }

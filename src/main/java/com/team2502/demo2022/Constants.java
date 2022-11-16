@@ -49,8 +49,8 @@ public final class Constants {
     public final class Subsystems {
         public final class Drivetrain {
             // distance between swerve modules (meters)
-            public static final double SWERVE_LENGTH = 0.762;
-            public static final double SWERVE_WIDTH = 0.752;
+            public static final double SWERVE_LENGTH = 0.5207; // 20.5 inches
+            public static final double SWERVE_WIDTH = 0.6477; // 25.5 inches
 
             public static final int SWERVE_ENCODER_COUNTS_PER_REV = 4096;
             public static final int FALCON_ENCODER_TICKS_PER_REV = 2048;

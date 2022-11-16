@@ -33,10 +33,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private WPI_TalonFX drivetrainTurnBackRight;
     private WPI_TalonFX drivetrainTurnFrontRight;
 
-    private CANSparkMax drivetrainEncoderBackLeft;
-    private CANSparkMax drivetrainEncoderFrontLeft;
-    private CANSparkMax drivetrainEncoderBackRight;
-    private CANSparkMax drivetrainEncoderFrontRight;
+    //private CANSparkMax drivetrainEncoderBackLeft;
+    //private CANSparkMax drivetrainEncoderFrontLeft;
+    //private CANSparkMax drivetrainEncoderBackRight;
+    //private CANSparkMax drivetrainEncoderFrontRight;
 
     private AHRS navX = new AHRS();
 
@@ -53,10 +53,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
 
-        drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        //drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        //drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        //drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        //drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
@@ -87,28 +87,32 @@ public class DrivetrainSubsystem extends SubsystemBase{
             SwerveModuleState.optimize(
                 moduleStates[0], 
                 Rotation2d.fromDegrees(
-                        drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        drivetrainTurnFrontLeft.getSelectedSensorPosition()/360
                     )
             );
         SwerveModuleState FRState = 
             SwerveModuleState.optimize(
                 moduleStates[1], 
                 Rotation2d.fromDegrees(
-                        drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        drivetrainTurnFrontRight.getSelectedSensorPosition()/360
                     )
             );
-        SwerveModuleState BLState = 
+        SwerveModuleState BLState =
             SwerveModuleState.optimize(
                 moduleStates[2], 
                 Rotation2d.fromDegrees(
-                        drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        drivetrainTurnBackLeft.getSelectedSensorPosition()/360
                     )
             );
         SwerveModuleState BRState = 
             SwerveModuleState.optimize(
                 moduleStates[3], 
                 Rotation2d.fromDegrees(
-                        drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+                        drivetrainTurnBackRight.getSelectedSensorPosition()/360
                     )
             );
 
@@ -205,5 +209,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //SmartDashboard.putNumber("RPM", getRpm());
 	    SmartDashboard.putNumber("fr temp", drivetrainPowerFrontRight.getTemperature());
         //SmartDashboard.putBoolean("High Gear", getGear());
+        SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
+        SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
     }
 }
