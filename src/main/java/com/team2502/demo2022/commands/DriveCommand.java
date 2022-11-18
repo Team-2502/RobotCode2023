@@ -1,5 +1,6 @@
 package com.team2502.demo2022.commands;
 
+import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -39,8 +40,8 @@ public class DriveCommand extends CommandBase {
     public void execute() {
         switch(typeEntry.getSelected()) {
             case RobotOriented:
-                ChassisSpeeds speeds = new ChassisSpeeds(leftJoystick.getX(), leftJoystick.getY(), rightJoystick.getZ());
-                Translation2d centerOfRotation = new Translation2d(rightJoystick.getX(),rightJoystick.getY());
+                ChassisSpeeds speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, -rightJoystick.getZ()*Drivetrain.MAX_ROT);
+                Translation2d centerOfRotation = new Translation2d(-rightJoystick.getY(),-rightJoystick.getX());
                 drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case FieldOriented:
