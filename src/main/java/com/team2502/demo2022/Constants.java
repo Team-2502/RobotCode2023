@@ -63,8 +63,10 @@ public final class Constants {
                     //(FALCON_ENCODER_TICKS_PER_REV * SWERVE_TURNING_GEAR_RATIO) / 360;
             public static final double WHEEL_CIRCUMFERENCE = (4 / 39.37) * Math.PI;
             // CTRE units are encoder ticks per 100ms
+            //public static final double SWERVE_METERS_PER_SECOND_TO_CTRE =
+            //        (WHEEL_CIRCUMFERENCE * 10) / (SWERVE_DRIVE_GEAR_RATIO * FALCON_ENCODER_TICKS_PER_REV);
             public static final double SWERVE_METERS_PER_SECOND_TO_CTRE =
-                    (WHEEL_CIRCUMFERENCE * 10) / (SWERVE_DRIVE_GEAR_RATIO * FALCON_ENCODER_TICKS_PER_REV);
+                ((FALCON_ENCODER_TICKS_PER_REV * SWERVE_DRIVE_GEAR_RATIO/WHEEL_CIRCUMFERENCE) / 10) ;
         }
     }
 }

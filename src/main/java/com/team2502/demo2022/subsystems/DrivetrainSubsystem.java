@@ -128,6 +128,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerFrontRight.set(ControlMode.Velocity, FRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackLeft.set(ControlMode.Velocity, BLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+        SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
+        SmartDashboard.putNumber("FLCTRUNITS ", FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
     }
 
     public void stop() {
@@ -208,7 +210,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //SmartDashboard.putNumber("RPM", getRpm());
 	    SmartDashboard.putNumber("fr temp", drivetrainPowerFrontRight.getTemperature());
         //SmartDashboard.putBoolean("High Gear", getGear());
-        SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
-        SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
+        //SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
+        //SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
     }
 }
