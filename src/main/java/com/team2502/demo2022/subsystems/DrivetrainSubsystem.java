@@ -33,10 +33,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private WPI_TalonFX drivetrainTurnBackRight;
     private WPI_TalonFX drivetrainTurnFrontRight;
 
-    //private CANSparkMax drivetrainEncoderBackLeft;
-    //private CANSparkMax drivetrainEncoderFrontLeft;
-    //private CANSparkMax drivetrainEncoderBackRight;
-    //private CANSparkMax drivetrainEncoderFrontRight;
+    private CANSparkMax drivetrainEncoderBackLeft;
+    private CANSparkMax drivetrainEncoderFrontLeft;
+    private CANSparkMax drivetrainEncoderBackRight;
+    private CANSparkMax drivetrainEncoderFrontRight;
 
     private AHRS navX = new AHRS();
 
@@ -53,10 +53,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
 
-        //drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        //drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        //drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        //drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
@@ -88,7 +88,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 moduleStates[0], 
                 Rotation2d.fromDegrees(
                         //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnFrontLeft.getSelectedSensorPosition()/360
+                        drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
                     )
             );
         SwerveModuleState FRState = 
@@ -96,7 +96,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 moduleStates[1], 
                 Rotation2d.fromDegrees(
                         //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnFrontRight.getSelectedSensorPosition()/360
+                        drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
                     )
             );
         SwerveModuleState BLState =
@@ -104,7 +104,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 moduleStates[2], 
                 Rotation2d.fromDegrees(
                         //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnBackLeft.getSelectedSensorPosition()/360
+                        drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
                     )
             );
         SwerveModuleState BRState = 
@@ -112,23 +112,22 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 moduleStates[3], 
                 Rotation2d.fromDegrees(
                         //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnBackRight.getSelectedSensorPosition()/360
+                        drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
                     )
             );
 
 
         // TODO: create logic to prevent a snap at 180deg
-        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
-        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
-        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
-        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() * Drivetrain.SWERVE_ROTATION_DEGREES_TO_ENCODER_COUNTS);
+        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
 
 
         drivetrainPowerFrontLeft.set(ControlMode.Velocity, FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerFrontRight.set(ControlMode.Velocity, FRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackLeft.set(ControlMode.Velocity, BLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
-
     }
 
     public void stop() {
