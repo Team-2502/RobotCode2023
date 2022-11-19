@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import java.lang.Math;
 
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
 
@@ -190,6 +191,33 @@ public class DrivetrainSubsystem extends SubsystemBase{
 //
     public void resetHeading() {
         navX.reset();
+    }
+
+    /** getClosestAngle
+     * returns the closest parallel angle to the given angle
+     * used to normalize swerve module heading
+     * 
+     * @param currentAngle swerve module angle (large number)
+     * @param targetAngle kinematic output angle (0-360)
+     * */
+    private Rotation2d getClosestAngle(Rotation2d currentAngle, Rotation2d targetAngle) {
+        int fullRotations = (int) Math.floor(currentAngle.getDegrees() / 360);
+        double offset = currentAngle.getDegrees()%360;
+        double target = targetAngle.getDegrees();
+
+        double diff = target-offset;
+        target += 360*fullRotations;
+
+        if (Math.abs(diff)>90){ // it would be faster to reverse the module
+            if (diff>0){
+                target -= 180;
+            }
+            else {
+                target += 180;
+            }
+        }
+
+        return Rotation2d.fromDegrees(target);
     }
 //
 //    public boolean getGear() {
