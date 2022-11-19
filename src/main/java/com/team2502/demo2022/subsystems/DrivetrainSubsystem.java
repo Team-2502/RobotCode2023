@@ -139,22 +139,17 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void stop() {
+        drivetrainPowerBackLeft.stopMotor();
+        drivetrainPowerBackRight.stopMotor();
+        drivetrainPowerFrontLeft.stopMotor();
+        drivetrainPowerFrontRight.stopMotor();
+
+        drivetrainTurnBackLeft.stopMotor();
+        drivetrainTurnBackRight.stopMotor();
+        drivetrainTurnFrontLeft.stopMotor();
+        drivetrainTurnFrontRight.stopMotor();
     }
 
-//    public DifferentialDrive getDrive(){
-//        return drive;
-//    }
-//
-//    public void setSpeed(double leftSpeed, double rightSpeed){
-//        drive.tankDrive(leftSpeed, rightSpeed);
-//    }
-//    public void brake(){
-//        drive.stopMotor();
-//    }
-//
-//    public void setHighGear() { solenoid.set(true); }
-//    public void setLowGear() { solenoid.set(false); }
-//
 //    /**
 //    * Average drivetrain motor revs
 //    * @return double revs since restart
@@ -166,8 +161,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
 //		   )/2;
 //    }
 //
-//    public void toggleDrivetrain() { solenoid.toggle(); }
-//
 //    /**
 //    * inches since init
 //    * @return inches since initialization
@@ -178,13 +171,21 @@ public class DrivetrainSubsystem extends SubsystemBase{
 //		    * (6 * Math.PI); // wheel radius */
 //	    return drivetrainFrontRight.getSelectedSensorPosition() / Drivetrain.TICKS_PER_INCH;
 //    }
-//
-//    public void setNeutralMode(NeutralMode nm)
-//    {
-//        drivetrainFrontRight.setNeutralMode(nm);
-//        drivetrainFrontLeft.setNeutralMode(nm);
-//    }
-//
+
+    public void setPowerNeutralMode(NeutralMode nm) {
+        drivetrainPowerBackLeft.setNeutralMode(nm);
+        drivetrainPowerBackRight.setNeutralMode(nm);
+        drivetrainPowerFrontLeft.setNeutralMode(nm);
+        drivetrainPowerFrontRight.stopMotor();
+    }
+
+    public void setTurnNeutralMode(NeutralMode nm) {
+        drivetrainTurnBackLeft.setNeutralMode(nm);
+        drivetrainTurnBackRight.setNeutralMode(nm);
+        drivetrainTurnFrontLeft.setNeutralMode(nm);
+        drivetrainTurnFrontRight.setNeutralMode(nm);
+    }
+
 //    public double getRpm() {
 //        return (drivetrainFrontLeft.getSelectedSensorVelocity() / Drivetrain.TICKS_PER_INCH);
 //    }
@@ -224,17 +225,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         return Rotation2d.fromDegrees(target);
     }
-//
-//    public boolean getGear() {
-//        double highGear;
-//        if(solenoid.get() == false) return true;
-//        else return false;
-//    }
-//
-//    public void stop() {
-//        drivetrainFrontRight.stopMotor();
-//        drivetrainFrontLeft.stopMotor();
-//    }
 
     @Override
     public void periodic(){
