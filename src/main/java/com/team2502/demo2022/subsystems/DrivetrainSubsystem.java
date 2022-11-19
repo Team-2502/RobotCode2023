@@ -83,46 +83,50 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public void setSpeeds(ChassisSpeeds speed, Translation2d centerOfRotation) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speed, centerOfRotation);
+
+        Rotation2d FLRotation = Rotation2d.fromDegrees(
+            //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+            drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+        );
+        Rotation2d FRRotation = Rotation2d.fromDegrees(
+            //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+            drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+        );
+        Rotation2d BLRotation = Rotation2d.fromDegrees(
+            //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+            drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+        );
+        Rotation2d BRRotation = Rotation2d.fromDegrees(
+            //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
+            drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+        );
         
         SwerveModuleState FLState = 
             SwerveModuleState.optimize(
                 moduleStates[0], 
-                Rotation2d.fromDegrees(
-                        //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                    )
+                FLRotation
             );
         SwerveModuleState FRState = 
             SwerveModuleState.optimize(
                 moduleStates[1], 
-                Rotation2d.fromDegrees(
-                        //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                    )
+                FRRotation
             );
         SwerveModuleState BLState =
             SwerveModuleState.optimize(
                 moduleStates[2], 
-                Rotation2d.fromDegrees(
-                        //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                    )
+                BLRotation
             );
         SwerveModuleState BRState = 
             SwerveModuleState.optimize(
                 moduleStates[3], 
-                Rotation2d.fromDegrees(
-                        //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-                        drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                    )
+                BRRotation
             );
 
 
-        // TODO: create logic to prevent a snap at 180deg
-        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontLeft.set(ControlMode.Position, getClosestAngle(FLRotation, FLState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontRight.set(ControlMode.Position, getClosestAngle(FRRotation, FRState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackLeft.set(ControlMode.Position, getClosestAngle(BLRotation, BLState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackRight.set(ControlMode.Position, getClosestAngle(BRRotation, BRState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
 
 
         drivetrainPowerFrontLeft.set(ControlMode.Velocity, FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
@@ -131,6 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLCTRUNITS ", FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+        SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
     }
 
     public void stop() {
