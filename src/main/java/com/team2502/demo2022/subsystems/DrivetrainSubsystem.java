@@ -133,6 +133,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerFrontRight.set(ControlMode.Velocity, FRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackLeft.set(ControlMode.Velocity, BLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
+
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLCTRUNITS ", FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
@@ -207,6 +208,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param targetAngle kinematic output angle (0-360)
      * */
     private Rotation2d getClosestAngle(Rotation2d currentAngle, Rotation2d targetAngle) {
+        /*
         int fullRotations = (int) Math.floor(currentAngle.getDegrees() / 360);
         double offset = currentAngle.getDegrees()%360;
         double target = targetAngle.getDegrees();
@@ -224,6 +226,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         }
 
         return Rotation2d.fromDegrees(target);
+        */
+        return targetAngle;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.team2502.demo2022.commands;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -18,7 +19,9 @@ public class DriveCommand extends CommandBase {
     private enum Drivetype {
         FieldOriented,
         RobotOriented,
+        RobotOrientedCenteredRot,
         VirtualTank,
+        VirtualSplitArcade
     }
 
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
@@ -28,8 +31,10 @@ public class DriveCommand extends CommandBase {
         leftJoystick = joystickDriveLeft;
         rightJoystick = joystickDriveRight;
 
-        typeEntry.addOption("Tank", Drivetype.VirtualTank);
+        typeEntry.addOption("Split Arcade", Drivetype.VirtualSplitArcade);
+        typeEntry.addOption("adhi mode", Drivetype.VirtualTank);
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
+        typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
         typeEntry.setDefaultOption("Robot Oriented", Drivetype.RobotOriented);
         SmartDashboard.putData("Drive Type", typeEntry);
 
@@ -38,17 +43,33 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        ChassisSpeeds speeds;
+        Translation2d centerOfRotation;
+        drivetrain.setTurnNeutralMode(NeutralMode.Brake);
+        drivetrain.setPowerNeutralMode(NeutralMode.Coast);
         switch(typeEntry.getSelected()) {
             case RobotOriented:
-                ChassisSpeeds speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, -rightJoystick.getZ()*Drivetrain.MAX_ROT);
-                Translation2d centerOfRotation = new Translation2d(-rightJoystick.getY(),-rightJoystick.getX());
+                speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT);
+                centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
+                drivetrain.setSpeeds(speeds, centerOfRotation);
+                break;
+            case RobotOrientedCenteredRot:
+                speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getX()*Drivetrain.MAX_ROT);
+                centerOfRotation = new Translation2d(0,0);
                 drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case FieldOriented:
                 // TODO: impl after initial test
                 break;
             case VirtualTank:
-                // TODO: impl after initial test
+                speeds = new ChassisSpeeds(-(leftJoystick.getY()+rightJoystick.getY())* Drivetrain.MAX_VEL, 0, (rightJoystick.getY()-leftJoystick.getY())*Drivetrain.MAX_ROT);
+                centerOfRotation = new Translation2d(0,0);
+                drivetrain.setSpeeds(speeds, centerOfRotation);
+                break;
+            case VirtualSplitArcade:
+                speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, 0, rightJoystick.getX()*Drivetrain.MAX_ROT);
+                centerOfRotation = new Translation2d(0,0);
+                drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
         }
     }

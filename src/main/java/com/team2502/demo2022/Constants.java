@@ -48,8 +48,8 @@ public final class Constants {
 
     public final class Subsystems {
         public final class Drivetrain {
-            public static final double MAX_VEL = 2; // driver speed gain (m/s)
-            public static final double MAX_ROT = 2; // driver rotation gain (rad/s)
+            public static final double MAX_VEL = 7; // driver speed gain (m/s)
+            public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
                                                    
             // distance between swerve modules (meters)
             public static final double SWERVE_LENGTH = 0.5207; // 20.5 inches
