@@ -200,6 +200,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         navX.reset();
     }
 
+    public double getHeading() {
+        return navX.getAngle();
+    }
+
     /** getClosestAngle
      * returns the closest parallel angle to the given angle
      * used to normalize swerve module heading

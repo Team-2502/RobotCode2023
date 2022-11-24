@@ -59,7 +59,13 @@ public class DriveCommand extends CommandBase {
                 drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case FieldOriented:
-                // TODO: impl after initial test
+                Translation2d rawVelGoal = new Translation2d(-leftJoystick.getY(),-leftJoystick.getX());
+                rawVelGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                speeds = new ChassisSpeeds(rawVelGoal.getX()* Drivetrain.MAX_VEL, rawVelGoal.getY()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT );
+                Translation2d rawCenterGoal = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
+                rawCenterGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                centerOfRotation = rawCenterGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case VirtualTank:
                 speeds = new ChassisSpeeds(-(leftJoystick.getY()+rightJoystick.getY())* Drivetrain.MAX_VEL, 0, (rightJoystick.getY()-leftJoystick.getY())*Drivetrain.MAX_ROT);
