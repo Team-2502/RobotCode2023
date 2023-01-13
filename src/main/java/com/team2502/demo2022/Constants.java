@@ -22,6 +22,11 @@ public final class Constants {
 
         // Driver Right
         public static final int RESET_HEADING = 2;
+
+        // Driver Left
+        public static final int ALLIGN_LEFT = 3;
+        public static final int ALLIGN_CENTER = 2;
+        public static final int ALLIGN_RIGHT = 4;
     }
 
     public final class HardwareMap {
@@ -70,6 +75,10 @@ public final class Constants {
             //        (WHEEL_CIRCUMFERENCE * 10) / (SWERVE_DRIVE_GEAR_RATIO * FALCON_ENCODER_TICKS_PER_REV);
             public static final double SWERVE_METERS_PER_SECOND_TO_CTRE =
                 ((FALCON_ENCODER_TICKS_PER_REV * SWERVE_DRIVE_GEAR_RATIO/WHEEL_CIRCUMFERENCE) / 10) ;
+        }
+
+        public final class Vision {
+            public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
         }
     }
 }

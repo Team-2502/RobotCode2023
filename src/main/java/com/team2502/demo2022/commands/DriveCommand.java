@@ -19,9 +19,10 @@ public class DriveCommand extends CommandBase {
     private enum Drivetype {
         FieldOriented,
         RobotOriented,
+	    FieldOrientedTwist,
         RobotOrientedCenteredRot,
         VirtualTank,
-        VirtualSplitArcade
+        VirtualSplitArcade,
     }
 
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
@@ -35,6 +36,7 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("adhi mode", Drivetype.VirtualTank);
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
         typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
+	    typeEntry.addOption("Field Twist", Drivetype.FieldOrientedTwist);
         typeEntry.setDefaultOption("Robot Oriented", Drivetype.RobotOriented);
         SmartDashboard.putData("Drive Type", typeEntry);
 
@@ -59,13 +61,22 @@ public class DriveCommand extends CommandBase {
                 drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case FieldOriented:
-                Translation2d rawVelGoal = new Translation2d(-leftJoystick.getY(),-leftJoystick.getX());
-                rawVelGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
-                speeds = new ChassisSpeeds(rawVelGoal.getX()* Drivetrain.MAX_VEL, rawVelGoal.getY()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT );
-                Translation2d rawCenterGoal = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
-                rawCenterGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
-                centerOfRotation = rawCenterGoal.rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                        -leftJoystick.getY() * Drivetrain.MAX_VEL,
+                        -leftJoystick.getX() * Drivetrain.MAX_VEL,
+                        rightJoystick.getX() * Drivetrain.MAX_ROT,
+                        Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
+                //centerOfRotation = new Translation2d(0, 0);
                 drivetrain.setSpeeds(speeds, centerOfRotation);
+	    case FieldOrientedTwist:
+		speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+				-leftJoystick.getY() * Drivetrain.MAX_VEL,
+				-leftJoystick.getX() * Drivetrain.MAX_VEL,
+				rightJoystick.getZ() * Drivetrain.MAX_ROT,
+				Rotation2d.fromDegrees(-drivetrain.getHeading()));
+		centerOfRotation = new Translation2d(0, 0);
+		drivetrain.setSpeeds(speeds, centerOfRotation);
                 break;
             case VirtualTank:
                 speeds = new ChassisSpeeds(-(leftJoystick.getY()+rightJoystick.getY())* Drivetrain.MAX_VEL, 0, (rightJoystick.getY()-leftJoystick.getY())*Drivetrain.MAX_ROT);

@@ -4,9 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.unmanaged.UnmanagedJNI;
 import com.kauailabs.navx.frc.AHRS;
 import com.team2502.demo2022.Constants.HardwareMap;
 import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
+import com.team2502.demo2022.Utils;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -101,32 +103,31 @@ public class DrivetrainSubsystem extends SubsystemBase{
             drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         
-        SwerveModuleState FLState = 
-            SwerveModuleState.optimize(
+        SwerveModuleState FLState =
+            Utils.optimize(
                 moduleStates[0], 
-                FLRotation
+                    FLRotation
             );
-        SwerveModuleState FRState = 
-            SwerveModuleState.optimize(
-                moduleStates[1], 
-                FRRotation
+        SwerveModuleState FRState =
+                Utils.optimize(
+                moduleStates[1],
+                    FRRotation
             );
         SwerveModuleState BLState =
-            SwerveModuleState.optimize(
-                moduleStates[2], 
-                BLRotation
+                Utils.optimize(
+                moduleStates[2],
+                    BLRotation
             );
-        SwerveModuleState BRState = 
-            SwerveModuleState.optimize(
-                moduleStates[3], 
-                BRRotation
+        SwerveModuleState BRState =
+                Utils.optimize(
+                moduleStates[3],
+                    BRRotation
             );
 
-
-        drivetrainTurnFrontLeft.set(ControlMode.Position, getClosestAngle(FLRotation, FLState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnFrontRight.set(ControlMode.Position, getClosestAngle(FRRotation, FRState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackLeft.set(ControlMode.Position, getClosestAngle(BLRotation, BLState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackRight.set(ControlMode.Position, getClosestAngle(BRRotation, BRState.angle).getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
 
 
         drivetrainPowerFrontLeft.set(ControlMode.Velocity, FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
@@ -137,6 +138,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLCTRUNITS ", FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
+        SmartDashboard.putNumber("FL Angle", FLRotation.getDegrees());
     }
 
     public void stop() {
@@ -204,34 +206,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return navX.getAngle();
     }
 
-    /** getClosestAngle
-     * returns the closest parallel angle to the given angle
-     * used to normalize swerve module heading
-     * 
-     * @param currentAngle swerve module angle (large number)
-     * @param targetAngle kinematic output angle (0-360)
-     * */
-    private Rotation2d getClosestAngle(Rotation2d currentAngle, Rotation2d targetAngle) {
-        /*
-        int fullRotations = (int) Math.floor(currentAngle.getDegrees() / 360);
-        double offset = currentAngle.getDegrees()%360;
-        double target = targetAngle.getDegrees();
+    public double getAverageTemp() {
+        double fl = drivetrainPowerFrontLeft.getTemperature();
+        double fr = drivetrainPowerFrontRight.getTemperature();
+        double bl = drivetrainPowerFrontLeft.getTemperature();
+        double br = drivetrainPowerBackRight.getTemperature();
 
-        double diff = target-offset;
-        target += 360*fullRotations;
-
-        if (Math.abs(diff)>90){ // it would be faster to reverse the module
-            if (diff>0){
-                target -= 180;
-            }
-            else {
-                target += 180;
-            }
-        }
-
-        return Rotation2d.fromDegrees(target);
-        */
-        return targetAngle;
+        return (fl + fr + bl + br) / 4;
     }
 
     @Override
@@ -243,5 +224,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //SmartDashboard.putBoolean("High Gear", getGear());
         //SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
         //SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
+        SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
     }
 }

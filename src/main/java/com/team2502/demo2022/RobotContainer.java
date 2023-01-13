@@ -6,7 +6,9 @@
 package com.team2502.demo2022;
 
 import com.team2502.demo2022.commands.DriveCommand;
+import com.team2502.demo2022.commands.allignApriltagCommand;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
+import com.team2502.demo2022.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
     protected final DrivetrainSubsystem DRIVETRAIN = new DrivetrainSubsystem();
+    protected final VisionSubsystem VISION = new VisionSubsystem();
 
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
@@ -33,6 +36,15 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+/*
+        JoystickButton ApriltagAllignLeft = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
+        ApriltagAllignLeft.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.LEFT));
+
+        JoystickButton ApriltagAllignCenter = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
+        ApriltagAllignCenter.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.CENTER));
+
+        JoystickButton ApriltagAllignRight = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
+        ApriltagAllignRight.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.RIGHT));*/
     }
 
     /**
