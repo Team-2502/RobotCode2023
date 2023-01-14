@@ -6,7 +6,6 @@
 package com.team2502.demo2022;
 
 import com.team2502.demo2022.commands.DriveCommand;
-import com.team2502.demo2022.commands.DriveDistanceRotCommand;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -36,18 +35,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
-/*
-        JoystickButton ApriltagAllignLeft = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
-        ApriltagAllignLeft.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.LEFT));
-
-        JoystickButton ApriltagAllignCenter = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
-        ApriltagAllignCenter.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.CENTER));
-
-        JoystickButton ApriltagAllignRight = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
-        ApriltagAllignRight.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.RIGHT));*/
-
-        //JoystickButton MoveInches = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.MOVE_INCHES);
-        //MoveInches.whenHeld(new DriveDistanceRotCommand(DRIVETRAIN, 0.0, new Rotation2d(0)));
     }
 
     /**
