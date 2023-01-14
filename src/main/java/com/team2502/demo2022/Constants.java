@@ -27,6 +27,8 @@ public final class Constants {
         public static final int ALLIGN_LEFT = 3;
         public static final int ALLIGN_CENTER = 2;
         public static final int ALLIGN_RIGHT = 4;
+
+        public static final int MOVE_INCHES = 2;
     }
 
     public final class HardwareMap {
@@ -75,6 +77,7 @@ public final class Constants {
             //        (WHEEL_CIRCUMFERENCE * 10) / (SWERVE_DRIVE_GEAR_RATIO * FALCON_ENCODER_TICKS_PER_REV);
             public static final double SWERVE_METERS_PER_SECOND_TO_CTRE =
                 ((FALCON_ENCODER_TICKS_PER_REV * SWERVE_DRIVE_GEAR_RATIO/WHEEL_CIRCUMFERENCE) / 10) ;
+            public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI);
         }
 
         public final class Vision {

@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.unmanaged.UnmanagedJNI;
 import com.kauailabs.navx.frc.AHRS;
 import com.team2502.demo2022.Constants.HardwareMap;
@@ -36,14 +37,21 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private WPI_TalonFX drivetrainTurnBackRight;
     private WPI_TalonFX drivetrainTurnFrontRight;
 
-    private CANSparkMax drivetrainEncoderBackLeft;
+    /*private CANSparkMax drivetrainEncoderBackLeft;
     private CANSparkMax drivetrainEncoderFrontLeft;
     private CANSparkMax drivetrainEncoderBackRight;
-    private CANSparkMax drivetrainEncoderFrontRight;
+    private CANSparkMax drivetrainEncoderFrontRight;*/
+
+    private CANCoder drivetrainEncoderBackLeft;
+    private CANCoder drivetrainEncoderFrontLeft;
+    private CANCoder drivetrainEncoderBackRight;
+    private CANCoder drivetrainEncoderFrontRight;
 
     private AHRS navX = new AHRS();
 
     private Solenoid solenoid;
+
+    private double currentPos;
 
     public DrivetrainSubsystem(){
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR);
@@ -56,10 +64,15 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
 
-        drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        /*drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
         drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
         drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
+        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);*/
+
+        drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER);
+        drivetrainEncoderFrontLeft = new CANCoder(HardwareMap.FL_TURN_ENCODER);
+        drivetrainEncoderFrontRight = new CANCoder(HardwareMap.FR_TURN_ENCODER);
+        drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER);
 
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
@@ -168,12 +181,18 @@ public class DrivetrainSubsystem extends SubsystemBase{
 //    * inches since init
 //    * @return inches since initialization
 //     */
-//    public double getInchesTraveled() {
-//	    /*return (getRevsAvg()/2048) // encoder
-//		    * (24 / 50) // gearbox
-//		    * (6 * Math.PI); // wheel radius */
-//	    return drivetrainFrontRight.getSelectedSensorPosition() / Drivetrain.TICKS_PER_INCH;
-//    }
+    public double getInchesTraveled() {
+	    return (drivetrainPowerFrontLeft.getSelectedSensorPosition() / Drivetrain.SWERVE_FALCON_TICKS_PER_INCH) / 1000;
+    }
+
+    public void setToDistance(double distance) {
+        currentPos = drivetrainPowerFrontLeft.getSelectedSensorPosition();
+
+        drivetrainPowerFrontLeft.set(ControlMode.Position, distance + currentPos);
+        drivetrainPowerFrontRight.set(ControlMode.Position, distance + currentPos);
+        drivetrainPowerBackLeft.set(ControlMode.Position, distance + currentPos);
+        drivetrainPowerBackRight.set(ControlMode.Position, distance + currentPos);
+    }
 
     public void setPowerNeutralMode(NeutralMode nm) {
         drivetrainPowerBackLeft.setNeutralMode(nm);
@@ -189,9 +208,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight.setNeutralMode(nm);
     }
 
-//    public double getRpm() {
-//        return (drivetrainFrontLeft.getSelectedSensorVelocity() / Drivetrain.TICKS_PER_INCH);
-//    }
+    public double getRpm() {
+        return (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.SWERVE_FALCON_TICKS_PER_INCH);
+    }
 //
 //    public double getHeading()
 //    {
@@ -225,5 +244,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
         //SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
         SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
+        SmartDashboard.putNumber("Inches Travled", getInchesTraveled());
     }
 }

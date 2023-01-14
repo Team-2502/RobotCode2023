@@ -6,9 +6,9 @@
 package com.team2502.demo2022;
 
 import com.team2502.demo2022.commands.DriveCommand;
-import com.team2502.demo2022.commands.allignApriltagCommand;
+import com.team2502.demo2022.commands.DriveDistanceRotCommand;
 import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
-import com.team2502.demo2022.subsystems.VisionSubsystem;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
     protected final DrivetrainSubsystem DRIVETRAIN = new DrivetrainSubsystem();
-    protected final VisionSubsystem VISION = new VisionSubsystem();
+    //protected final VisionSubsystem VISION = new VisionSubsystem();
 
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
@@ -45,6 +45,9 @@ public class RobotContainer {
 
         JoystickButton ApriltagAllignRight = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.ALLIGN_LEFT);
         ApriltagAllignRight.whenPressed(new allignApriltagCommand(DRIVETRAIN, VISION, allignApriltagCommand.ApriltagScoreDirection.RIGHT));*/
+
+        //JoystickButton MoveInches = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.MOVE_INCHES);
+        //MoveInches.whenHeld(new DriveDistanceRotCommand(DRIVETRAIN, 0.0, new Rotation2d(0)));
     }
 
     /**
