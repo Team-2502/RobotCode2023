@@ -51,5 +51,17 @@ public class Utils {
         }
         return newAngle;
     }
+
+    /**
+     * Adds a deadzone to a given value
+     *
+     * @param val the value (controller input)
+     * @return if the val is too low returns 0, or the given value
+     */
+    public static double deadzone(double val) {
+        if (val >= 0.075) { return val; }
+        else if (val <= -0.075) { return val; }
+        else { return 0; }
+    }
 }
 
