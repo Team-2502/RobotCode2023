@@ -78,7 +78,8 @@ public final class Constants {
             //        (WHEEL_CIRCUMFERENCE * 10) / (SWERVE_DRIVE_GEAR_RATIO * FALCON_ENCODER_TICKS_PER_REV);
             public static final double SWERVE_METERS_PER_SECOND_TO_CTRE =
                 ((FALCON_ENCODER_TICKS_PER_REV * SWERVE_DRIVE_GEAR_RATIO/WHEEL_CIRCUMFERENCE) / 10) ;
-            public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI);
+            public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI); // actually in meters, haha
+            public static final double SWERVE_FALCON_METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_ENCODER_TICKS_PER_REV*SWERVE_DRIVE_GEAR_RATIO);
         }
 
         public final class Vision {

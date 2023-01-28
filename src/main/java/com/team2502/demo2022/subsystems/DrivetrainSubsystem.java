@@ -13,6 +13,8 @@ import com.team2502.demo2022.Utils;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
@@ -26,6 +28,7 @@ import java.lang.Math;
 
 public class DrivetrainSubsystem extends SubsystemBase{
     private SwerveDriveKinematics kinematics;
+    private SwerveDriveOdometry odometry;
 
     private WPI_TalonFX drivetrainPowerBackLeft;
     private WPI_TalonFX drivetrainPowerFrontLeft;
@@ -86,6 +89,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 m_backRightLocation
         );
 
+        Pose2d startPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
+
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
         //drivetrainBackLeft.setInverted(TalonFXInvertType.CounterClockwise);
@@ -96,6 +102,38 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //drive.setSafetyEnabled(false); // suppress "watchdog not fed" errors
     }
 
+    public SwerveModulePosition[] getModulePositions() {
+        Rotation2d FLRotation = Rotation2d.fromDegrees(
+                drivetrainEncoderFrontLeft.getPosition()
+        );
+        Rotation2d FRRotation = Rotation2d.fromDegrees(
+                drivetrainEncoderFrontLeft.getPosition()
+        );
+        Rotation2d BLRotation = Rotation2d.fromDegrees(
+                drivetrainEncoderBackLeft.getPosition()
+        );
+        Rotation2d BRRotation = Rotation2d.fromDegrees(
+                drivetrainEncoderBackRight.getPosition()
+        );
+
+        SwerveModulePosition FRPosition = new SwerveModulePosition(
+                drivetrainPowerFrontRight.getSelectedSensorPosition()*Drivetrain.SWERVE_FALCON_METERS_PER_TICK, 
+                FRRotation);
+        SwerveModulePosition FLPosition = new SwerveModulePosition(
+                drivetrainPowerFrontLeft.getSelectedSensorPosition()*Drivetrain.SWERVE_FALCON_METERS_PER_TICK, 
+                FLRotation);
+        SwerveModulePosition BRPosition = new SwerveModulePosition(
+                drivetrainPowerBackRight.getSelectedSensorPosition()*Drivetrain.SWERVE_FALCON_METERS_PER_TICK, 
+                BRRotation);
+        SwerveModulePosition BLPosition = new SwerveModulePosition(
+                drivetrainPowerBackLeft.getSelectedSensorPosition()*Drivetrain.SWERVE_FALCON_METERS_PER_TICK, 
+                BLRotation);
+
+        SwerveModulePosition[] modulePositions = {FLPosition,FRPosition,BLPosition,BRPosition};
+
+        return modulePositions;
+
+    }
     public void setSpeeds(ChassisSpeeds speed, Translation2d centerOfRotation) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speed, centerOfRotation);
 
@@ -189,6 +227,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	    return (drivetrainPowerFrontLeft.getSelectedSensorPosition() / Drivetrain.SWERVE_FALCON_TICKS_PER_INCH) / 1000;
     }
 
+    public double getMetersTraveled() {
+	    return (drivetrainPowerFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_METERS_PER_TICK);
+    }
+
     public void setToDistance(double distance) {
         currentPos = drivetrainPowerFrontLeft.getSelectedSensorPosition();
 
@@ -249,6 +291,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
+        odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+
+        double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
+        SmartDashboard.putNumberArray("Position", position);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
         //SmartDashboard.putNumber("RPM", getRpm());
@@ -258,6 +304,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         //SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
         SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
         SmartDashboard.putNumber("Inches Travled", getInchesTraveled());
+        SmartDashboard.putNumber("Meters Travled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
     }
 }
