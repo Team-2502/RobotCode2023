@@ -55,6 +55,9 @@ public final class Constants {
     }
 
     public final class Subsystems {
+        public final class PhotonVision {
+            public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
+        }
         public final class Drivetrain {
             public static final double MAX_VEL = 7; // driver speed gain (m/s)
             public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
