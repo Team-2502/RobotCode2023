@@ -238,6 +238,15 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return (fl + fr + bl + br) / 4;
     }
 
+    public double getMaxTemp() {
+        double fl = drivetrainPowerFrontLeft.getTemperature();
+        double fr = drivetrainPowerFrontRight.getTemperature();
+        double bl = drivetrainPowerFrontLeft.getTemperature();
+        double br = drivetrainPowerBackRight.getTemperature();
+
+        return Math.max(Math.max(fl, fr), Math.max(bl, br));
+    }
+
     @Override
     public void periodic(){
 
