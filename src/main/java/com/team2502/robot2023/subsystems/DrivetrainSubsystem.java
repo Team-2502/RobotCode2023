@@ -1,4 +1,4 @@
-package com.team2502.demo2022.subsystems;
+package com.team2502.robot2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -7,9 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.unmanaged.UnmanagedJNI;
 import com.kauailabs.navx.frc.AHRS;
-import com.team2502.demo2022.Constants.HardwareMap;
-import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
-import com.team2502.demo2022.Utils;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -18,10 +16,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.team2502.robot2023.Utils;
+import com.team2502.robot2023.Constants.HardwareMap;
+import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
+
 import java.lang.Math;
 
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
@@ -49,6 +52,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private CANCoder drivetrainEncoderFrontLeft;
     private CANCoder drivetrainEncoderBackRight;
     private CANCoder drivetrainEncoderFrontRight;
+
+    private Field2d field;
 
     private AHRS navX = new AHRS();
 
@@ -91,6 +96,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         Pose2d startPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
+
+        field = new Field2d();
+        //field.initSendable(builder);
 
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
@@ -295,6 +303,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
         SmartDashboard.putNumberArray("Position", position);
+        
+        field.setRobotPose(odometry.getPoseMeters());
+        SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
         //SmartDashboard.putNumber("RPM", getRpm());

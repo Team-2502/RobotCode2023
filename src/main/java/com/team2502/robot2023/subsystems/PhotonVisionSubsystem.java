@@ -1,4 +1,4 @@
-package com.team2502.demo2022.subsystems;
+package com.team2502.robot2023.subsystems;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -37,10 +37,8 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        PhotonPipelineResult result = camera.getLatestResult();
-
-        result.getBestTarget().get
-
-        SmartDashboard.putNumber("PHOTONVAL", value)
+        //PhotonPipelineResult result = camera.getLatestResult();
+        //result.getBestTarget().get
+        //SmartDashboard.putNumber("PHOTONVAL", value)
     }
 }
