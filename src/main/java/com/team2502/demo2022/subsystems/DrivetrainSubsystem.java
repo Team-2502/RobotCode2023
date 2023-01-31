@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
@@ -49,6 +50,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private CANCoder drivetrainEncoderFrontLeft;
     private CANCoder drivetrainEncoderBackRight;
     private CANCoder drivetrainEncoderFrontRight;
+
+    private Field2d field;
 
     private AHRS navX = new AHRS();
 
@@ -91,6 +94,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         Pose2d startPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
+
+        field = new Field2d();
+        //field.initSendable(builder);
 
 
         //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
@@ -295,6 +301,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
         SmartDashboard.putNumberArray("Position", position);
+        
+        field.setRobotPose(odometry.getPoseMeters());
+        SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
         //SmartDashboard.putNumber("RPM", getRpm());
