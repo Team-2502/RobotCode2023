@@ -55,6 +55,12 @@ public final class Constants {
     }
 
     public final class Subsystems {
+        public final class AprilTags {
+            //AprilTagFieldLayout field = new 
+            List<AprilTag> tagList = new List();
+
+            tagList.add(new AprilTag(1, new Pose3d(0,0,0, new Rotation3d(0,0,0))));
+        }
         public final class PhotonVision {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
         }
