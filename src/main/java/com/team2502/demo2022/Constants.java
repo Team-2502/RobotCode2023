@@ -52,6 +52,11 @@ public final class Constants {
         public static final int BR_DRIVE_MOTOR = 10;
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
+
+        // Intake Motors
+        public static final int LIFT_INTAKE_MOTOR = 13;
+        public static final int RIGHT_INTAKE_MOTOR = 14;
+        public static final int LEFT_INTAKE_MOTOR = 15;
     }
 
     public final class Subsystems {
