@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.revrobotics.frc:REVLib-java:2023.1.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.revrobotics.frc/REVLib-java/2023.1.2/e09f35a5b73520c9d6eb235b21abbaa2e3953c4/REVLib-java-2023.1.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.revrobotics.frc/REVLib-java/2023.1.2/94919ed29c7b4aca45884ed0f2b952aee8f2a1ff/REVLib-java-2023.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

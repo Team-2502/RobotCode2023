@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.wpi.first.thirdparty.frc2023.opencv:opencv-java:4.6.0-4">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2023.opencv/opencv-java/4.6.0-4/b7b867ac1620b4f88abbcb27eaec9ee479b6e941/opencv-java-4.6.0-4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.thirdparty.frc2023.opencv/opencv-java/4.6.0-4/4c8c64db94ced16e278e64ecd2ee9df1282a8d3/opencv-java-4.6.0-4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

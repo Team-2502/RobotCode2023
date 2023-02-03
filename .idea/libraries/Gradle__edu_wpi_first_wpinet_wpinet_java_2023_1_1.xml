@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: edu.wpi.first.wpinet:wpinet-java:2023.1.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpinet/wpinet-java/2023.1.1/ec82b07b2d506ea126d3c0cdf8444f77d4520c33/wpinet-java-2023.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/edu.wpi.first.wpinet/wpinet-java/2023.1.1/d606f555c3f4c8b356a17b4e70cf2f7bae2d66ac/wpinet-java-2023.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
