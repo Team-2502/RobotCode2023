@@ -27,4 +27,16 @@ public class IntakeSubsystem extends SubsystemBase {
         //Sets Left Motor To Spin Opposite Direction To Work With Right Motor
         leftMotor.setInverted(true);
     }
+
+    //Command to Deploy and Retract the Intake
+    public void deploy(Boolean down){
+        if (down == true){
+            liftMotor.set(1);
+        }else if (down == false){
+            liftMotor.set(-1);
+        }else{
+            liftMotor.stopMotor();
+            return;
+        }
+    }
 }
