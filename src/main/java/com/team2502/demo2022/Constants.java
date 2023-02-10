@@ -52,6 +52,9 @@ public final class Constants {
         public static final int BR_DRIVE_MOTOR = 10;
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
+
+        public static final int LEFT_CONVEYOR = 13;
+        public static final int RIGHT_CONVEYOR = 14;
     }
 
     public final class Subsystems {
@@ -82,6 +85,8 @@ public final class Constants {
             public static final double SWERVE_FALCON_METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_ENCODER_TICKS_PER_REV*SWERVE_DRIVE_GEAR_RATIO);
         }
 
+
+        }
         public final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
         }
