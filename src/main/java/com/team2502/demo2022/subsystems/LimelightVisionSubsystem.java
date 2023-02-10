@@ -25,14 +25,28 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     }
 
     @Override
+    //runs often the retrieve the newest values from the Limelight
     public void periodic() {
         NetworkTableEntry TARGET_X = Limelight.getEntry("x");
         NetworkTableEntry TARGET_Y = Limelight.getEntry("y");
         NetworkTableEntry AREA_51 = Limelight.getEntry("area");
 
+        //sets the doubles to the Limelight's values & sets to zero if no targets found
         targetX = TARGET_X.getDouble(0);
         targetY = TARGET_Y.getDouble(0);
         targetA = AREA_51.getDouble(0);
+    }
+    //returns the X offset
+    public double getX(){
+        return targetX;
+    }
+    //returns the Y offset
+    public double getY(){
+        return targetY;
+    }
+    //returns the target Area
+    public double getAREA(){
+        return targetA;
     }
 }
 
