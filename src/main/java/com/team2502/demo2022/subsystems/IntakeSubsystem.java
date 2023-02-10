@@ -38,8 +38,13 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     //Command to Control Intake Speed
-    public void intake(double intakeSpeed){
-        rightMotor.set(intakeSpeed);
-        leftMotor.set(intakeSpeed);
+    public void intake(Boolean onoff, double intakeSpeed){
+        if (onoff) {
+            rightMotor.set(intakeSpeed);
+            leftMotor.set(intakeSpeed);
+        }else {
+            rightMotor.stopMotor();
+            leftMotor.stopMotor();
+        }
     }
 }
