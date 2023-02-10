@@ -39,4 +39,10 @@ public class IntakeSubsystem extends SubsystemBase {
             return;
         }
     }
+
+    //Command to Control Intake Speed
+    public void intake(float intakeSpeed){
+        rightMotor.set(intakeSpeed);
+        leftMotor.set(intakeSpeed);
+    }
 }
