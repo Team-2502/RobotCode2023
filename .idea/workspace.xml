@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cd37457d-4dea-4296-b00d-d9df2e479de2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/team2502/demo2022/subsystems/VisionSubsystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/team2502/demo2022/subsystems/VisionSubsystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/team2502/demo2022/subsystems/LimelightVisionSubsystem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,7 +44,7 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="TaskManager">
@@ -60,5 +60,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
