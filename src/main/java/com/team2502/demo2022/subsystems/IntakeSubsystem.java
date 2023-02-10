@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
         }
     }
 
-    //Command to Control Intake Speed
+    //Command to Control Intake Speed. Stops Motor if off
     public void intake(Boolean onoff, double intakeSpeed){
         if (onoff) {
             rightMotor.set(intakeSpeed);
