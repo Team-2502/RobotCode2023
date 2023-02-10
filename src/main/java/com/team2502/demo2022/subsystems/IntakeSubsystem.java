@@ -32,11 +32,8 @@ public class IntakeSubsystem extends SubsystemBase {
     public void deploy(Boolean down){
         if (down == true){
             liftMotor.set(1);
-        }else if (down == false){
-            liftMotor.set(-1);
         }else{
-            liftMotor.stopMotor();
-            return;
+            liftMotor.set(-1);
         }
     }
 
