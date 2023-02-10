@@ -14,6 +14,10 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     private final NetworkTable Limelight;
     private final NetworkTable Dashboard;
 
+    private double targetX;
+    private double targetY;
+    private double targetA;
+
     public LimelightVisionSubsystem() {
         //sets Object Constants
         Limelight = NetworkTableInstance.getDefault().getTable(Constants.Subsystems.Vision.LIMELIGHT_NETWORK_TABLE);
@@ -24,6 +28,11 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     public void periodic() {
         NetworkTableEntry TARGET_X = Limelight.getEntry("x");
         NetworkTableEntry TARGET_Y = Limelight.getEntry("y");
+        NetworkTableEntry AREA_51 = Limelight.getEntry("area");
+
+        targetX = TARGET_X.getDouble(0);
+        targetY = TARGET_Y.getDouble(0);
+        targetA = AREA_51.getDouble(0);
     }
 }
 
