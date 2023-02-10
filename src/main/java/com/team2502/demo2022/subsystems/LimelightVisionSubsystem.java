@@ -48,5 +48,9 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     public double getAREA(){
         return targetA;
     }
+    //returns true if there is a target, false is one is not found
+    public boolean targot(){
+        return (targetA != 0);
+    }
 }
 
