@@ -53,8 +53,7 @@ public final class Constants {
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
 
-        public static final int LEFT_CONVEYOR = 13;
-        public static final int RIGHT_CONVEYOR = 14;
+        public static final int CONVEYOR = 13;
     }
 
     public final class Subsystems {
@@ -86,7 +85,6 @@ public final class Constants {
         }
 
 
-        }
         public final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
         }
