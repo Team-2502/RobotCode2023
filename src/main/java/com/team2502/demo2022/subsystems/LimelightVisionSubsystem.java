@@ -52,5 +52,13 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     public boolean targot(){
         return (targetA != 0);
     }
+    //Allows you to control the Limelight's light's
+    public void limeLight(boolean power){
+        if (power){
+            Limelight.getEntry("pipeline").setNumber(Constants.Subsystems.Vision.LIMELIGHT_ON);
+        }else {
+            Limelight.getEntry("pipeline").setNumber(Constants.Subsystems.Vision.LIMELIGHT_OFF);
+        }
+    }
 }
 
