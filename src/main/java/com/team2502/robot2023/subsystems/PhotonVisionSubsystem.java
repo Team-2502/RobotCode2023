@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.io.IOException;
 
-import com.team2502.demo2022.Constants.Subsystems.PhotonVision;
+import com.team2502.robot2023.Constants.Subsystems.PhotonVision;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
     PhotonCamera camera;

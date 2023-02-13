@@ -76,7 +76,6 @@ public final class Constants {
             );
             AprilTagFieldLayout field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
             //field length, field width are in meters
-            //tagList.add(new AprilTag(1, new Pose3d(0,0,0, new Rotation3d(0,0,0))));
         }
         public final class PhotonVision {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
