@@ -25,6 +25,7 @@ public class RobotContainer {
 
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
+    protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.CONTROLLER);
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
