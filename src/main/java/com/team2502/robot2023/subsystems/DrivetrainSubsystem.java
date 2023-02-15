@@ -62,6 +62,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private double currentPos;
 
     public DrivetrainSubsystem(){
+        PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
+
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontRight = new WPI_TalonFX(HardwareMap.FR_DRIVE_MOTOR, "can0");

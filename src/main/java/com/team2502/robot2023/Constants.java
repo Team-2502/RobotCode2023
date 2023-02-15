@@ -4,6 +4,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package com.team2502.robot2023;
+import java.util.*;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -64,6 +69,26 @@ public final class Constants {
     }
 
     public final class Subsystems {
+        public final class AprilTags {
+            //x y z coordinates are in meters, rotations are in radians
+            List<AprilTag> tagList = new ArrayList<>(
+                Arrays.asList(
+                    new AprilTag(1, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
+                    new AprilTag(2, new Pose3d(15.51358903, 2.748031496, 0.462788926, new Rotation3d(0,0, Math.PI))),
+                    new AprilTag(3, new Pose3d(15.51358903, 4.424434849, 0.462788926, new Rotation3d(0,0, Math.PI))),
+                    new AprilTag(4, new Pose3d(16.17881636, 6.7498095, 0.695453391, new Rotation3d(0,0, Math.PI))),
+                    new AprilTag(5, new Pose3d(0.361950724, 6.7498095, 0.695453391, new Rotation3d(0,0, 0))),
+                    new AprilTag(6, new Pose3d(1.027432055, 4.424434849, 0.462788926, new Rotation3d(0,0, 0))),
+                    new AprilTag(7, new Pose3d(1.027432055, 2.748031496, 0.462788926, new Rotation3d(0,0, 0))),
+                    new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
+                )
+            );
+            AprilTagFieldLayout field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
+            //field length, field width are in meters
+        }
+        public final class PhotonVision {
+            public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
+        }
         public final class Drivetrain {
             public static final double MAX_VEL = 7; // driver speed gain (m/s)
             public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
