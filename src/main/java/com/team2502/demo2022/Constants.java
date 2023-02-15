@@ -66,7 +66,7 @@ public final class Constants {
             public static final int SWERVE_ENCODER_COUNTS_PER_REV = 4096;
             public static final int FALCON_ENCODER_TICKS_PER_REV = 2048;
             public static final double SWERVE_DRIVE_GEAR_RATIO = 6.75;
-            public static final double SWERVE_TURNING_GEAR_RATIO = 12.8;
+            public static final double SWERVE_TURNING_GEAR_RATIO = 15.43;
             public static final double SWERVE_SPARK_ENCODER_COUNTS_TO_DEGREES = 
                 SWERVE_ENCODER_COUNTS_PER_REV / 360;
             public static final double SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES = 
