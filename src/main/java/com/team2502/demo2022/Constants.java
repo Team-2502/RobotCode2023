@@ -89,6 +89,9 @@ public final class Constants {
 
         public final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
+            //TODO SET CORRECT NUMBERS
+            public static final double LIMELIGHT_ON = 0;
+            public static final double LIMELIGHT_OFF = 1;
         }
     }
 }
