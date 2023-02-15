@@ -53,10 +53,14 @@ public final class Constants {
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
 
+        // Conveyor Belt
+        public static final int CONVEYOR = 13;
+
         // Intake Motors
-        public static final int LIFT_INTAKE_MOTOR = 13;
-        public static final int RIGHT_INTAKE_MOTOR = 14;
-        public static final int LEFT_INTAKE_MOTOR = 15;
+        public static final int LIFT_INTAKE_MOTOR = 14;
+        public static final int RIGHT_INTAKE_MOTOR = 15;
+        public static final int LEFT_INTAKE_MOTOR = 16;
+
     }
 
     public final class Subsystems {
@@ -86,6 +90,7 @@ public final class Constants {
             public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI); // actually in meters, haha
             public static final double SWERVE_FALCON_METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_ENCODER_TICKS_PER_REV*SWERVE_DRIVE_GEAR_RATIO);
         }
+
 
         public final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
