@@ -28,12 +28,17 @@ public class IntakeSubsystem extends SubsystemBase {
         leftMotor.setInverted(true);
     }
 
-    //Command to Deploy and Retract the Intake
+    //Command to Deploy the Intake
     public void deploy(Boolean down){
-        if (down == true){
-            liftMotor.set(1);
-        }else{
-            liftMotor.set(-1);
+        if (down){
+            liftMotor.set(0.1);
+        }
+    }
+
+    //Command to Retract the Intake
+    public void retract(Boolean up){
+        if (up){
+            liftMotor.set(-0.1);
         }
     }
 
