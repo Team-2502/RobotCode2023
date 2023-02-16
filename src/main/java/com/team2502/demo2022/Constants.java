@@ -52,6 +52,9 @@ public final class Constants {
         public static final int BR_DRIVE_MOTOR = 10;
         public static final int BR_TURN_MOTOR = 11;
         public static final int BR_TURN_ENCODER = 12;
+
+        // manipulator subsystem
+        public static final int MANIPULATOR_MOTOR = 99;
     }
 
     public final class Subsystems {
