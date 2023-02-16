@@ -19,7 +19,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public final class OI {
+    public static final class OI {
         public static final int JOYSTICK_DRIVE_RIGHT = 0;
         public static final int JOYSTICK_DRIVE_LEFT = 1;
         public static final int CONTROLLER = 3;
@@ -37,7 +37,7 @@ public final class Constants {
         public static final int MOVE_INCHES = 2;
     }
 
-    public final class HardwareMap {
+    public static final class HardwareMap {
         // Front Left Module
         public static final int FL_DRIVE_MOTOR = 1;
         public static final int FL_TURN_MOTOR = 2;
@@ -68,10 +68,14 @@ public final class Constants {
 
     }
 
-    public final class Subsystems {
-        public final class AprilTags {
+    public static final class Subsystems {
+        public static final class AprilTags {
+            
+            public static final AprilTagFieldLayout field;
+
             //x y z coordinates are in meters, rotations are in radians
-            List<AprilTag> tagList = new ArrayList<>(
+            static {
+                List<AprilTag> tagList = new ArrayList<>(
                 Arrays.asList(
                     new AprilTag(1, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(2, new Pose3d(15.51358903, 2.748031496, 0.462788926, new Rotation3d(0,0, Math.PI))),
@@ -81,15 +85,16 @@ public final class Constants {
                     new AprilTag(6, new Pose3d(1.027432055, 4.424434849, 0.462788926, new Rotation3d(0,0, 0))),
                     new AprilTag(7, new Pose3d(1.027432055, 2.748031496, 0.462788926, new Rotation3d(0,0, 0))),
                     new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
-                )
-            );
-            AprilTagFieldLayout field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
+                    )
+                );
+                field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
+            }
             //field length, field width are in meters
         }
-        public final class PhotonVision {
+        public static final class PhotonVision {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
         }
-        public final class Drivetrain {
+        public static final class Drivetrain {
             public static final double MAX_VEL = 7; // driver speed gain (m/s)
             public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
                                                    
@@ -117,7 +122,7 @@ public final class Constants {
         }
 
 
-        public final class Vision {
+        public static final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
             //TODO SET CORRECT NUMBERS
             public static final double LIMELIGHT_ON = 0;
