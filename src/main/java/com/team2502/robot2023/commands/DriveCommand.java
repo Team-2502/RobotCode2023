@@ -108,7 +108,7 @@ public class DriveCommand extends CommandBase {
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                             -leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            -leftJoystick.getX() * Drivetrain.MAX_VEL,
+                            leftJoystick.getX() * Drivetrain.MAX_VEL,
                             rightJoystick.getZ() * Drivetrain.MAX_ROT,
                             Rotation2d.fromDegrees(-drivetrain.getHeading()));
                     centerOfRotation = new Translation2d(0, 0);
