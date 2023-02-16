@@ -84,6 +84,9 @@ public final class Constants {
             public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI); // actually in meters, haha
             public static final double SWERVE_FALCON_METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_ENCODER_TICKS_PER_REV*SWERVE_DRIVE_GEAR_RATIO);
         }
+        public final class Manipulator{
+            public static final double SPEED = 0.05;
+        }
 
         public final class Vision {
             public static final String LIMELIGHT_NETWORK_TABLE = "limelight";
