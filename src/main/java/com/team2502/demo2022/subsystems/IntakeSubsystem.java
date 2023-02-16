@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
         leftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         //Sets Speed Limit To Motors
-        //TODO CHANGE SPEED!!!
+        //TODO CHANGE LIMIT!!!
         liftMotor.setSmartCurrentLimit(20);
         rightMotor.setSmartCurrentLimit(20);
         leftMotor.setSmartCurrentLimit(20);
