@@ -30,17 +30,13 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     //Command to Deploy the Intake
-    public void deploy(Boolean down){
-        if (down){
-            liftMotor.set(0.1);
-        }
+    public void deploy(){
+        liftMotor.set(Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
 
     //Command to Retract the Intake
-    public void retract(Boolean up){
-        if (up){
-            liftMotor.set(-0.1);
-        }
+    public void retract(){
+        liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
 
     //Command to Control Intake Speed. Stops Motor if off
