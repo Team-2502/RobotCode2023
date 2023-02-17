@@ -125,6 +125,7 @@ public final class Constants {
             public static final double LINE_I = 0.0;
             public static final double LINE_D = 0.0;
             public static final double LINE_T = 0.0;
+            public static final double LINE_F = 0.0;
         }
 
 
