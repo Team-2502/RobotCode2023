@@ -1,4 +1,4 @@
-package com.team2502.demo2022;
+package com.team2502.robot2023;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
@@ -27,7 +27,7 @@ public class Utils {
      * @param newAngle       Target Angle
      * @return Closest angle within scope
      */
-    private static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
+    public static double placeInAppropriate0To360Scope(double scopeReference, double newAngle) {
         double lowerBound;
         double upperBound;
         double lowerOffset = scopeReference % 360;

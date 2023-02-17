@@ -1,8 +1,9 @@
-package com.team2502.demo2022.subsystems;
+package com.team2502.robot2023.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import com.team2502.demo2022.Constants;
+import com.team2502.robot2023.Constants;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
