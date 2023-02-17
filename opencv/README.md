@@ -1,0 +1,1 @@
+This folder contains opencv code for the Raspberry Pi coproccessor. This code runs alongside Photonvision as a systemd service to account for Photonvision instability when using multiple identical cameras

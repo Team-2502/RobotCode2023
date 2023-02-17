@@ -1,8 +1,11 @@
-package com.team2502.demo2022.commands;
+package com.team2502.robot2023.commands;
+
+import static com.team2502.robot2023.Utils.deadzone;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
-import com.team2502.demo2022.subsystems.DrivetrainSubsystem;
+import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
+import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -11,8 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-
-import static com.team2502.demo2022.Utils.deadzone;
 
 public class DriveCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
@@ -86,7 +87,7 @@ public class DriveCommand extends CommandBase {
         } else {
             switch(typeEntry.getSelected()) {
                 case RobotOriented:
-                    speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT);
+                    speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT);
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;

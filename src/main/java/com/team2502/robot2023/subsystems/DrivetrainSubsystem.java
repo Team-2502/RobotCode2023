@@ -1,4 +1,4 @@
-package com.team2502.demo2022.subsystems;
+package com.team2502.robot2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -7,9 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.unmanaged.UnmanagedJNI;
 import com.kauailabs.navx.frc.AHRS;
-import com.team2502.demo2022.Constants.HardwareMap;
-import com.team2502.demo2022.Constants.Subsystems.Drivetrain;
-import com.team2502.demo2022.Utils;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -23,6 +21,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.team2502.robot2023.Utils;
+import com.team2502.robot2023.Constants.HardwareMap;
+import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
+
 import java.lang.Math;
 
 //import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
@@ -60,30 +62,32 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private double currentPos;
 
     public DrivetrainSubsystem(){
-        drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR);
-        drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR);
-        drivetrainPowerFrontRight = new WPI_TalonFX(HardwareMap.FR_DRIVE_MOTOR);
-        drivetrainPowerBackRight = new WPI_TalonFX(HardwareMap.BR_DRIVE_MOTOR);
+        PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
+
+        drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
+        drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
+        drivetrainPowerFrontRight = new WPI_TalonFX(HardwareMap.FR_DRIVE_MOTOR, "can0");
+        drivetrainPowerBackRight = new WPI_TalonFX(HardwareMap.BR_DRIVE_MOTOR, "can0");
         
-        drivetrainTurnBackLeft = new WPI_TalonFX(HardwareMap.BL_TURN_MOTOR);
-        drivetrainTurnFrontLeft = new WPI_TalonFX(HardwareMap.FL_TURN_MOTOR);
-        drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR);
-        drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR);
+        drivetrainTurnBackLeft = new WPI_TalonFX(HardwareMap.BL_TURN_MOTOR, "can0");
+        drivetrainTurnFrontLeft = new WPI_TalonFX(HardwareMap.FL_TURN_MOTOR, "can0");
+        drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR, "can0");
+        drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR, "can0");
 
         /*drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
         drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
         drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
         drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);*/
 
-        drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER);
-        drivetrainEncoderFrontLeft = new CANCoder(HardwareMap.FL_TURN_ENCODER);
-        drivetrainEncoderFrontRight = new CANCoder(HardwareMap.FR_TURN_ENCODER);
-        drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER);
+        drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER, "can0");
+        drivetrainEncoderFrontLeft = new CANCoder(HardwareMap.FL_TURN_ENCODER, "can0");
+        drivetrainEncoderFrontRight = new CANCoder(HardwareMap.FR_TURN_ENCODER, "can0");
+        drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER, "can0");
 
-        Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
-        Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
-        Translation2d m_backLeftLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
-        Translation2d m_backRightLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
+        Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
+        Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
+        Translation2d m_backLeftLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
+        Translation2d m_backRightLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
 
         kinematics = new SwerveDriveKinematics(
                 m_frontLeftLocation,
@@ -110,16 +114,16 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
-                drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
-                drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
-                drivetrainEncoderBackLeft.getPosition()
+                -drivetrainEncoderBackLeft.getPosition()
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
-                drivetrainEncoderBackRight.getPosition()
+                -drivetrainEncoderBackRight.getPosition()
         );
 
         SwerveModulePosition FRPosition = new SwerveModulePosition(
@@ -146,49 +150,35 @@ public class DrivetrainSubsystem extends SubsystemBase{
         Rotation2d FLRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
             //drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
             //drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
             //drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                drivetrainEncoderBackLeft.getPosition()
+                -drivetrainEncoderBackLeft.getPosition()
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
             //drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                drivetrainEncoderBackRight.getPosition()
+                -drivetrainEncoderBackRight.getPosition()
         );
         
-        SwerveModuleState FLState =
-            Utils.optimize(
-                moduleStates[0], 
-                    FLRotation
-            );
-        SwerveModuleState FRState =
-                Utils.optimize(
-                moduleStates[1],
-                    FRRotation
-            );
-        SwerveModuleState BLState =
-                Utils.optimize(
-                moduleStates[2],
-                    BLRotation
-            );
-        SwerveModuleState BRState =
-                Utils.optimize(
-                moduleStates[3],
-                    BRRotation
-            );
+        SmartDashboard.putNumber("FL Anglepre", FLRotation.getDegrees());
+        SwerveModuleState FLState = SwerveModuleState.optimize(moduleStates[0], FLRotation);
+        SwerveModuleState FRState = SwerveModuleState.optimize(moduleStates[1], FRRotation);
+        SwerveModuleState BLState = SwerveModuleState.optimize(moduleStates[2], BLRotation);
+        SwerveModuleState BRState = SwerveModuleState.optimize(moduleStates[3], BRRotation);
+        SmartDashboard.putNumber("FL Anglepost", FLState.angle.getDegrees());
 
-        drivetrainTurnFrontLeft.set(ControlMode.Position, FLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnFrontRight.set(ControlMode.Position, FRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackLeft.set(ControlMode.Position, BLState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
-        drivetrainTurnBackRight.set(ControlMode.Position, BRState.angle.getDegrees() / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontLeft.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(FLRotation.getDegrees(), FLState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnFrontRight.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(FRRotation.getDegrees(), FRState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackLeft.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(BLRotation.getDegrees(), BLState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
+        drivetrainTurnBackRight.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(BRRotation.getDegrees(), BRState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
 
 
         drivetrainPowerFrontLeft.set(ControlMode.Velocity, FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
