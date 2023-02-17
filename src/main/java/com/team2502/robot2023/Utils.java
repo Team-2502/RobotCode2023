@@ -67,7 +67,7 @@ public class Utils {
     }
 
     /** class for creating trapezoidal curves, used to create a linear transition between two numbers */
-    public class Trapezoidal {
+    public static class Trapezoidal {
         /** maximum acceleration in units per second per second */
         double maxAccel;
         /** maximum deceleration in units per second per second */

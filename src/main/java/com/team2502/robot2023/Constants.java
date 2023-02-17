@@ -120,9 +120,11 @@ public final class Constants {
             public static final double SWERVE_FALCON_TICKS_PER_INCH = (SWERVE_DRIVE_GEAR_RATIO) * (WHEEL_CIRCUMFERENCE * Math.PI); // actually in meters, haha
             public static final double SWERVE_FALCON_METERS_PER_TICK = WHEEL_CIRCUMFERENCE / (FALCON_ENCODER_TICKS_PER_REV*SWERVE_DRIVE_GEAR_RATIO);
 
+            // TODO
             public static final double LINE_P = 0.0;
             public static final double LINE_I = 0.0;
             public static final double LINE_D = 0.0;
+            public static final double LINE_T = 0.0;
         }
 
 
