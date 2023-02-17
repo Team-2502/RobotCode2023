@@ -20,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
         leftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         //Sets Speed Limit To Motors
-        //TODO CHANGE SPEED!!!
+        //TODO CHANGE LIMIT!!!
         liftMotor.setSmartCurrentLimit(20);
         rightMotor.setSmartCurrentLimit(20);
         leftMotor.setSmartCurrentLimit(20);
@@ -29,13 +29,14 @@ public class IntakeSubsystem extends SubsystemBase {
         leftMotor.setInverted(true);
     }
 
-    //Command to Deploy and Retract the Intake
-    public void deploy(Boolean down){
-        if (down == true){
-            liftMotor.set(1);
-        }else{
-            liftMotor.set(-1);
-        }
+    //Command to Deploy the Intake
+    public void deploy(){
+        liftMotor.set(Constants.Subsystems.Intake.DEPLOY_SPEED);
+    }
+
+    //Command to Retract the Intake
+    public void retract(){
+        liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
 
     //Command to Control Intake Speed. Stops Motor if off
