@@ -27,14 +27,13 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 2;
+        public static final int RESET_HEADING = 4;
+        public static final int RUN_INTAKE = 1;
+        public static final int LOWER_INTAKE = 2;
 
         // Driver Left
-        public static final int ALLIGN_LEFT = 3;
-        public static final int ALLIGN_CENTER = 2;
-        public static final int ALLIGN_RIGHT = 4;
-
-        public static final int MOVE_INCHES = 2;
+        public static final int RUN_INTAKE_BACK = 1;
+        public static final int RAISE_INTAKE = 2;
     }
 
     public static final class HardwareMap {

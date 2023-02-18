@@ -17,4 +17,8 @@ public class ConveyorSubsystem extends SubsystemBase {
     public void runConveyor(double speed){
         conveyor.set(speed);
     }
+
+    public void stop() {
+        conveyor.stopMotor();
+    }
 }

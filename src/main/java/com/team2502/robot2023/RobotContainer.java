@@ -6,8 +6,12 @@
 package com.team2502.robot2023;
 
 import com.team2502.robot2023.commands.DriveCommand;
+import com.team2502.robot2023.commands.RunConveyorCommand;
+import com.team2502.robot2023.commands.RunIntakeCommand;
+import com.team2502.robot2023.subsystems.ConveyorSubsystem;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
+import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,6 +34,9 @@ public class RobotContainer {
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
+    protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
+    protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
+
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
 
@@ -39,6 +46,14 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+
+        JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
+        RunIntake.whenHeld(new RunIntakeCommand(INTAKE, 0.25));
+        RunIntake.whenHeld(new RunConveyorCommand(CONVEYOR, 0.25));
+
+        JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
+        RunIntakeBack.whenHeld(new RunIntakeCommand(INTAKE, -0.25));
+        RunIntakeBack.whenHeld(new RunConveyorCommand(CONVEYOR, -0.25));
     }
 
     /**
