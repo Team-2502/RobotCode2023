@@ -16,11 +16,11 @@ public class RunIntakeCommand extends CommandBase {
 
     @Override
     public void execute() {
-        intake.intake(true, speed);
+        intake.run(speed);
     }
 
     @Override
     public void end(boolean kInterrupted) {
-        intake.intake(false, 0);
+        intake.stop();
     }
 }

@@ -39,14 +39,13 @@ public class IntakeSubsystem extends SubsystemBase {
         liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
 
-    //Command to Control Intake Speed. Stops Motor if off
-    public void intake(Boolean onoff, double intakeSpeed){
-        if (onoff) {
-            rightMotor.set(intakeSpeed);
-            leftMotor.set(intakeSpeed);
-        }else {
-            rightMotor.stopMotor();
-            leftMotor.stopMotor();
-        }
+    public void run(double speed) {
+        leftMotor.set(speed);
+        rightMotor.set(-speed);
+    }
+
+    public void stop() {
+        leftMotor.stopMotor();
+        rightMotor.stopMotor();
     }
 }

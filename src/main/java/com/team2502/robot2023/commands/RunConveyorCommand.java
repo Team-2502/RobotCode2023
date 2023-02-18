@@ -16,7 +16,7 @@ public class RunConveyorCommand extends CommandBase {
 
     @Override
     public void execute() {
-        conveyor.runConveyor(speed);
+        conveyor.run(speed);
     }
 
     @Override
