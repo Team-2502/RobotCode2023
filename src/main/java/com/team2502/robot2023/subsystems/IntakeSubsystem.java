@@ -8,27 +8,34 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
     //Define motors
-    private final CANSparkMax liftMotor;
+    private final CANSparkMax leftLiftMotor;
+    private final CANSparkMax rightLiftMotor;
     private final CANSparkMax rightMotor;
     private final CANSparkMax leftMotor;
 
 
     public IntakeSubsystem() {
         // Pulls Motor Info From Constants and Defines Motor Type
-        liftMotor = new CANSparkMax(Constants.HardwareMap.LIFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftLiftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_LIFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightLiftMotor = new CANSparkMax(Constants.HardwareMap.RIGHT_LIFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         rightMotor = new CANSparkMax(Constants.HardwareMap.RIGHT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         leftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         //Sets Speed Limit To Motors
-        //TODO CHANGE LIMIT!!!
-        liftMotor.setSmartCurrentLimit(40);
-        rightMotor.setSmartCurrentLimit(40);
-        leftMotor.setSmartCurrentLimit(40);
+        leftLiftMotor.setSmartCurrentLimit(39);
+        rightLiftMotor.setSmartCurrentLimit(39);
+        rightMotor.setSmartCurrentLimit(39);
+        leftMotor.setSmartCurrentLimit(39);
 
         //Sets Left Motor To Spin Opposite Direction To Work With Right Motor
         leftMotor.setInverted(true);
+
+        leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
+    // TODO use PID
+    /*
     //Command to Deploy the Intake
     public void deploy(){
         liftMotor.set(Constants.Subsystems.Intake.DEPLOY_SPEED);
@@ -38,7 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void retract(){
         liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
-
+     */
     public void run(double leftSpeed, double rightSpeed) {
         leftMotor.set(-leftSpeed);
         rightMotor.set(-rightSpeed);
