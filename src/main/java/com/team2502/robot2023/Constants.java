@@ -75,6 +75,9 @@ public final class Constants {
         public static final int LEFT_ELEVATOR_MOTOR = 17;
         public static final int RIGHT_ELEVATOR_MOTOR = 18;
 
+        // Manipulator
+        public static final int GRIPPER_MOTOR = 19;
+
     }
 
     public static final class Subsystems {
