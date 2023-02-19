@@ -6,9 +6,12 @@
 package com.team2502.robot2023;
 
 import com.team2502.robot2023.commands.DriveCommand;
+import com.team2502.robot2023.commands.GotoAbsoluteCommand;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -38,7 +41,12 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
-        ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+
+        new JoystickButton(JOYSTICK_OPERATOR, 1)
+            .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
+                    new Pose2d(0, 0, new Rotation2d(0))
+                    ));
     }
 
     /**

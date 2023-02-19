@@ -227,6 +227,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	    return (drivetrainPowerFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_METERS_PER_TICK);
     }
 
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
     public void setToDistance(double distance) {
         currentPos = drivetrainPowerFrontLeft.getSelectedSensorPosition();
 
