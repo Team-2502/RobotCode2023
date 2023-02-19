@@ -28,7 +28,34 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
 
+        pid = rightElevator.getPIDController();
         encoder = rightElevator.getEncoder();
+
+        double kP = 5e-5;
+        double kI = 1e-6;
+        double kD = 0;
+        double kIz = 0;
+        double kFF = 0.000156;
+        double kMaxOutput = 1;
+        double kMinOutput = -1;
+
+        double maxVel = 2000;
+        double minVel = 0;
+        double maxAcc = 1500;
+        double allowedErr = 5;
+
+        pid.setP(kP);
+        pid.setI(kI);
+        pid.setD(kD);
+        pid.setIZone(kIz);
+        pid.setFF(kFF);
+        pid.setOutputRange(kMinOutput, kMaxOutput);
+
+        int smartMotionSlot = 0;
+        pid.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
+        pid.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
+        pid.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
+        pid.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
     }
 
     public void set(ElevatorPosition pos) {
