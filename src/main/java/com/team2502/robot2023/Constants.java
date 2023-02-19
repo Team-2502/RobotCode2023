@@ -99,6 +99,14 @@ public final class Constants {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
         }
         public static final class Drivetrain {
+            // constants for pose control
+            public static final double DRIVETRAIN_MOVE_P = 0.25;
+            public static final double DRIVETRAIN_MOVE_I = 0;
+            public static final double DRIVETRAIN_MOVE_D = 0;
+            public static final double DRIVETRAIN_TURN_P = 0.25;
+            public static final double DRIVETRAIN_TURN_I = 0;
+            public static final double DRIVETRAIN_TURN_D = 0;
+
             public static final double MAX_VEL = 7; // driver speed gain (m/s)
             public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
                                                    

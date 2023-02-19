@@ -11,39 +11,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 public class GotoAbsoluteCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
-    private PIDController xPidController;
-    private PIDController yPidController;
-    private PIDController rPidController;
+    private Pose2d goalPose;
 
     public GotoAbsoluteCommand(DrivetrainSubsystem drivetrain, Pose2d goalPose) {
         this.drivetrain = drivetrain;
-
-        this.xPidController = new PIDController(0.25, 0, 0);
-        this.yPidController = new PIDController(0.25, 0, 0);
-        this.rPidController = new PIDController(0.5, 0, 0);
-
-        this.xPidController.setSetpoint(goalPose.getX());
-        this.yPidController.setSetpoint(goalPose.getY());
-        this.rPidController.setSetpoint(goalPose.getRotation().getRadians());
+        this.goalPose = goalPose;
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void execute() {
-        Pose2d odometry = drivetrain.getPose();
-        double xPower = -xPidController.calculate(odometry.getX());
-        double yPower = -yPidController.calculate(odometry.getY());
-        double rPower = -rPidController.calculate(odometry.getRotation().getRadians());
-
-        ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
-        Translation2d centerOfRotation = new Translation2d(0, 0);
-        drivetrain.setSpeeds(speeds, centerOfRotation);
+        drivetrain.setGoalPose(goalPose);
     }
 
     @Override
     public boolean isFinished() {
-        return false; // unimplemented
+        return drivetrain.atGoalPose();
     }
 
     @Override

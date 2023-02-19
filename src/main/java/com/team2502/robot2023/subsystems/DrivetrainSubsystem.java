@@ -2,32 +2,27 @@ package com.team2502.robot2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.unmanaged.UnmanagedJNI;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
+import com.team2502.robot2023.Constants.Subsystems.Drivetrain.*;
 
 import java.lang.Math;
 
-//import com.team2502.robot2022.Constants.Subsystem.Drivetrain;
 
 public class DrivetrainSubsystem extends SubsystemBase{
     private SwerveDriveKinematics kinematics;
@@ -57,9 +52,18 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     private AHRS navX = new AHRS();
 
-    private Solenoid solenoid;
-
     private double currentPos;
+
+    private enum ControlModes {
+        POSE, /// approach the given absolute x,y,theta pose
+        VELOCITY, /// attempt to reach the given x,y,theta velocity
+    }
+
+    private ControlModes controlMode; // current control strategy
+    // pose control constants
+    private PIDController xPidController;
+    private PIDController yPidController;
+    private PIDController rPidController;
 
     public DrivetrainSubsystem(){
         PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
@@ -73,11 +77,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontLeft = new WPI_TalonFX(HardwareMap.FL_TURN_MOTOR, "can0");
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR, "can0");
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR, "can0");
-
-        /*drivetrainEncoderBackLeft = new CANSparkMax(HardwareMap.BL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderFrontLeft = new CANSparkMax(HardwareMap.FL_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderBackRight = new CANSparkMax(HardwareMap.BR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);
-        drivetrainEncoderFrontRight = new CANSparkMax(HardwareMap.FR_TURN_ENCODER, CANSparkMaxLowLevel.MotorType.kBrushless);*/
 
         drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER, "can0");
         drivetrainEncoderFrontLeft = new CANCoder(HardwareMap.FL_TURN_ENCODER, "can0");
@@ -100,19 +99,16 @@ public class DrivetrainSubsystem extends SubsystemBase{
         odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
 
         field = new Field2d();
-        //field.initSendable(builder);
 
+        controlMode = ControlModes.VELOCITY;
 
-        //drivetrainBackRight.setInverted(TalonFXInvertType.CounterClockwise);
-        //drivetrainBackLeft.setInverted(TalonFXInvertType.CounterClockwise);
-        //drivetrainFrontRight.setNeutralMode(NeutralMode.Brake);
-        //drivetrainFrontLeft.setNeutralMode(NeutralMode.Brake);
-        //drive = new DifferentialDrive(drivetrainFrontLeft, drivetrainFrontRight);
-
-        //drive.setSafetyEnabled(false); // suppress "watchdog not fed" errors
+        // initialize PIDs
+        this.xPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
+        this.yPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
+        this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
     }
 
-    public SwerveModulePosition[] getModulePositions() {
+    private SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
                 -drivetrainEncoderFrontLeft.getPosition()
         );
@@ -144,7 +140,50 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return modulePositions;
 
     }
+
+    /** setGoalPose
+     * sets the target position and rotation for the robot, using the internal PID controllers
+     * @param pose target pose
+     */
+    public void setGoalPose(Pose2d pose) {
+        controlMode = ControlModes.VELOCITY;
+
+        this.xPidController.setSetpoint(pose.getX());
+        this.yPidController.setSetpoint(pose.getY());
+        this.rPidController.setSetpoint(pose.getRotation().getRadians());
+    }
+
+    /** atGoalPose
+     * @return are all movement PIDs settled?
+     */
+    public boolean atGoalPose() {
+        switch (controlMode) {
+            case POSE:
+                return xPidController.atSetpoint() && yPidController.atSetpoint() && rPidController.atSetpoint();
+            case VELOCITY:
+                return false;
+        }
+        return false;
+    }
+
+
+	/** setSpeeds
+     * sets a velocity for the swerve drive
+	 * @param speed x,y,theta goal velocity (m/s)
+	 */
+    public void setSpeeds(ChassisSpeeds speed) {
+        Translation2d centerOfRotation = new Translation2d(0, 0);
+        setSpeeds(speed, centerOfRotation);
+    }
+
+	/** setSpeeds
+     * sets a velocity for the swerve drive
+	 * @param speed x,y,theta goal velocity (m/s)
+	 * @param centerOfRotation x,y position (m) on the chassis to rotate around
+	 */
     public void setSpeeds(ChassisSpeeds speed, Translation2d centerOfRotation) {
+        controlMode = ControlModes.VELOCITY;
+
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speed, centerOfRotation);
 
         Rotation2d FLRotation = Rotation2d.fromDegrees(
@@ -168,12 +207,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 -drivetrainEncoderBackRight.getPosition()
         );
         
-        SmartDashboard.putNumber("FL Anglepre", FLRotation.getDegrees());
         SwerveModuleState FLState = SwerveModuleState.optimize(moduleStates[0], FLRotation);
         SwerveModuleState FRState = SwerveModuleState.optimize(moduleStates[1], FRRotation);
         SwerveModuleState BLState = SwerveModuleState.optimize(moduleStates[2], BLRotation);
         SwerveModuleState BRState = SwerveModuleState.optimize(moduleStates[3], BRRotation);
-        SmartDashboard.putNumber("FL Anglepost", FLState.angle.getDegrees());
 
         drivetrainTurnFrontLeft.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(FLRotation.getDegrees(), FLState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
         drivetrainTurnFrontRight.set(ControlMode.Position, Utils.placeInAppropriate0To360Scope(FRRotation.getDegrees(), FRState.angle.getDegrees()) / Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES);
@@ -187,12 +224,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerBackRight.set(ControlMode.Velocity, BRState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
 
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
-        SmartDashboard.putNumber("FLCTRUNITS ", FLState.speedMetersPerSecond * Drivetrain.SWERVE_METERS_PER_SECOND_TO_CTRE);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
         SmartDashboard.putNumber("FL Angle", FLRotation.getDegrees());
     }
 
+    /** stop drivetrain by freezing all motors */
     public void stop() {
+        controlMode = ControlModes.VELOCITY;
         drivetrainPowerBackLeft.stopMotor();
         drivetrainPowerBackRight.stopMotor();
         drivetrainPowerFrontLeft.stopMotor();
@@ -204,17 +242,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainTurnFrontRight.stopMotor();
     }
 
-//    /**
-//    * Average drivetrain motor revs
-//    * @return double revs since restart
-//     */
-//    public double getRevsAvg() {
-//	    return (
-//			    -drivetrainFrontRight.getSelectedSensorPosition()+
-//			    drivetrainFrontLeft.getSelectedSensorPosition()
-//		   )/2;
-//    }
-//
 //    /**
 //    * inches since init
 //    * @return inches since initialization
@@ -257,12 +284,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     public double getRpm() {
         return (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.SWERVE_FALCON_TICKS_PER_INCH);
     }
-//
-//    public double getHeading()
-//    {
-//        return Math.IEEEremainder(-navX.getAngle(), 360D);
-//    }
-//
+    
     public void resetHeading() {
         navX.reset();
     }
@@ -291,8 +313,25 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+        Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
 
+        switch (controlMode) {
+            case VELOCITY:
+                controlMode = ControlModes.VELOCITY;
+                break;
+            case POSE:
+                double xPower = -xPidController.calculate(pose.getX());
+                double yPower = -yPidController.calculate(pose.getY());
+                double rPower = -rPidController.calculate(pose.getRotation().getRadians());
+
+                ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
+                setSpeeds(speeds);
+
+                controlMode = ControlModes.POSE;
+                break;
+        }
+
+        // telemetry
         double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
@@ -300,14 +339,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
-        //SmartDashboard.putNumber("RPM", getRpm());
 	    SmartDashboard.putNumber("fr temp", drivetrainPowerFrontRight.getTemperature());
-        //SmartDashboard.putBoolean("High Gear", getGear());
-        //SmartDashboard.putNumber("FL rotation", drivetrainTurnFrontLeft.getSelectedSensorPosition()/360);
-        //SmartDashboard.putNumber("FR Rotation", drivetrainTurnFrontRight.getSelectedSensorPosition()/360);
         SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
-        SmartDashboard.putNumber("Inches Travled", getInchesTraveled());
-        SmartDashboard.putNumber("Meters Travled", getMetersTraveled());
+        SmartDashboard.putNumber("Meters Traveled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
     }
 }
