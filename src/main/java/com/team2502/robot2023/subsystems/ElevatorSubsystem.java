@@ -29,18 +29,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
 
-        pid = rightElevator.getPIDController();
         encoder = rightElevator.getEncoder();
     }
 
     public void set(ElevatorPosition pos) {
         switch (pos) {
             case BOTTOM:
-                pid.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+                rightElevator.getPIDController().setReference(0, CANSparkMax.ControlType.kSmartMotion);
             case MIDDLE:
-                pid.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+                rightElevator.getPIDController().setReference(0, CANSparkMax.ControlType.kSmartMotion);
             case TOP:
-                pid.setReference(0, CANSparkMax.ControlType.kSmartMotion);
+                rightElevator.getPIDController().setReference(0, CANSparkMax.ControlType.kSmartMotion);
         }
     }
 
