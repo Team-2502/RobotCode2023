@@ -7,10 +7,12 @@ package com.team2502.robot2023;
 
 import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.commands.RunConveyorCommand;
+import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
 import com.team2502.robot2023.subsystems.ConveyorSubsystem;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
+import com.team2502.robot2023.subsystems.ElevatorSubsystem;
 import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -30,12 +32,13 @@ public class RobotContainer {
 
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
-    protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.CONTROLLER);
+    protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.JOYSTICK_OPERATOR);
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
     protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
+    protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
@@ -48,12 +51,19 @@ public class RobotContainer {
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
-        RunIntake.whenHeld(new RunIntakeCommand(INTAKE, 0.25));
-        RunIntake.whenHeld(new RunConveyorCommand(CONVEYOR, 0.25));
+        RunIntake.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
 
         JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
-        RunIntakeBack.whenHeld(new RunIntakeCommand(INTAKE, -0.25));
-        RunIntakeBack.whenHeld(new RunConveyorCommand(CONVEYOR, -0.25));
+        RunIntakeBack.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, -0.75, -0.5, -0.6));
+
+        JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
+        ElevatorBot.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.BOTTOM));
+
+        JoystickButton ElevatorMid = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID);
+        ElevatorMid.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.MIDDLE));
+
+        JoystickButton ElevatorTop = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP);
+        ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.TOP));
     }
 
     /**

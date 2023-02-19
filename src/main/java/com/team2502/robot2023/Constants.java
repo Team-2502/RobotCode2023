@@ -22,18 +22,24 @@ public final class Constants {
     public static final class OI {
         public static final int JOYSTICK_DRIVE_RIGHT = 0;
         public static final int JOYSTICK_DRIVE_LEFT = 1;
+        public static final int JOYSTICK_OPERATOR = 2;
         public static final int CONTROLLER = 3;
 
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 4;
+        public static final int RESET_HEADING = 2;
         public static final int RUN_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
 
         // Driver Left
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
+
+        // Operator
+        public static final int ELEVATOR_BOT = 3;
+        public static final int ELEVATOR_MID = 2;
+        public static final int ELEVATOR_TOP = 4;
     }
 
     public static final class HardwareMap {
@@ -64,6 +70,10 @@ public final class Constants {
         public static final int LIFT_INTAKE_MOTOR = 14;
         public static final int RIGHT_INTAKE_MOTOR = 15;
         public static final int LEFT_INTAKE_MOTOR = 16;
+
+        // Elevator
+        public static final int LEFT_ELEVATOR_MOTOR = 17;
+        public static final int RIGHT_ELEVATOR_MOTOR = 18;
 
     }
 
@@ -98,8 +108,8 @@ public final class Constants {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
         }
         public static final class Drivetrain {
-            public static final double MAX_VEL = 7; // driver speed gain (m/s)
-            public static final double MAX_ROT = 4; // driver rotation gain (rad/s)
+            public static final double MAX_VEL = 10; // driver speed gain (m/s)
+            public static final double MAX_ROT = 6; // driver rotation gain (rad/s)
                                                    
             // distance between swerve modules (meters)
             public static final double SWERVE_LENGTH = 0.5334; // TODO: get from cad

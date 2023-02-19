@@ -87,7 +87,7 @@ public class DriveCommand extends CommandBase {
         } else {
             switch(typeEntry.getSelected()) {
                 case RobotOriented:
-                    speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT);
+                    speeds = new ChassisSpeeds(leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, -rightJoystick.getZ()*Drivetrain.MAX_ROT);
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;
@@ -107,10 +107,10 @@ public class DriveCommand extends CommandBase {
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -leftJoystick.getY() * Drivetrain.MAX_VEL,
+                            leftJoystick.getY() * Drivetrain.MAX_VEL,
                             -leftJoystick.getX() * Drivetrain.MAX_VEL,
-                            rightJoystick.getZ() * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                            -rightJoystick.getZ() * Drivetrain.MAX_ROT,
+                            Rotation2d.fromDegrees(drivetrain.getHeading()));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;

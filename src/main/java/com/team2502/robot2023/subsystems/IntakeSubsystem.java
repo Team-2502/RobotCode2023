@@ -21,9 +21,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
         //Sets Speed Limit To Motors
         //TODO CHANGE LIMIT!!!
-        liftMotor.setSmartCurrentLimit(20);
-        rightMotor.setSmartCurrentLimit(20);
-        leftMotor.setSmartCurrentLimit(20);
+        liftMotor.setSmartCurrentLimit(40);
+        rightMotor.setSmartCurrentLimit(40);
+        leftMotor.setSmartCurrentLimit(40);
 
         //Sets Left Motor To Spin Opposite Direction To Work With Right Motor
         leftMotor.setInverted(true);
@@ -39,9 +39,9 @@ public class IntakeSubsystem extends SubsystemBase {
         liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
     }
 
-    public void run(double speed) {
-        leftMotor.set(speed);
-        rightMotor.set(-speed);
+    public void run(double leftSpeed, double rightSpeed) {
+        leftMotor.set(-leftSpeed);
+        rightMotor.set(-rightSpeed);
     }
 
     public void stop() {
