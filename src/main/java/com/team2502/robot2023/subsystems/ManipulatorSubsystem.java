@@ -16,6 +16,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
         gripper.getPIDController().setReference(val, CANSparkMax.ControlType.kSmartMotion);
     }
 
+    public void setSpeed(double speed) {
+        gripper.set(speed);
+    }
+
     public void stop() {
         gripper.stopMotor();
     }

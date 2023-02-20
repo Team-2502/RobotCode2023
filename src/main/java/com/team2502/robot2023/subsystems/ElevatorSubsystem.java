@@ -34,6 +34,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightElevator.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
     }
 
+    public void setLinearSpeed(double speed) {
+        rightElevator.set(speed);
+    }
+
+    public void setPitchSpeed(double speed) {
+        pitchElevator.set(speed);
+    }
+
     public void stop() {
         rightElevator.stopMotor();
         leftElevator.stopMotor();
