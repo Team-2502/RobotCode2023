@@ -9,6 +9,8 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -133,6 +135,7 @@ public final class Constants {
         }
         public static final class PhotonVision {
             public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
+            public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.66), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
             public static final double MAX_VEL = 10; // driver speed gain (m/s)
