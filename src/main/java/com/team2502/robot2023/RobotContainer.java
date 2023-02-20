@@ -80,19 +80,25 @@ public class RobotContainer {
                     ));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.1), ELEVATOR));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.1), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.1), ELEVATOR));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.1), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.1), ELEVATOR));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.1), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.1), ELEVATOR));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.1), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_GRAB)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.1)));
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.1)))
+                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RELEASE)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.1)));
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.1)))
+                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
 
 
     }
