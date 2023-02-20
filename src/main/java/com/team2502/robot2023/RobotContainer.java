@@ -62,13 +62,13 @@ public class RobotContainer {
         RunIntakeBack.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, -0.75, -0.5, -0.6));
 
         JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
-        ElevatorBot.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.BOTTOM));
+        ElevatorBot.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
 
         JoystickButton ElevatorMid = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID);
-        ElevatorMid.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.MIDDLE));
+        ElevatorMid.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE));
 
         JoystickButton ElevatorTop = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP);
-        ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.TOP));
+        ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.TOP));
 
         new JoystickButton(JOYSTICK_OPERATOR, 1)
             .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
