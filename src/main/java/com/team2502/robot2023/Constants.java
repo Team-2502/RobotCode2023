@@ -84,7 +84,7 @@ public final class Constants {
 
         // Intake Motors
         public static final int LEFT_LIFT_INTAKE_MOTOR = 14;
-        public static final int RIGHT_LIFT_INTAKE_MOTOR = 17;
+        public static final int RIGHT_LIFT_INTAKE_MOTOR = 21;
         public static final int RIGHT_INTAKE_MOTOR = 15;
         public static final int LEFT_INTAKE_MOTOR = 16;
 
