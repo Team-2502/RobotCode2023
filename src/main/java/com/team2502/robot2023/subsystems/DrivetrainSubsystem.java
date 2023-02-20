@@ -322,7 +322,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+        Pose2d pose = odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
         
 
         SmartDashboard.putBoolean("GTA en?", controlMode == ControlModes.POSE);
