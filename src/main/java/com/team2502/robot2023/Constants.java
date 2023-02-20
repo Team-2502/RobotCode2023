@@ -100,6 +100,9 @@ public final class Constants {
 
     public static final class Subsystems {
         public static final class Elevator {
+            public static final double ELEVATOR_LIM_BOTTOM = 0;
+            public static final double ELEVATOR_LIM_TOP = 999999;
+
             public static enum ElevatorPosition {
                 BOTTOM(0),
                 MIDDLE(1),
