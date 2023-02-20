@@ -54,6 +54,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     private double currentPos;
 
+    public double fieldOrientedOffset; // gyro offset to driver
+
     private enum ControlModes {
         POSE, /// approach the given absolute x,y,theta pose
         VELOCITY, /// attempt to reach the given x,y,theta velocity
@@ -106,6 +108,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.xPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.yPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+
+        fieldOrientedOffset = 0;
     }
 
     private SwerveModulePosition[] getModulePositions() {
@@ -287,6 +291,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
     
     public void resetHeading() {
         navX.reset();
+    }
+
+    public void resetOffset() {
+        fieldOrientedOffset = -navX.getAngle();
     }
 
     public double getHeading() {

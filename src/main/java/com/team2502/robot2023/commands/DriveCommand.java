@@ -101,8 +101,8 @@ public class DriveCommand extends CommandBase {
                             -leftJoystick.getY() * Drivetrain.MAX_VEL,
                             -leftJoystick.getX() * Drivetrain.MAX_VEL,
                             rightJoystick.getX() * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(-drivetrain.getHeading()));
-                    centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
+                            Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
+                    centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX()).rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     //centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                 case FieldOrientedTwist:
@@ -110,7 +110,7 @@ public class DriveCommand extends CommandBase {
                             leftJoystick.getY() * Drivetrain.MAX_VEL,
                             -leftJoystick.getX() * Drivetrain.MAX_VEL,
                             -rightJoystick.getZ() * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(drivetrain.getHeading()));
+                            Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;

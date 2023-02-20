@@ -52,7 +52,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
-        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
         RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
