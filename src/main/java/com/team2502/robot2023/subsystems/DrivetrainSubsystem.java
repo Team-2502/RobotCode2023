@@ -10,6 +10,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -98,7 +99,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         );
 
         Pose2d startPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), startPose2d);
 
         field = new Field2d();
 
@@ -150,7 +151,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param pose target pose
      */
     public void setGoalPose(Pose2d pose) {
-        controlMode = ControlModes.VELOCITY;
+        controlMode = ControlModes.POSE;
 
         this.xPidController.setSetpoint(pose.getX());
         this.yPidController.setSetpoint(pose.getY());
@@ -322,15 +323,23 @@ public class DrivetrainSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+        
+
+        SmartDashboard.putBoolean("GTA en?", controlMode == ControlModes.POSE);
 
         switch (controlMode) {
             case VELOCITY:
                 controlMode = ControlModes.VELOCITY;
                 break;
             case POSE:
-                double xPower = -xPidController.calculate(pose.getX());
-                double yPower = -yPidController.calculate(pose.getY());
-                double rPower = -rPidController.calculate(pose.getRotation().getRadians());
+                double xPower = xPidController.calculate(pose.getX());
+                double yPower = yPidController.calculate(pose.getY());
+                //double rPower = rPidController.calculate(pose.getRotation().getRadians());
+                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()));
+
+                SmartDashboard.putNumber("GTA xp", xPower);
+                SmartDashboard.putNumber("GTA yp", yPower);
+                SmartDashboard.putNumber("GTA rp", rPower);
 
                 ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
                 setSpeeds(speeds);
