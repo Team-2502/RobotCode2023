@@ -12,10 +12,7 @@ import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
 import com.team2502.robot2023.commands.GotoAbsoluteCommand;
 
-import com.team2502.robot2023.subsystems.ConveyorSubsystem;
-import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
-import com.team2502.robot2023.subsystems.ElevatorSubsystem;
-import com.team2502.robot2023.subsystems.IntakeSubsystem;
+import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -45,6 +42,7 @@ public class RobotContainer {
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
     protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
     protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
+    protected final ManipulatorSubsystem MANIPULATOR = new ManipulatorSubsystem();
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
@@ -80,6 +78,23 @@ public class RobotContainer {
             .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
                     new Pose2d(0, 0, new Rotation2d(0))
                     ));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.1), ELEVATOR));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_RETRACT)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.1), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.1), ELEVATOR));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RETRACT)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.1), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_GRAB)
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.1)));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RELEASE)
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.1)));
+
+
     }
 
     /**

@@ -47,6 +47,15 @@ public final class Constants {
 
         public static final int MANIPULATOR_OUT = 2;
         public static final int MANIPULATOR_IN = 4;
+
+        public static final int ELEVATOR_EXTEND = 5;
+        public static final int ELEVATOR_RETRACT = 6;
+
+        public static final int MANIPULATOR_EXTEND = 7;
+        public static final int MANIPULATOR_RETRACT = 8;
+
+        public static final int MANIPULATOR_GRAB = 9;
+        public static final int MANIPULATOR_RELEASE = 10;
     }
 
     public static final class HardwareMap {
