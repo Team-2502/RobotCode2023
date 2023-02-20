@@ -117,7 +117,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 -drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontRight.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
                 -drivetrainEncoderBackLeft.getPosition()
@@ -198,7 +198,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         Rotation2d FRRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
             //drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                -drivetrainEncoderFrontLeft.getPosition()
+                -drivetrainEncoderFrontRight.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
