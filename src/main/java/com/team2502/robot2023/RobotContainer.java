@@ -9,12 +9,17 @@ import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.commands.RunConveyorCommand;
 import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
+import com.team2502.robot2023.commands.GotoAbsoluteCommand;
+
 import com.team2502.robot2023.subsystems.ConveyorSubsystem;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
-
 import com.team2502.robot2023.subsystems.ElevatorSubsystem;
 import com.team2502.robot2023.subsystems.IntakeSubsystem;
+import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,7 +53,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
-        ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
         RunIntake.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
@@ -64,6 +69,11 @@ public class RobotContainer {
 
         JoystickButton ElevatorTop = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP);
         ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, ElevatorSubsystem.ElevatorPosition.TOP));
+
+        new JoystickButton(JOYSTICK_OPERATOR, 1)
+            .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
+                    new Pose2d(0, 0, new Rotation2d(0))
+                    ));
     }
 
     /**
