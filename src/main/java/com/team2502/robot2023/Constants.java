@@ -41,12 +41,12 @@ public final class Constants {
         // Operator
         public static final int DEBUG_RUN = 1;
 
-        public static final int ELEVATOR_BOT = 30;
+        public static final int ELEVATOR_BOT = 16;
         public static final int ELEVATOR_MID = 20;
-        public static final int ELEVATOR_TOP = 40;
+        public static final int ELEVATOR_TOP = 15;
 
-        public static final int MANIPULATOR_OUT = 20;
-        public static final int MANIPULATOR_IN = 40;
+        public static final int MANIPULATOR_OUT = 14;
+        public static final int MANIPULATOR_IN = 13;
 
         public static final int ELEVATOR_EXTEND = 9;
         public static final int ELEVATOR_RETRACT = 8;
