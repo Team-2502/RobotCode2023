@@ -27,8 +27,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightElevator.setSmartCurrentLimit(39);
         pitchElevator.setSmartCurrentLimit(20);
 
-        rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
-        rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
+        rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
+        rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
         rightElevator.enableSoftLimit(SoftLimitDirection.kForward,true);
         rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
     }
