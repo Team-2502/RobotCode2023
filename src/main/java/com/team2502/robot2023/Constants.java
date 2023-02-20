@@ -159,7 +159,7 @@ public final class Constants {
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 3;
+            public static final double DRIVETRAIN_MOVE_P = .2;
             public static final double DRIVETRAIN_MOVE_I = 0.0003;
             public static final double DRIVETRAIN_MOVE_D = 0.0;
             public static final double DRIVETRAIN_MOVE_A = 3;

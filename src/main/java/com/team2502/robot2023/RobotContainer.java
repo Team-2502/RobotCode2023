@@ -7,6 +7,8 @@ package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.commands.DriveCommand;
+import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
+import com.team2502.robot2023.commands.FollowPathRelativeCommand;
 import com.team2502.robot2023.commands.RunConveyorCommand;
 import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
@@ -75,9 +77,11 @@ public class RobotContainer {
             .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.STOWED), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN)
-            .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
-                    new Pose2d(0, 0, new Rotation2d(0))
-                    ));
+        //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
+            .onTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN+1)
+                .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))

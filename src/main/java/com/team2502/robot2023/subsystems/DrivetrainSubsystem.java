@@ -156,6 +156,12 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.xPidController.setSetpoint(pose.getX());
         this.yPidController.setSetpoint(pose.getY());
         this.rPidController.setSetpoint(pose.getRotation().getRadians());
+
+        field.getObject("target").setPose(pose);
+    }
+
+    public void setPose(Pose2d pose) {
+        odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
     }
 
     /** atGoalPose
@@ -342,6 +348,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 SmartDashboard.putNumber("GTA rp", rPower);
 
                 ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
+                //ChassisSpeeds speeds = new ChassisSpeeds(xTrap.calculate(xPower), yTrap.calculate(yPower), rTrap.calculate(rPower));
                 setSpeeds(speeds);
 
                 controlMode = ControlModes.POSE;
