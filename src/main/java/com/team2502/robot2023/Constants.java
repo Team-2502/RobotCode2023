@@ -159,12 +159,14 @@ public final class Constants {
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 0.25;
-            public static final double DRIVETRAIN_MOVE_I = 0;
-            public static final double DRIVETRAIN_MOVE_D = 0;
-            public static final double DRIVETRAIN_TURN_P = 0.25;
-            public static final double DRIVETRAIN_TURN_I = 0;
+            public static final double DRIVETRAIN_MOVE_P = 3;
+            public static final double DRIVETRAIN_MOVE_I = 0.0003;
+            public static final double DRIVETRAIN_MOVE_D = 0.0;
+            public static final double DRIVETRAIN_MOVE_A = 3;
+            public static final double DRIVETRAIN_TURN_P = 1.6;
+            public static final double DRIVETRAIN_TURN_I = 0.0007;
             public static final double DRIVETRAIN_TURN_D = 0;
+            public static final double DRIVETRAIN_TURN_A = 2;
                                                    
             // distance between swerve modules (meters)
             public static final double SWERVE_LENGTH = 0.5405;
