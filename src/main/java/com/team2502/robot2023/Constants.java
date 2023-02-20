@@ -39,9 +39,14 @@ public final class Constants {
         public static final int RAISE_INTAKE = 2;
 
         // Operator
+        public static final int DEBUG_RUN = 1;
+
         public static final int ELEVATOR_BOT = 3;
         public static final int ELEVATOR_MID = 2;
         public static final int ELEVATOR_TOP = 4;
+
+        public static final int MANIPULATOR_OUT = 2;
+        public static final int MANIPULATOR_IN = 4;
     }
 
     public static final class HardwareMap {

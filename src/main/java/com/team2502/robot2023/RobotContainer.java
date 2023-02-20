@@ -5,6 +5,7 @@
 
 package com.team2502.robot2023;
 
+import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.commands.RunConveyorCommand;
 import com.team2502.robot2023.commands.RunElevatorCommand;
@@ -56,21 +57,26 @@ public class RobotContainer {
         ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
-        RunIntake.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
+        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
 
         JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
-        RunIntakeBack.whenHeld(new RunIntakeCommand(INTAKE, CONVEYOR, -0.75, -0.5, -0.6));
+        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.75, -0.5, -0.6));
 
         JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
-        ElevatorBot.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
+        ElevatorBot.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
 
         JoystickButton ElevatorMid = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID);
-        ElevatorMid.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE));
+        ElevatorMid.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE));
 
         JoystickButton ElevatorTop = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP);
         ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.TOP));
 
-        new JoystickButton(JOYSTICK_OPERATOR, 1)
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_OUT)
+            .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.OUT), ELEVATOR));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_IN)
+            .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.STOWED), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN)
             .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
                     new Pose2d(0, 0, new Rotation2d(0))
                     ));
