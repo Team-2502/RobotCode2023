@@ -167,8 +167,8 @@ public final class Constants {
             public static final double DRIVETRAIN_TURN_D = 0;
                                                    
             // distance between swerve modules (meters)
-            public static final double SWERVE_LENGTH = 0.5334; // TODO: get from cad
-            public static final double SWERVE_WIDTH = 0.5334;
+            public static final double SWERVE_LENGTH = 0.5405;
+            public static final double SWERVE_WIDTH = 0.5405;
 
             public static final int SWERVE_ENCODER_COUNTS_PER_REV = 4096;
             public static final int FALCON_ENCODER_TICKS_PER_REV = 2048;
