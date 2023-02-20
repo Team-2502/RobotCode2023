@@ -5,6 +5,7 @@ import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,7 @@ public class GotoAbsoluteCommand extends CommandBase {
     @Override
     public void execute() {
         drivetrain.setGoalPose(goalPose);
+        SmartDashboard.putBoolean("GTA ats", drivetrain.atGoalPose());
     }
 
     @Override
