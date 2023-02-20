@@ -41,21 +41,21 @@ public final class Constants {
         // Operator
         public static final int DEBUG_RUN = 1;
 
-        public static final int ELEVATOR_BOT = 3;
-        public static final int ELEVATOR_MID = 2;
-        public static final int ELEVATOR_TOP = 4;
+        public static final int ELEVATOR_BOT = 30;
+        public static final int ELEVATOR_MID = 20;
+        public static final int ELEVATOR_TOP = 40;
 
-        public static final int MANIPULATOR_OUT = 2;
-        public static final int MANIPULATOR_IN = 4;
+        public static final int MANIPULATOR_OUT = 20;
+        public static final int MANIPULATOR_IN = 40;
 
-        public static final int ELEVATOR_EXTEND = 5;
-        public static final int ELEVATOR_RETRACT = 6;
+        public static final int ELEVATOR_EXTEND = 9;
+        public static final int ELEVATOR_RETRACT = 8;
 
-        public static final int MANIPULATOR_EXTEND = 7;
-        public static final int MANIPULATOR_RETRACT = 8;
+        public static final int MANIPULATOR_EXTEND = 6;
+        public static final int MANIPULATOR_RETRACT = 7;
 
-        public static final int MANIPULATOR_GRAB = 9;
-        public static final int MANIPULATOR_RELEASE = 10;
+        public static final int MANIPULATOR_GRAB = 3;
+        public static final int MANIPULATOR_RELEASE = 4;
     }
 
     public static final class HardwareMap {
