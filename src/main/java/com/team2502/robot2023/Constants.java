@@ -56,6 +56,11 @@ public final class Constants {
 
         public static final int MANIPULATOR_GRAB = 3;
         public static final int MANIPULATOR_RELEASE = 4;
+
+        // Home commands
+        public static final int INTAKE_HOME = 14;
+        public static final int ELEVATOR_HOME = 15;
+        public static final int MANIPULATOR_HOME = 16;
     }
 
     public static final class HardwareMap {

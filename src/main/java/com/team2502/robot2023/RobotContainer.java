@@ -101,6 +101,18 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
 
 
+        // Home commands
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_HOME)
+                .onTrue(new InstantCommand(() -> INTAKE.home(), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.stopLift(), INTAKE));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_HOME)
+                .onTrue(new InstantCommand(() -> ELEVATOR.home(), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_HOME)
+                .onTrue(new InstantCommand(() -> MANIPULATOR.home(), MANIPULATOR))
+                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0), MANIPULATOR));
     }
 
     /**

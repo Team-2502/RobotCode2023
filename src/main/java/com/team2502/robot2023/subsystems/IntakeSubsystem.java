@@ -76,4 +76,9 @@ public class IntakeSubsystem extends SubsystemBase {
         leftMotor.stopMotor();
         rightMotor.stopMotor();
     }
+
+    public void stopLift() {
+        leftLiftMotor.stopMotor();
+        rightLiftMotor.stopMotor();
+    }
 }
