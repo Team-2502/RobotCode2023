@@ -15,6 +15,6 @@ public class RunManipulatorCommand extends CommandBase {
 
     @Override
     public void execute() {
-        manipulator.set(val);
+        manipulator.setSpeed(val);
     }
 }
