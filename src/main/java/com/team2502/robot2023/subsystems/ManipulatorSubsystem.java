@@ -14,6 +14,8 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public ManipulatorSubsystem() {
         gripper = new CANSparkMax(Constants.HardwareMap.GRIPPER_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+
+        limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_GRIPPER);
     }
 
     public void set(ManipulatorPosition pos) {
