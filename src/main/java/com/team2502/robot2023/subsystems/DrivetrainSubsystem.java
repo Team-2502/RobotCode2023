@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -86,6 +87,12 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainEncoderFrontRight = new CANCoder(HardwareMap.FR_TURN_ENCODER, "can0");
         drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER, "can0");
 
+        // reset encoders to saved compass heading
+        drivetrainEncoderBackLeft.setPositionToAbsolute();
+        drivetrainEncoderFrontLeft.setPositionToAbsolute();
+        drivetrainEncoderBackRight.setPositionToAbsolute();
+        drivetrainEncoderFrontRight.setPositionToAbsolute();
+
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
         Translation2d m_backLeftLocation = new Translation2d(-Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
@@ -111,6 +118,28 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
 
         fieldOrientedOffset = 0;
+    }
+
+    /**
+     * call once after aligning turn motors after motor rebuild
+     * ensures that swerve zeros persist across restarts
+     */
+    public void setSwerveInit() {
+        drivetrainEncoderFrontLeft.configMagnetOffset(
+                drivetrainEncoderFrontLeft.getAbsolutePosition());
+        drivetrainEncoderFrontLeft.setPositionToAbsolute();
+
+        drivetrainEncoderFrontRight.configMagnetOffset(
+                drivetrainEncoderFrontRight.getAbsolutePosition());
+        drivetrainEncoderFrontRight.setPositionToAbsolute();
+
+        drivetrainEncoderBackLeft.configMagnetOffset(
+                drivetrainEncoderBackLeft.getAbsolutePosition());
+        drivetrainEncoderBackLeft.setPositionToAbsolute();
+
+        drivetrainEncoderBackRight.configMagnetOffset(
+                drivetrainEncoderBackRight.getAbsolutePosition());
+        drivetrainEncoderBackRight.setPositionToAbsolute();
     }
 
     private SwerveModulePosition[] getModulePositions() {
