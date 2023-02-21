@@ -3,6 +3,7 @@ package com.team2502.robot2023.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2502.robot2023.Constants;
+import com.team2502.robot2023.Constants.Subsystems.Intake.*;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -41,6 +42,11 @@ public class IntakeSubsystem extends SubsystemBase {
         rightLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_RIGHT_INTAKE);
     }
 
+    public void set(IntakePosition pos) {
+        leftLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
+        rightLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
+    }
+
     public void run(double leftSpeed, double rightSpeed) {
         leftMotor.set(-leftSpeed);
         rightMotor.set(-rightSpeed);
@@ -62,6 +68,8 @@ public class IntakeSubsystem extends SubsystemBase {
         while (rightLimitSwitch.get()) {
             runRight(-0.1);
         }
+
+        set(IntakePosition.RETRACTED);
     }
 
     public void stop() {
