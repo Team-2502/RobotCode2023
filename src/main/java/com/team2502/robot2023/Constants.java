@@ -128,8 +128,29 @@ public final class Constants {
                 }
             }
         }
+
+        public static final class Manipulator {
+            public static enum ManipulatorPosition {
+                OPEN(0),
+                CLOSED(1);
+
+                public final double position;
+                private ManipulatorPosition(double position) {
+                    this.position = position;
+                }
+            }
+        }
+
         public static final class Intake {
-            public static final float DEPLOY_SPEED = 0.1f;
+            public static enum IntakePosition {
+                DEPLOYED(0),
+                RETRACTED(1);
+
+                public final double position;
+                private IntakePosition(double position) {
+                    this.position = position;
+                }
+            }
         }
 
         public static final class AprilTags {
