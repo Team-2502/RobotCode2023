@@ -40,8 +40,9 @@ public final class Constants {
 
         // Operator
         public static final int DEBUG_RUN = 1;
+        public static final int RESET_MODULES = 16;
 
-        public static final int ELEVATOR_BOT = 16;
+        public static final int ELEVATOR_BOT = 12;
         public static final int ELEVATOR_MID = 20;
         public static final int ELEVATOR_TOP = 15;
 
