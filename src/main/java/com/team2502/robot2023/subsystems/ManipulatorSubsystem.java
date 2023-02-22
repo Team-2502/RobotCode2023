@@ -27,10 +27,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
     }
 
     public void home() {
-        while (limitSwitch.get()) {
+        while (!limitSwitch.get()) {
             setSpeed(-0.1);
         }
 
+        gripper.getEncoder().setPosition(0);
         set(ManipulatorPosition.OPEN);
     }
 

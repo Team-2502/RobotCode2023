@@ -69,6 +69,9 @@ public class IntakeSubsystem extends SubsystemBase {
             runRight(-0.1);
         }
 
+        leftLiftMotor.getEncoder().setPosition(0);
+        rightLiftMotor.getEncoder().setPosition(0);
+
         set(IntakePosition.RETRACTED);
     }
 

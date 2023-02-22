@@ -64,6 +64,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             setLinearSpeed(-0.1);
         }
 
+        rightElevator.getEncoder().setPosition(0);
         set(ElevatorPosition.BOTTOM);
     }
 
