@@ -14,7 +14,11 @@ public class ConveyorSubsystem extends SubsystemBase {
         conveyor.setSmartCurrentLimit(30);
     }
 
-    public void runConveyor(double speed){
+    public void run(double speed){
         conveyor.set(speed);
+    }
+
+    public void stop() {
+        conveyor.stopMotor();
     }
 }
