@@ -25,6 +25,7 @@ public final class Constants {
         public static final int JOYSTICK_DRIVE_RIGHT = 0;
         public static final int JOYSTICK_DRIVE_LEFT = 1;
         public static final int JOYSTICK_OPERATOR = 2;
+        public static final int JOYSTICK_DEBUG = 5;
         public static final int CONTROLLER = 3;
 
         // Buttons
@@ -55,8 +56,8 @@ public final class Constants {
         public static final int MANIPULATOR_EXTEND = 6;
         public static final int MANIPULATOR_RETRACT = 7;
 
-        public static final int MANIPULATOR_GRAB = 3;
-        public static final int MANIPULATOR_RELEASE = 4;
+        public static final int MANIPULATOR_GRAB = 1;
+        public static final int MANIPULATOR_RELEASE = 2;
     }
 
     public static final class HardwareMap {

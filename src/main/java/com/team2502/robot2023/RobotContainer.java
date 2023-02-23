@@ -38,6 +38,7 @@ public class RobotContainer {
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
     protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.JOYSTICK_OPERATOR);
+    protected final Joystick JOYSTICK_DEBUG = new Joystick(Constants.OI.JOYSTICK_DEBUG);
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
@@ -79,11 +80,11 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_IN)
             .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.STOWED), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN)
+        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
         //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
             .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN+1)
+        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+1)
                 .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)

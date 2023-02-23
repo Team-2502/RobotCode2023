@@ -100,7 +100,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         );
 
         Pose2d startPose2d = new Pose2d(0, 0, Rotation2d.fromDegrees(0));
-        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(getHeading()), getModulePositions(), startPose2d);
+        odometry = new SwerveDriveOdometry(kinematics, Rotation2d.fromDegrees(-getHeading()), getModulePositions(), startPose2d);
 
         field = new Field2d();
 
@@ -184,7 +184,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void setPose(Pose2d pose) {
-        odometry.resetPosition(Rotation2d.fromDegrees(getHeading()), getModulePositions(), pose);
+        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        odometry.resetPosition(Rotation2d.fromDegrees(-getHeading()), getModulePositions(), pose);
     }
 
     /** atGoalPose
@@ -289,7 +290,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        Pose2d pose = odometry.getPoseMeters();
+        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+
+        return pose;
     }
 
     public void setToDistance(double distance) {
@@ -351,7 +355,9 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     @Override
     public void periodic(){
-        Pose2d pose = odometry.update(Rotation2d.fromDegrees(getHeading()), getModulePositions());
+        Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+        pose = getPose();
+
         
 
         SmartDashboard.putBoolean("GTA en?", controlMode == ControlModes.POSE);
@@ -379,10 +385,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         }
 
         // telemetry
-        double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
+        double[] position = {getPose().getX(), getPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
-        field.setRobotPose(odometry.getPoseMeters());
+        field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
