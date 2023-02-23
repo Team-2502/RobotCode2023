@@ -370,7 +370,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 double xPower = xPidController.calculate(pose.getX());
                 double yPower = yPidController.calculate(pose.getY());
                 //double rPower = rPidController.calculate(pose.getRotation().getRadians());
-                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()));
+                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()+180));
 
                 SmartDashboard.putNumber("GTA xp", xPower);
                 SmartDashboard.putNumber("GTA yp", yPower);

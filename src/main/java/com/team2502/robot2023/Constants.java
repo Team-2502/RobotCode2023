@@ -39,12 +39,13 @@ public final class Constants {
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
 
-        // Operator
+        // DBG
         public static final int DEBUG_RUN = 1;
-        public static final int RESET_MODULES = 16;
+        public static final int RESET_MODULES = 4;
 
+        // Operator
         public static final int ELEVATOR_BOT = 12;
-        public static final int ELEVATOR_MID = 20;
+        public static final int ELEVATOR_MID = 11;
         public static final int ELEVATOR_TOP = 15;
 
         public static final int MANIPULATOR_OUT = 14;
@@ -161,7 +162,7 @@ public final class Constants {
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = .2;
+            public static final double DRIVETRAIN_MOVE_P = 1.4;
             public static final double DRIVETRAIN_MOVE_I = 0.0003;
             public static final double DRIVETRAIN_MOVE_D = 0.0;
             public static final double DRIVETRAIN_MOVE_A = 3;

@@ -57,7 +57,7 @@ public class RobotContainer {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.RESET_MODULES)
+        new JoystickButton(JOYSTICK_DEBUG, OI.RESET_MODULES)
             .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
