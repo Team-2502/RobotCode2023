@@ -84,6 +84,9 @@ public class RobotContainer {
         //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
             .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
 
+        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+2)
+            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpretzel"));
+
         new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+1)
                 .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
 
