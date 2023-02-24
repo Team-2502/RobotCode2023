@@ -15,11 +15,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
+import com.team2502.robot2023.Constants.Subsystems.AprilTags;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain.*;
 
@@ -57,6 +60,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private double currentPos;
 
     public double fieldOrientedOffset; // gyro offset to driver
+
+    private Alliance alliance;
 
     private enum ControlModes {
         POSE, /// approach the given absolute x,y,theta pose
@@ -112,6 +117,35 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
 
         fieldOrientedOffset = 0;
+
+        queryStation(); // set inversions if on blue
+    }
+
+    /** ask driver station which alliance we are on
+     *
+     * all other pose-based commands will be reflected from red to match coordinates
+     */
+    public void queryStation() {
+        alliance = DriverStation.getAlliance();
+    }
+
+    /** reflect pose to match current alliance
+     *
+     * this method is reversible, you can use it for closed loop control
+     *
+     * @param input pose for the red alliance
+     * @return pose for the alliance reported by FMS
+     */
+    private Pose2d reflectPose(Pose2d input) {
+        switch (alliance) {
+            case Blue:
+                return new Pose2d(
+                        AprilTags.FIELD_CENTER_X -input.getX(), 
+                        input.getY(), 
+                        Rotation2d.fromDegrees(90).minus(input.getRotation())); // TODO: ascertain north
+            default:
+                return input;
+        }
     }
 
     /**
@@ -171,9 +205,12 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     /** setGoalPose
      * sets the target position and rotation for the robot, using the internal PID controllers
+     * input should correspond to the red alliance
      * @param pose target pose
      */
     public void setGoalPose(Pose2d pose) {
+        pose = reflectPose(pose);
+
         controlMode = ControlModes.POSE;
 
         this.xPidController.setSetpoint(pose.getX());
@@ -184,6 +221,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void setPose(Pose2d pose) {
+        pose = reflectPose(pose);
         pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
         odometry.resetPosition(Rotation2d.fromDegrees(-getHeading()), getModulePositions(), pose);
     }
@@ -289,7 +327,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	    return (drivetrainPowerFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_METERS_PER_TICK);
     }
 
+    /** get red-aligned robot pose */
     public Pose2d getPose() {
+        return reflectPose(getRawPose());
+    }
+
+    /** get absolute robot pose */
+    private Pose2d getRawPose() {
         Pose2d pose = odometry.getPoseMeters();
         pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
 
@@ -356,7 +400,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
-        pose = getPose();
+        pose = getRawPose();
 
         
 
@@ -385,10 +429,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         }
 
         // telemetry
-        double[] position = {getPose().getX(), getPose().getY()};
+        double[] position = {getRawPose().getX(), getRawPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
-        field.setRobotPose(getPose());
+        field.setRobotPose(getRawPose());
         SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());
