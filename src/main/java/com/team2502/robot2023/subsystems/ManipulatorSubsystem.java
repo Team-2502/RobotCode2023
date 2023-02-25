@@ -19,6 +19,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
     public ManipulatorSubsystem() {
         gripper = new CANSparkMax(Constants.HardwareMap.GRIPPER_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         setupPID();
+        gripper.getEncoder().setPosition(ManipulatorPosition.STOWED.position);
 
         gripper.setSoftLimit(SoftLimitDirection.kForward,(float) ManipulatorPosition.CLOSED.position);
         gripper.setSoftLimit(SoftLimitDirection.kReverse,(float) ManipulatorPosition.OPEN.position);
@@ -31,6 +32,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putData("Test: Gripper CONE", new InstantCommand(() -> { set(ManipulatorPosition.CONE);}));
         SmartDashboard.putData("Test: Gripper CUBE", new InstantCommand(() -> { set(ManipulatorPosition.CUBE);}));
         SmartDashboard.putData("Test: Gripper OPEN", new InstantCommand(() -> { set(ManipulatorPosition.OPEN);}));
+        SmartDashboard.putData("Test: Gripper STOW", new InstantCommand(() -> { set(ManipulatorPosition.STOWED);}));
         SmartDashboard.putData("Test: Gripper HOME", new InstantCommand(() -> { home();}));
     }
 
@@ -53,7 +55,7 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void home() {
         gripper.enableSoftLimit(SoftLimitDirection.kReverse,false);
-        while (limitSwitch.get()) {
+        while (!limitSwitch.get()) {
             setSpeed(-0.1);
         }
 

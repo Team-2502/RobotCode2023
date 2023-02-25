@@ -16,7 +16,7 @@ import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
-        SCORE_POINTS((d,i,e,m) -> Commands.sequence(
+        SCORE_POINTS_BAD_DANGER((d,i,e,m) -> Commands.sequence(
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(-0.3))),
@@ -40,18 +40,18 @@ public enum Autos { // first auto is default
             //    m.set(ManipulatorPosition.CONE);
             //}),
             //Commands.waitSeconds(2),
-            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
+            Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
             Commands.waitSeconds(2),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
-            Commands.waitSeconds(5),
-            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(-0.3))),
+            Commands.waitSeconds(1.5),
+            Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
-            //Commands.waitSeconds(.25),
+            //Commands.waitSeconds(2),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-            Commands.waitSeconds(5),
+            Commands.waitSeconds(3),
             new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),

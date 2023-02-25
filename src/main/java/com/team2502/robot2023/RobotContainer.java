@@ -106,10 +106,10 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_GRAB)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.3)))
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.6)))
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RELEASE)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.3)))
+                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.6)))
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_ZERO)
