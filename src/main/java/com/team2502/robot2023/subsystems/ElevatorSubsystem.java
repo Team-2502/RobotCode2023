@@ -46,7 +46,13 @@ public class ElevatorSubsystem extends SubsystemBase {
         pitchPid = pitchElevator.getPIDController();
         setupPID();
 
-        SmartDashboard.putData("Flush Elevator PIDs", new InstantCommand(() -> {setupPID();}));
+        NTInit();setupPID();
+        SmartDashboard.putData("Flush Elevator PIDs", new InstantCommand(() -> { NTUpdate();}));
+
+        SmartDashboard.putData("Test: Elvator UP", new InstantCommand(() -> { set(ElevatorPosition.TOP);}));
+        SmartDashboard.putData("Test: Elvator DOWN", new InstantCommand(() -> { set(ElevatorPosition.BOTTOM);}));
+        SmartDashboard.putData("Test: Wrist OUT", new InstantCommand(() -> { setPitch(ElevatorPitch.OUT);}));
+        SmartDashboard.putData("Test: Wrist IN", new InstantCommand(() -> { setPitch(ElevatorPitch.STOWED);}));
     }
 
     @Override
@@ -57,11 +63,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPitch(ElevatorPitch pitch) {
-        pitchElevator.getPIDController().setReference(pitch.position, CANSparkMax.ControlType.kSmartMotion);
+        pitchElevator.getPIDController().setReference(pitch.position, CANSparkMax.ControlType.kPosition);
     }
 
     public void set(ElevatorPosition pos) {
-        rightElevator.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
+        rightElevator.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kPosition);
     }
 
     public void setLinearSpeed(double speed) {
@@ -85,6 +91,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ELEVATOR_P", Constants.Subsystems.Elevator.ELEVATOR_P);
         SmartDashboard.putNumber("ELEVATOR_I", Constants.Subsystems.Elevator.ELEVATOR_I);
         SmartDashboard.putNumber("ELEVATOR_D", Constants.Subsystems.Elevator.ELEVATOR_D);
+        SmartDashboard.putNumber("PITCH_P", Constants.Subsystems.Elevator.PITCH_P);
+        SmartDashboard.putNumber("PITCH_I", Constants.Subsystems.Elevator.PITCH_I);
+        SmartDashboard.putNumber("PITCH_D", Constants.Subsystems.Elevator.PITCH_D);
     }
 
     private void setupPID() {
@@ -105,6 +114,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         pid.setP(SmartDashboard.getNumber("ELEVATOR_P", 0));
         pid.setI(SmartDashboard.getNumber("ELEVATOR_I", 0));
         pid.setD(SmartDashboard.getNumber("ELEVATOR_D", 0));
+        pitchPid.setP(SmartDashboard.getNumber("PITCH_P", 0));
+        pitchPid.setI(SmartDashboard.getNumber("PITCH_I", 0));
+        pitchPid.setD(SmartDashboard.getNumber("PITCH_D", 0));
     }
 
     public void stop() {

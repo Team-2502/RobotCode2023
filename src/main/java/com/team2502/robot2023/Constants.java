@@ -142,7 +142,7 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
-                OUT(-19);
+                OUT(-72);
 
                 public final double position;
                 private ElevatorPitch(double position) {
