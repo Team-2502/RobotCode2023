@@ -60,7 +60,7 @@ public final class Constants {
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
 
-        public static final int ELEVATOR_ZERO = 1;
+        public static final int ELEVATOR_ZERO = 16;
 
         // Home commands
         public static final int INTAKE_HOME = 14;
@@ -117,7 +117,7 @@ public final class Constants {
             public static final double ELEVATOR_LIM_TOP = -50;
             public static final double ELEVATOR_LIM_BOTTOM = 0;
 
-            public static final double ELEVATOR_P = 0.0;
+            public static final double ELEVATOR_P = 0.5;
             public static final double ELEVATOR_I = 0.0;
             public static final double ELEVATOR_D = 0.0;
             public static final int ELEVATOR_MIN_OUTPUT = -1;
@@ -126,7 +126,7 @@ public final class Constants {
             public static enum ElevatorPosition {
                 BOTTOM(0),
                 MIDDLE(1),
-                TOP(2);
+                TOP(-47.9);
 
                 public final double position;
                 private ElevatorPosition(double position) {
@@ -136,7 +136,7 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
-                OUT(1);
+                OUT(-19);
 
                 public final double position;
                 private ElevatorPitch(double position) {
@@ -146,6 +146,10 @@ public final class Constants {
         }
 
         public static final class Manipulator {
+            public static final double GRIPPER_P = 0.5;
+            public static final double GRIPPER_I = 0.0;
+            public static final double GRIPPER_D = 0.0;
+
             public static enum ManipulatorPosition {
                 OPEN(0),
                 CLOSED(1);

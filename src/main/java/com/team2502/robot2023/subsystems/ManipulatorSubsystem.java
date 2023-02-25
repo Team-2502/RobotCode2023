@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2502.robot2023.Constants;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Constants.Subsystems.Manipulator.*;
 
@@ -37,5 +38,10 @@ public class ManipulatorSubsystem extends SubsystemBase {
 
     public void stop() {
         gripper.stopMotor();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("grip pos", gripper.getEncoder().getPosition());
     }
 }
