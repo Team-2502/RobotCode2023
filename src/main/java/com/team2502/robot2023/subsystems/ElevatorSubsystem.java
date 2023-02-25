@@ -3,6 +3,7 @@ package com.team2502.robot2023.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
@@ -15,6 +16,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private CANSparkMax leftElevator;
     private CANSparkMax rightElevator;
     private CANSparkMax pitchElevator;
+
+    private SparkMaxPIDController pid;
 
     private DigitalInput limitSwitch;
 
@@ -36,11 +39,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
 
         limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_ELEVATOR);
+
+        pid = rightElevator.getPIDController();
+        setupPID();
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Turret pos", rightElevator.getEncoder().getPosition());
+        NTUpdate();
     }
 
     public void setPitch(ElevatorPitch pitch) {
@@ -66,6 +73,26 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         rightElevator.getEncoder().setPosition(0);
         set(ElevatorPosition.BOTTOM);
+    }
+
+    private void NTInit() {
+        SmartDashboard.putNumber("ELEVATOR_P", Constants.Subsystems.Elevator.ELEVATOR_P);
+        SmartDashboard.putNumber("ELEVATOR_I", Constants.Subsystems.Elevator.ELEVATOR_I);
+        SmartDashboard.putNumber("ELEVATOR_D", Constants.Subsystems.Elevator.ELEVATOR_D);
+    }
+
+    private void setupPID() {
+        pid.setP(Constants.Subsystems.Elevator.ELEVATOR_P);
+        pid.setI(Constants.Subsystems.Elevator.ELEVATOR_I);
+        pid.setD(Constants.Subsystems.Elevator.ELEVATOR_D);
+        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
+        rightElevator.burnFlash();
+    }
+
+    public void NTUpdate() {
+        pid.setP(SmartDashboard.getNumber("ELEVATOR_P", 0));
+        pid.setI(SmartDashboard.getNumber("ELEVATOR_I", 0));
+        pid.setD(SmartDashboard.getNumber("ELEVATOR_D", 0));
     }
 
     public void stop() {

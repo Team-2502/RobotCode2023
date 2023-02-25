@@ -31,7 +31,7 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 2;
+        public static final int RESET_HEADING = 3;
         public static final int RUN_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
 
@@ -59,6 +59,8 @@ public final class Constants {
 
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
+
+        public static final int ELEVATOR_ZERO = 1;
 
         // Home commands
         public static final int INTAKE_HOME = 14;
@@ -114,6 +116,12 @@ public final class Constants {
         public static final class Elevator {
             public static final double ELEVATOR_LIM_TOP = -50;
             public static final double ELEVATOR_LIM_BOTTOM = 0;
+
+            public static final double ELEVATOR_P = 0.0;
+            public static final double ELEVATOR_I = 0.0;
+            public static final double ELEVATOR_D = 0.0;
+            public static final int ELEVATOR_MIN_OUTPUT = -1;
+            public static final int ELEVATOR_MAX_OUTPUT = 1;
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
