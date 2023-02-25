@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
@@ -119,6 +120,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         fieldOrientedOffset = 0;
 
         queryStation(); // set inversions if on blue
+        SmartDashboard.putString("alliance", alliance.name());
+        SmartDashboard.putData("alliance flush", new InstantCommand(() -> queryStation()));
     }
 
     /** ask driver station which alliance we are on
