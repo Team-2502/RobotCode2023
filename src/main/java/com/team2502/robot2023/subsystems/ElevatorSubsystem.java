@@ -46,7 +46,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Turret pos", rightElevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("elev pos", rightElevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("wrist pos", pitchElevator.getEncoder().getPosition());
         NTUpdate();
     }
 
