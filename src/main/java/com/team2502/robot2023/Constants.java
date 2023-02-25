@@ -59,6 +59,11 @@ public final class Constants {
 
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
+
+        // Home commands
+        public static final int INTAKE_HOME = 14;
+        public static final int ELEVATOR_HOME = 15;
+        public static final int MANIPULATOR_HOME = 16;
     }
 
     public static final class HardwareMap {
@@ -85,19 +90,23 @@ public final class Constants {
         // Conveyor Belt
         public static final int CONVEYOR = 13;
 
-        // Intake Motors
+        // Intake
         public static final int LEFT_LIFT_INTAKE_MOTOR = 14;
         public static final int RIGHT_LIFT_INTAKE_MOTOR = 21;
         public static final int RIGHT_INTAKE_MOTOR = 15;
         public static final int LEFT_INTAKE_MOTOR = 16;
+        public static final int SWITCH_LEFT_INTAKE = 0;
+        public static final int SWITCH_RIGHT_INTAKE = 1;
 
         // Elevator
         public static final int LEFT_ELEVATOR_MOTOR = 17;
         public static final int RIGHT_ELEVATOR_MOTOR = 18;
         public static final int PITCH_ELEVATOR_MOTOR = 19;
+        public static final int SWITCH_ELEVATOR = 2;
 
         // Manipulator
         public static final int GRIPPER_MOTOR = 20;
+        public static final int SWITCH_GRIPPER = 3;
 
     }
 
@@ -127,8 +136,31 @@ public final class Constants {
                 }
             }
         }
+
+        public static final class Manipulator {
+            public static enum ManipulatorPosition {
+                OPEN(0),
+                CLOSED(1);
+
+                public final double position;
+                private ManipulatorPosition(double position) {
+                    this.position = position;
+                }
+            }
+
+            
+        }
+
         public static final class Intake {
-            public static final float DEPLOY_SPEED = 0.1f;
+            public static enum IntakePosition {
+                DEPLOYED(0),
+                RETRACTED(1);
+
+                public final double position;
+                private IntakePosition(double position) {
+                    this.position = position;
+                }
+            }
         }
 
         public static final class AprilTags {

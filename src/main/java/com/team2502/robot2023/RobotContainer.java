@@ -61,10 +61,10 @@ public class RobotContainer {
             .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
-        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.75, 0.5, 0.6));
+        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.5, 0.6));
 
         JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
-        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.75, -0.5, -0.6));
+        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.5, -0.6));
 
         JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
         ElevatorBot.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
@@ -109,6 +109,18 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
 
 
+        // Home commands
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_HOME)
+                .onTrue(new InstantCommand(() -> INTAKE.home(), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.stopLift(), INTAKE));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_HOME)
+                .onTrue(new InstantCommand(() -> ELEVATOR.home(), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_HOME)
+                .onTrue(new InstantCommand(() -> MANIPULATOR.home(), MANIPULATOR))
+                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0), MANIPULATOR));
     }
 
     /**

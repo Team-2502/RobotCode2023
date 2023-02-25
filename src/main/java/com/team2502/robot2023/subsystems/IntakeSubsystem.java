@@ -3,7 +3,9 @@ package com.team2502.robot2023.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2502.robot2023.Constants;
+import com.team2502.robot2023.Constants.Subsystems.Intake.*;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -12,6 +14,9 @@ public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax rightLiftMotor;
     private final CANSparkMax rightMotor;
     private final CANSparkMax leftMotor;
+
+    private DigitalInput leftLimitSwitch;
+    private DigitalInput rightLimitSwitch;
 
 
     public IntakeSubsystem() {
@@ -32,27 +37,51 @@ public class IntakeSubsystem extends SubsystemBase {
 
         leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+        leftLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_LEFT_INTAKE);
+        rightLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_RIGHT_INTAKE);
     }
 
-    // TODO use PID
-    /*
-    //Command to Deploy the Intake
-    public void deploy(){
-        liftMotor.set(Constants.Subsystems.Intake.DEPLOY_SPEED);
+    public void set(IntakePosition pos) {
+        leftLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
+        rightLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
     }
 
-    //Command to Retract the Intake
-    public void retract(){
-        liftMotor.set(-Constants.Subsystems.Intake.DEPLOY_SPEED);
-    }
-     */
     public void run(double leftSpeed, double rightSpeed) {
         leftMotor.set(-leftSpeed);
         rightMotor.set(-rightSpeed);
     }
 
+    void runLeft(double speed) {
+        leftMotor.set(-speed);
+    }
+
+    void runRight(double speed) {
+        rightMotor.set(-speed);
+    }
+
+    public void home() {
+        while (leftLimitSwitch.get()) {
+            runLeft(-0.1);
+        }
+
+        while (rightLimitSwitch.get()) {
+            runRight(-0.1);
+        }
+
+        leftLiftMotor.getEncoder().setPosition(0);
+        rightLiftMotor.getEncoder().setPosition(0);
+
+        set(IntakePosition.RETRACTED);
+    }
+
     public void stop() {
         leftMotor.stopMotor();
         rightMotor.stopMotor();
+    }
+
+    public void stopLift() {
+        leftLiftMotor.stopMotor();
+        rightLiftMotor.stopMotor();
     }
 }
