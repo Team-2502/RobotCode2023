@@ -386,6 +386,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return navX.getAngle();
     }
 
+    public double getRoll() {
+        return navX.getPitch(); // rio sideways
+    }
+    public double getPitch() {
+        return navX.getRoll(); // rio sideways
+    }
+
     public double getAverageTemp() {
         double fl = drivetrainPowerFrontLeft.getTemperature();
         double fr = drivetrainPowerFrontRight.getTemperature();

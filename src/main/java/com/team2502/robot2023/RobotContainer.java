@@ -7,6 +7,7 @@ package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.autonomous.AutoChooser;
+import com.team2502.robot2023.commands.BalanceCommand;
 import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
 import com.team2502.robot2023.commands.FollowPathRelativeCommand;
@@ -93,6 +94,9 @@ public class RobotContainer {
 
         new JoystickButton(JOYSTICK_DEBUG, 5)
             .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
+
+        new JoystickButton(JOYSTICK_DEBUG, 6)
+            .whileTrue( new BalanceCommand(DRIVETRAIN, false));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
