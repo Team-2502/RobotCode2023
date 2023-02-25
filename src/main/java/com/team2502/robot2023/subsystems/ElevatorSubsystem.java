@@ -10,6 +10,7 @@ import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -18,6 +19,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private CANSparkMax pitchElevator;
 
     private SparkMaxPIDController pid;
+    private SparkMaxPIDController pitchPid;
 
     private DigitalInput limitSwitch;
 
@@ -41,7 +43,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_ELEVATOR);
 
         pid = rightElevator.getPIDController();
+        pitchPid = pitchElevator.getPIDController();
         setupPID();
+
+        SmartDashboard.putData("Flush Elevator PIDs", new InstantCommand(() -> {setupPID();}));
     }
 
     @Override
@@ -88,6 +93,12 @@ public class ElevatorSubsystem extends SubsystemBase {
         pid.setD(Constants.Subsystems.Elevator.ELEVATOR_D);
         pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
         rightElevator.burnFlash();
+
+        pitchPid.setP(Constants.Subsystems.Elevator.PITCH_P);
+        pitchPid.setI(Constants.Subsystems.Elevator.PITCH_I);
+        pitchPid.setD(Constants.Subsystems.Elevator.PITCH_D);
+        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
+        pitchElevator.burnFlash();
     }
 
     public void NTUpdate() {
