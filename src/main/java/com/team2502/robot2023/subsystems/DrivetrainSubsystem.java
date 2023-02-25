@@ -4,12 +4,14 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.*;
@@ -53,6 +55,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private AHRS navX = new AHRS();
 
     private double currentPos;
+
+    public double fieldOrientedOffset; // gyro offset to driver
 
     private enum ControlModes {
         POSE, /// approach the given absolute x,y,theta pose
@@ -106,6 +110,30 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.xPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.yPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+
+        fieldOrientedOffset = 0;
+    }
+
+    /**
+     * call once after aligning turn motors after motor rebuild
+     * ensures that swerve zeros persist across restarts
+     */
+    public void setSwerveInit() {
+        drivetrainEncoderFrontLeft.configMagnetOffset(
+                drivetrainEncoderFrontLeft.getAbsolutePosition());
+        drivetrainEncoderFrontLeft.setPositionToAbsolute();
+
+        drivetrainEncoderFrontRight.configMagnetOffset(
+                drivetrainEncoderFrontRight.getAbsolutePosition());
+        drivetrainEncoderFrontRight.setPositionToAbsolute();
+
+        drivetrainEncoderBackLeft.configMagnetOffset(
+                drivetrainEncoderBackLeft.getAbsolutePosition());
+        drivetrainEncoderBackLeft.setPositionToAbsolute();
+
+        drivetrainEncoderBackRight.configMagnetOffset(
+                drivetrainEncoderBackRight.getAbsolutePosition());
+        drivetrainEncoderBackRight.setPositionToAbsolute();
     }
 
     private SwerveModulePosition[] getModulePositions() {
@@ -146,11 +174,18 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param pose target pose
      */
     public void setGoalPose(Pose2d pose) {
-        controlMode = ControlModes.VELOCITY;
+        controlMode = ControlModes.POSE;
 
         this.xPidController.setSetpoint(pose.getX());
         this.yPidController.setSetpoint(pose.getY());
         this.rPidController.setSetpoint(pose.getRotation().getRadians());
+
+        field.getObject("target").setPose(pose);
+    }
+
+    public void setPose(Pose2d pose) {
+        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        odometry.resetPosition(Rotation2d.fromDegrees(-getHeading()), getModulePositions(), pose);
     }
 
     /** atGoalPose
@@ -255,7 +290,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public Pose2d getPose() {
-        return odometry.getPoseMeters();
+        Pose2d pose = odometry.getPoseMeters();
+        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+
+        return pose;
     }
 
     public void setToDistance(double distance) {
@@ -289,6 +327,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         navX.reset();
     }
 
+    public void resetOffset() {
+        fieldOrientedOffset = -navX.getAngle();
+    }
+
     public double getHeading() {
         return navX.getAngle();
     }
@@ -314,17 +356,28 @@ public class DrivetrainSubsystem extends SubsystemBase{
     @Override
     public void periodic(){
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
+        pose = getPose();
+
+        
+
+        SmartDashboard.putBoolean("GTA en?", controlMode == ControlModes.POSE);
 
         switch (controlMode) {
             case VELOCITY:
                 controlMode = ControlModes.VELOCITY;
                 break;
             case POSE:
-                double xPower = -xPidController.calculate(pose.getX());
-                double yPower = -yPidController.calculate(pose.getY());
-                double rPower = -rPidController.calculate(pose.getRotation().getRadians());
+                double xPower = xPidController.calculate(pose.getX());
+                double yPower = yPidController.calculate(pose.getY());
+                //double rPower = rPidController.calculate(pose.getRotation().getRadians());
+                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()+180));
+
+                SmartDashboard.putNumber("GTA xp", xPower);
+                SmartDashboard.putNumber("GTA yp", yPower);
+                SmartDashboard.putNumber("GTA rp", rPower);
 
                 ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
+                //ChassisSpeeds speeds = new ChassisSpeeds(xTrap.calculate(xPower), yTrap.calculate(yPower), rTrap.calculate(rPower));
                 setSpeeds(speeds);
 
                 controlMode = ControlModes.POSE;
@@ -332,10 +385,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         }
 
         // telemetry
-        double[] position = {odometry.getPoseMeters().getX(), odometry.getPoseMeters().getY()};
+        double[] position = {getPose().getX(), getPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
-        field.setRobotPose(odometry.getPoseMeters());
+        field.setRobotPose(getPose());
         SmartDashboard.putData("field", field);
 
         SmartDashboard.putNumber("Angle", navX.getAngle());

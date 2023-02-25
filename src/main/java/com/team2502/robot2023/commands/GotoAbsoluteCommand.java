@@ -29,7 +29,8 @@ public class GotoAbsoluteCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return drivetrain.atGoalPose();
+        return false;
+        //return drivetrain.atGoalPose();
     }
 
     @Override

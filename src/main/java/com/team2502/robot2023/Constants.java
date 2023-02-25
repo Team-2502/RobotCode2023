@@ -25,6 +25,7 @@ public final class Constants {
         public static final int JOYSTICK_DRIVE_RIGHT = 0;
         public static final int JOYSTICK_DRIVE_LEFT = 1;
         public static final int JOYSTICK_OPERATOR = 2;
+        public static final int JOYSTICK_DEBUG = 5;
         public static final int CONTROLLER = 3;
 
         // Buttons
@@ -38,15 +39,17 @@ public final class Constants {
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
 
-        // Operator
+        // DBG
         public static final int DEBUG_RUN = 1;
+        public static final int RESET_MODULES = 4;
 
-        public static final int ELEVATOR_BOT = 30;
-        public static final int ELEVATOR_MID = 20;
-        public static final int ELEVATOR_TOP = 40;
+        // Operator
+        public static final int ELEVATOR_BOT = 12;
+        public static final int ELEVATOR_MID = 11;
+        public static final int ELEVATOR_TOP = 15;
 
-        public static final int MANIPULATOR_OUT = 20;
-        public static final int MANIPULATOR_IN = 40;
+        public static final int MANIPULATOR_OUT = 14;
+        public static final int MANIPULATOR_IN = 13;
 
         public static final int ELEVATOR_EXTEND = 9;
         public static final int ELEVATOR_RETRACT = 8;
@@ -54,8 +57,8 @@ public final class Constants {
         public static final int MANIPULATOR_EXTEND = 6;
         public static final int MANIPULATOR_RETRACT = 7;
 
-        public static final int MANIPULATOR_GRAB = 3;
-        public static final int MANIPULATOR_RELEASE = 4;
+        public static final int MANIPULATOR_GRAB = 1;
+        public static final int MANIPULATOR_RELEASE = 2;
 
         // Home commands
         public static final int INTAKE_HOME = 14;
@@ -191,12 +194,14 @@ public final class Constants {
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 0.25;
-            public static final double DRIVETRAIN_MOVE_I = 0;
-            public static final double DRIVETRAIN_MOVE_D = 0;
-            public static final double DRIVETRAIN_TURN_P = 0.25;
-            public static final double DRIVETRAIN_TURN_I = 0;
+            public static final double DRIVETRAIN_MOVE_P = 1.4;
+            public static final double DRIVETRAIN_MOVE_I = 0.0003;
+            public static final double DRIVETRAIN_MOVE_D = 0.0;
+            public static final double DRIVETRAIN_MOVE_A = 3;
+            public static final double DRIVETRAIN_TURN_P = 1.6;
+            public static final double DRIVETRAIN_TURN_I = 0.0007;
             public static final double DRIVETRAIN_TURN_D = 0;
+            public static final double DRIVETRAIN_TURN_A = 2;
                                                    
             // distance between swerve modules (meters)
             public static final double SWERVE_LENGTH = 0.5405;

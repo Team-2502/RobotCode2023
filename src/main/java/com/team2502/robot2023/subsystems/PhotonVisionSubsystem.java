@@ -41,6 +41,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        /*
         Optional<EstimatedRobotPose> pose = estimator.update();
         
         newPoseThisFrame = pose.isPresent();
@@ -51,10 +52,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("PV Posex", getPose().getX());
         SmartDashboard.putNumber("PV Posey", getPose().getY());
         SmartDashboard.putNumber("PV Poser", getPose().getRotation().getDegrees());
-
-        //PhotonPipelineResult result = camera.getLatestResult();
-        //result.getBestTarget().get
-        //SmartDashboard.putNumber("PHOTONVAL", value)
+        */
     }
 
     public boolean newPoseThisFrame() {

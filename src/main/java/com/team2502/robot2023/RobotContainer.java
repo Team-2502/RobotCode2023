@@ -7,6 +7,8 @@ package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.commands.DriveCommand;
+import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
+import com.team2502.robot2023.commands.FollowPathRelativeCommand;
 import com.team2502.robot2023.commands.RunConveyorCommand;
 import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
@@ -36,6 +38,7 @@ public class RobotContainer {
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
     protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.JOYSTICK_OPERATOR);
+    protected final Joystick JOYSTICK_DEBUG = new Joystick(Constants.OI.JOYSTICK_DEBUG);
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
@@ -52,7 +55,10 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
-        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
+
+        new JoystickButton(JOYSTICK_DEBUG, OI.RESET_MODULES)
+            .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
         RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.5, 0.6));
@@ -74,10 +80,12 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_IN)
             .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.STOWED), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.DEBUG_RUN)
-            .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN,
-                    new Pose2d(0, 0, new Rotation2d(0))
-                    ));
+        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
+        //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
+            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
+
+        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+1)
+                .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
