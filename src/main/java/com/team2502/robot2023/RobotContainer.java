@@ -6,6 +6,7 @@
 package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
+import com.team2502.robot2023.autonomous.AutoChooser;
 import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
 import com.team2502.robot2023.commands.FollowPathRelativeCommand;
@@ -49,6 +50,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
+
+        AutoChooser.putToSmartDashboard();
 
         configureButtonBindings();
     }
@@ -129,7 +132,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new InstantCommand();
+        return AutoChooser.getAutoInstance().getInstance(
+                DRIVETRAIN,
+                INTAKE
+        );
     }
 }

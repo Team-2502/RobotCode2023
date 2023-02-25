@@ -4,6 +4,8 @@
 
 package com.team2502.robot2023;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -33,9 +35,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    LiveWindow.disableAllTelemetry();
-    //new Solenoid(PneumaticsModuleType.REVPH, Constants.RobotMap.Solenoids.INTAKE);
-    //new IntakeSubsystem().retractIntake();
+    LiveWindow.disableAllTelemetry(); // useful for debugging, huge network table/rio load
   }
 
   /**
@@ -55,11 +55,13 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     double elapsed = Timer.getFPGATimestamp() - before;
     SmartDashboard.putNumber("RIO load (ms)", elapsed * 1000);
+    SmartDashboard.putNumber("RIO load (%)", elapsed * 1000 / 20 * 100);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+      m_robotContainer.DRIVETRAIN.setPowerNeutralMode(NeutralMode.Brake);
       m_robotContainer.DRIVETRAIN.stop();
   }
 
@@ -69,6 +71,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.DRIVETRAIN.setPowerNeutralMode(NeutralMode.Coast);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -83,6 +86,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    m_robotContainer.DRIVETRAIN.setPowerNeutralMode(NeutralMode.Coast);
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

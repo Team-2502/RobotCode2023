@@ -164,6 +164,7 @@ public final class Constants {
         }
 
         public static final class AprilTags {
+            public static final double FIELD_CENTER_X = 8.294; // TODO: get from cad
             
             public static final AprilTagFieldLayout field;
 
