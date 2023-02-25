@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
+import com.team2502.robot2023.Constants.Subsystems.Manipulator.ManipulatorPosition;
 import com.team2502.robot2023.autonomous.AutoChooser.CommandFactory;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
 
@@ -34,6 +35,11 @@ public enum Autos { // first auto is default
         )),
 
         SCORE_POINTS_PID((d,i,e,m) -> Commands.sequence(
+            //new InstantCommand(() -> {
+            //    m.home();
+            //    m.set(ManipulatorPosition.CONE);
+            //}),
+            //Commands.waitSeconds(2),
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
@@ -42,6 +48,8 @@ public enum Autos { // first auto is default
             Commands.waitSeconds(5),
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
+            //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
+            //Commands.waitSeconds(.25),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
             Commands.waitSeconds(5),
             new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),

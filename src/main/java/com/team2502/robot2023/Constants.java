@@ -108,7 +108,7 @@ public final class Constants {
 
         // Manipulator
         public static final int GRIPPER_MOTOR = 20;
-        public static final int SWITCH_GRIPPER = 3;
+        public static final int SWITCH_GRIPPER = 7;
 
     }
 
@@ -157,8 +157,10 @@ public final class Constants {
             public static final double GRIPPER_D = 0.0;
 
             public static enum ManipulatorPosition {
-                OPEN(0),
-                CLOSED(1);
+                OPEN(8),
+                CONE(115), // TODO : measure
+                CUBE(81),  // TODO : measure 
+                CLOSED(160);
 
                 public final double position;
                 private ManipulatorPosition(double position) {
