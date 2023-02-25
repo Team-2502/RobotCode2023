@@ -114,6 +114,8 @@ public final class Constants {
 
     public static final class Subsystems {
         public static final class Elevator {
+            public static final boolean NT_TUNE = false;
+
             public static final double ELEVATOR_LIM_TOP = -50;
             public static final double ELEVATOR_LIM_BOTTOM = 0;
 

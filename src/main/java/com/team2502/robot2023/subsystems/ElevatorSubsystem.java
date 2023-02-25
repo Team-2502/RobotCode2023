@@ -53,13 +53,17 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putData("Test: Elvator DOWN", new InstantCommand(() -> { set(ElevatorPosition.BOTTOM);}));
         SmartDashboard.putData("Test: Wrist OUT", new InstantCommand(() -> { setPitch(ElevatorPitch.OUT);}));
         SmartDashboard.putData("Test: Wrist IN", new InstantCommand(() -> { setPitch(ElevatorPitch.STOWED);}));
+
+        SmartDashboard.putData("Elevator HOME", new InstantCommand(() -> { home();}));
     }
 
     @Override
     public void periodic() {
         SmartDashboard.putNumber("elev pos", rightElevator.getEncoder().getPosition());
         SmartDashboard.putNumber("wrist pos", pitchElevator.getEncoder().getPosition());
-        NTUpdate();
+        if (Constants.Subsystems.Elevator.NT_TUNE) {
+            NTUpdate();
+        }
     }
 
     public void setPitch(ElevatorPitch pitch) {
@@ -79,8 +83,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void home() {
-        while (limitSwitch.get()) {
-            setLinearSpeed(-0.1);
+        while (!limitSwitch.get()) {
+            setLinearSpeed(0.1);
+            if (rightElevator.getOutputCurrent() > 15) {
+                break;
+            }
         }
 
         rightElevator.getEncoder().setPosition(0);
