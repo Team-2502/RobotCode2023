@@ -116,11 +116,11 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> ELEVATOR.stop()));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.LOWER_INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.runLift(-0.1)))
+                .onTrue(new InstantCommand(() -> INTAKE.runLift(0.2)))
                 .onFalse(new InstantCommand(() -> INTAKE.runLift(0.0)));
 
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.RAISE_INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.runLift(0.1)))
+                .onTrue(new InstantCommand(() -> INTAKE.runLift(-0.2)))
                 .onFalse(new InstantCommand(() -> INTAKE.runLift(0.0)));
 
 
@@ -146,7 +146,9 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return AutoChooser.getAutoInstance().getInstance(
                 DRIVETRAIN,
-                INTAKE
+                INTAKE,
+                ELEVATOR,
+                MANIPULATOR
         );
     }
 }

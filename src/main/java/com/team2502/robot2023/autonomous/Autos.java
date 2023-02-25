@@ -13,13 +13,31 @@ import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
-        TEST_PATH((d,i) -> Commands.sequence(
+        SCORE_POINTS((d,i,e,m) -> Commands.sequence(
+            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(-0.3))),
+            new InstantCommand(() -> e.setLinearSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(-0.6))),
+            new InstantCommand(() -> e.setPitchSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(-0.3))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(0.6))),
+            new InstantCommand(() -> e.setPitchSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(0.3))),
+            new InstantCommand(() -> e.setLinearSpeed(0.0)),
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
             new FollowPathAbsoluteCommand(d, "testpath")
-        )), // always put last
+        )),
+
+        TEST_PATH((d,i,e,m) -> Commands.sequence(
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
+            new FollowPathAbsoluteCommand(d, "testpath")
+        )),
          
-        DO_NOTHING("Do Nothing", ((d,i) -> new InstantCommand(d::resetHeading))); // always put last
+        DO_NOTHING("Do Nothing", ((d,i,e,m) -> new InstantCommand(d::resetHeading))); // always put last
 
         Autos(String name, AutoChooser.CommandFactory commandFactory)
         {
