@@ -142,7 +142,11 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 return new Pose2d(
                         AprilTags.FIELD_CENTER_X -input.getX(), 
                         input.getY(), 
-                        Rotation2d.fromDegrees(90).minus(input.getRotation())); // TODO: ascertain north
+                        input.getRotation() // reflect over north
+                            .minus(Rotation2d.fromDegrees(90))
+                            .unaryMinus()
+                            .plus(Rotation2d.fromDegrees(90))
+                        );
             default:
                 return input;
         }
