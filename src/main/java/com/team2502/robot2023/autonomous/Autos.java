@@ -16,20 +16,21 @@ import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
-        ONE_CONE_SOUTH((d,i,e,m) -> Commands.sequence(
+        ONE_CONE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(
             //new InstantCommand(() -> {
             //    m.home();
             //    m.set(ManipulatorPosition.CONE);
             //}),
             //Commands.waitSeconds(2),
             new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(14.418,0.481,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
             Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
             Commands.waitSeconds(2),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
-            new FollowPathAbsoluteCommand(d, "1l-toscore"),
+            Commands.waitSeconds(2),
+            new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-1"),
             Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
@@ -37,19 +38,19 @@ public enum Autos { // first auto is default
             new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
             Commands.waitSeconds(3),
             new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
-            new FollowPathAbsoluteCommand(d, "1l-esc")
+            new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")
         )),
 
-        SCORE_POINTS_BAD_DANGER((d,i,e,m) -> Commands.sequence(
+        ONE_CONE_SOUTH_NO_ENCODER((d,i,e,m) -> Commands.sequence(
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(-0.3))),
             new InstantCommand(() -> e.setLinearSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(-0.6))),
+            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(-0.2))),
             new InstantCommand(() -> e.setPitchSpeed(0.0)),
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(0.6))),
+            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(0.2))),
             new InstantCommand(() -> e.setPitchSpeed(0.0)),
             Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(0.3))),
             new InstantCommand(() -> e.setLinearSpeed(0.0)),
@@ -58,7 +59,7 @@ public enum Autos { // first auto is default
             new FollowPathAbsoluteCommand(d, "testpath")
         )),
 
-        SCORE_POINTS_PID((d,i,e,m) -> Commands.sequence(
+        ONE_CODE_SOUTH_STATIC((d,i,e,m) -> Commands.sequence(
             //new InstantCommand(() -> {
             //    m.home();
             //    m.set(ManipulatorPosition.CONE);
@@ -82,7 +83,7 @@ public enum Autos { // first auto is default
             new FollowPathAbsoluteCommand(d, "testpath")
         )),
 
-        TEST_PATH((d,i,e,m) -> Commands.sequence(
+        LEAVE_COMMUNITY("Leave CT spawn", (d,i,e,m) -> Commands.sequence(
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
             new FollowPathAbsoluteCommand(d, "testpath")
