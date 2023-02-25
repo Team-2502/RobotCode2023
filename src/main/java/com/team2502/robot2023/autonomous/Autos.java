@@ -16,6 +16,30 @@ import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
+        ONE_CONE_SOUTH((d,i,e,m) -> Commands.sequence(
+            //new InstantCommand(() -> {
+            //    m.home();
+            //    m.set(ManipulatorPosition.CONE);
+            //}),
+            //Commands.waitSeconds(2),
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(14.418,0.481,Rotation2d.fromDegrees(180))), d),
+            Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
+            Commands.waitSeconds(2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
+            new FollowPathAbsoluteCommand(d, "1l-toscore"),
+            Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
+            //Commands.waitSeconds(2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(3),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            new FollowPathAbsoluteCommand(d, "1l-esc")
+        )),
+
         SCORE_POINTS_BAD_DANGER((d,i,e,m) -> Commands.sequence(
             Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
