@@ -3,12 +3,15 @@ package com.team2502.robot2023.autonomous;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Commands;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
 import com.team2502.robot2023.Constants.Subsystems.Manipulator.ManipulatorPosition;
 import com.team2502.robot2023.autonomous.AutoChooser.CommandFactory;
+import com.team2502.robot2023.commands.BalanceCommand;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
 
 /**
@@ -16,6 +19,12 @@ import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
+        ENGAGE((d,i,e,m) -> Commands.sequence( 
+            Commands.deadline(Commands.waitSeconds(1.65), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-1,0,0));})),
+            new BalanceCommand(d, false),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
         ONE_CUBE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(
             //new InstantCommand(() -> {
             //    m.home();
@@ -31,14 +40,17 @@ public enum Autos { // first auto is default
             new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
             Commands.waitSeconds(2),
             Commands.deadline(Commands.waitSeconds(2.8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-1")),
-            Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
+            Commands.deadline(Commands.waitSeconds(1.25), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(5), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")),
-            //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
-            //Commands.waitSeconds(2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
+            Commands.parallel(
+                Commands.deadline(Commands.waitSeconds(5), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")),
+                Commands.sequence(
+                    Commands.waitSeconds(2),
+                    new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+                    Commands.waitSeconds(3),
+                    new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
+                )
+            )
         )),
 
         ONE_CONE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(

@@ -25,8 +25,8 @@ public class BalanceCommand extends CommandBase {
         this.drivetrain = drivetrain;
         this.sideways = sideways;
 
-        this.rollPID = new PIDController(0.02, 0, 0);
-        rollPID.setTolerance(5,20);
+        this.rollPID = new PIDController(0.03, 0, 0);
+        rollPID.setTolerance(5);
         addRequirements(drivetrain);
     }
 
@@ -41,12 +41,19 @@ public class BalanceCommand extends CommandBase {
         } else {
             speeds = new ChassisSpeeds(-rollPID.calculate(drivetrain.getPitch()), 0, 0);
         }
-        drivetrain.setSpeeds(speeds);
+        if (rollPID.atSetpoint()) {
+            drivetrain.stop();
+        } else {
+            drivetrain.setSpeeds(speeds);
+        }
+
+        SmartDashboard.putNumber("roller", rollPID.getPositionError());
     }
 
     @Override
     public boolean isFinished() {
-        return rollPID.atSetpoint();
+        return false;
+        //return rollPID.atSetpoint();
     }
 
     @Override
