@@ -113,6 +113,13 @@ public final class Constants {
     }
 
     public static final class Subsystems {
+        public static final class Leds {
+            public static final int PORT = 9; // pwm:
+            public static final int LED_COUNT = 9; // logical, not physical count
+            public static final int FRAME_RATE = 15;
+
+        }
+
         public static final class Elevator {
             public static final boolean NT_TUNE = false;
 
