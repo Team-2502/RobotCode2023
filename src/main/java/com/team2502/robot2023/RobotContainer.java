@@ -66,10 +66,10 @@ public class RobotContainer {
             .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
-        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.55, 0.6));
+        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.55, 0.4));
 
         JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
-        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.55, -0.6));
+        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.55, -0.4));
 
         JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
         ElevatorBot.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
@@ -131,6 +131,12 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> INTAKE.runLift(-0.2)))
                 .onFalse(new InstantCommand(() -> INTAKE.runLift(0.0)));
 
+        new JoystickButton(JOYSTICK_OPERATOR, OI.RUN_CONVEYOR)
+                .onTrue(new InstantCommand(() -> CONVEYOR.run(0.4)))
+                .onFalse(new InstantCommand(() -> CONVEYOR.run(0.0)));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.RUN_CONVEYOR_BACK)
+                .onTrue(new InstantCommand(() -> CONVEYOR.run(-0.4)))
+                .onFalse(new InstantCommand(() -> CONVEYOR.run(0.0)));
 
         // Home commands
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_HOME)
