@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LightstripSubsystem extends SubsystemBase {
 
     public enum Animations {
-        OFF((l,b,f)->{
-            b.setRGB(0,0,0,0);
+        OFF((s,f)->{
+            s.buffer.setRGB(0,0,0,0);
         }),
-        REQUEST_CUBE((l,b,f)->{
-            l.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kRed);
+        REQUEST_CUBE((s,f)->{
+            s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kRed);
         });
 
         public final Animation animation;
@@ -31,28 +31,53 @@ public class LightstripSubsystem extends SubsystemBase {
 
     @FunctionalInterface
     public interface Animation {
-        void tick(
-                LightstripSubsystem light,
-                AddressableLEDBuffer buffer,
-                double frame
-                );
+        void tick(Lightstrip strip, double frame);
     }
 
+    class Lightstrip {
+        AddressableLED strip;
+        public AddressableLEDBuffer buffer;
+
+        public Lightstrip(int port, int count) {
+            strip = new AddressableLED(port);
+            strip.setLength(count);
+            buffer = new AddressableLEDBuffer(count);
+
+            strip.setData(buffer);
+            strip.start();
+        }
+
+        public int getID(Rotation2d angle) {
+            return (int) ((angle.getDegrees()%360)/90)*(Leds.LED_LEFT-Leds.LED_AHEAD) + Leds.LED_AHEAD;
+        }
+
+        public Rotation2d getAngle(int id) {
+            return Rotation2d.fromDegrees((id-Leds.LED_AHEAD)/(Leds.LED_LEFT-Leds.LED_AHEAD) * 90);
+        }
+
+        /** fill angle range with a solid color
+         *
+         * @param from robot-centric angle to start range (counterclockwise)
+         * @param to robot-centric angle to end range (must be greater than from)
+         * @param color color to set range to
+         */
+        public void fillColor(Rotation2d from, Rotation2d to, Color color) {
+            // assumes led strip goes counterclockwise
+            for (int i = getID(from); i < getID(to); i++) {
+                buffer.setLED(i, color);
+            }
+        }
+    }
+
+    Lightstrip strip;
     Animation animation;
-    AddressableLED strip;
-    AddressableLEDBuffer buffer;
     Timer cancelTimer; // stops temporary animations
     Timer frameTimer; // counts frames
     int frameCount;
     Optional<Double> timeout;
 
     public LightstripSubsystem() {
-        strip = new AddressableLED(Leds.PORT);
-        strip.setLength(Leds.LED_COUNT);
-        buffer = new AddressableLEDBuffer(Leds.LED_COUNT);
-
-        strip.setData(buffer);
-        strip.start();
+        strip = new Lightstrip(Leds.PORT,Leds.LED_COUNT);
 
         animation = Animations.OFF.animation;
         timeout = Optional.empty();
@@ -65,7 +90,7 @@ public class LightstripSubsystem extends SubsystemBase {
         }
         if (frameTimer.advanceIfElapsed(1/Leds.FRAME_RATE)) {
             frameCount += 1;
-            animation.tick(this, buffer, frameCount);
+            animation.tick(strip, frameCount);
         }
     }
 
@@ -90,24 +115,4 @@ public class LightstripSubsystem extends SubsystemBase {
         setAnimation(animation, Optional.empty());
     }
 
-    private int getID(Rotation2d angle) {
-        return (int) ((angle.getDegrees()%360)/90)*(Leds.LED_LEFT-Leds.LED_AHEAD) + Leds.LED_AHEAD;
-    }
-
-    private Rotation2d getAngle(int id) {
-        return Rotation2d.fromDegrees((id-Leds.LED_AHEAD)/(Leds.LED_LEFT-Leds.LED_AHEAD) * 90);
-    }
-
-    /** fill angle range with a solid color
-     *
-     * @param from robot-centric angle to start range (counterclockwise)
-     * @param to robot-centric angle to end range (must be greater than from)
-     * @param color color to set range to
-     */
-    public void fillColor(Rotation2d from, Rotation2d to, Color color) {
-        // assumes led strip goes counterclockwise
-        for (int i = getID(from); i < getID(to); i++) {
-            buffer.setLED(i, color);
-        }
-    }
 }
