@@ -118,6 +118,9 @@ public final class Constants {
             public static final int LED_COUNT = 9; // logical, not physical count
             public static final int FRAME_RATE = 15;
 
+            public static final int LED_AHEAD = 0; // Led id corresponding to center of front
+            public static final int LED_LEFT = 6; // Led id corresponding to center of left side
+
         }
 
         public static final class Elevator {

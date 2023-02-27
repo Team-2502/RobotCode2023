@@ -49,6 +49,7 @@ public class RobotContainer {
     protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
     protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
     protected final ManipulatorSubsystem MANIPULATOR = new ManipulatorSubsystem();
+    protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem();
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));

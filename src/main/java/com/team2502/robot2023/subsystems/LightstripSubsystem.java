@@ -5,17 +5,22 @@ import java.util.Optional;
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Leds;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightstripSubsystem extends SubsystemBase {
 
     public enum Animations {
-        OFF((b,f)->{
+        OFF((l,b,f)->{
             b.setRGB(0,0,0,0);
+        }),
+        REQUEST_CUBE((l,b,f)->{
+            l.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kRed);
         });
 
         public final Animation animation;
@@ -27,6 +32,7 @@ public class LightstripSubsystem extends SubsystemBase {
     @FunctionalInterface
     public interface Animation {
         void tick(
+                LightstripSubsystem light,
                 AddressableLEDBuffer buffer,
                 double frame
                 );
@@ -59,7 +65,7 @@ public class LightstripSubsystem extends SubsystemBase {
         }
         if (frameTimer.advanceIfElapsed(1/Leds.FRAME_RATE)) {
             frameCount += 1;
-            animation.tick(buffer, frameCount);
+            animation.tick(this, buffer, frameCount);
         }
     }
 
@@ -82,5 +88,26 @@ public class LightstripSubsystem extends SubsystemBase {
 
     public void setAnimation(Animation animation) {
         setAnimation(animation, Optional.empty());
+    }
+
+    private int getID(Rotation2d angle) {
+        return (int) ((angle.getDegrees()%360)/90)*(Leds.LED_LEFT-Leds.LED_AHEAD) + Leds.LED_AHEAD;
+    }
+
+    private Rotation2d getAngle(int id) {
+        return Rotation2d.fromDegrees((id-Leds.LED_AHEAD)/(Leds.LED_LEFT-Leds.LED_AHEAD) * 90);
+    }
+
+    /** fill angle range with a solid color
+     *
+     * @param from robot-centric angle to start range (counterclockwise)
+     * @param to robot-centric angle to end range (must be greater than from)
+     * @param color color to set range to
+     */
+    public void fillColor(Rotation2d from, Rotation2d to, Color color) {
+        // assumes led strip goes counterclockwise
+        for (int i = getID(from); i < getID(to); i++) {
+            buffer.setLED(i, color);
+        }
     }
 }
