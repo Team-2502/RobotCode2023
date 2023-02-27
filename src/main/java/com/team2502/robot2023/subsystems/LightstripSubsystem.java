@@ -1,5 +1,8 @@
 package com.team2502.robot2023.subsystems;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.Optional;
 
 import com.team2502.robot2023.Constants;
@@ -15,23 +18,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightstripSubsystem extends SubsystemBase {
 
-    public enum Animations {
-        OFF((s,f)->{
+    public static class Animations {
+        static Animation off = ((s,f)->{
             s.buffer.setRGB(0,0,0,0);
-        }),
-        REQUEST_CUBE((s,f)->{
-            s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kRed);
+            return false;
         });
-
-        public final Animation animation;
-        Animations(Animation animation) {
-            this.animation = animation;
-        }
+        Animation request_cube = ((s,f)->{
+            s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kPurple);
+            return false;
+        });
+        Animation request_cone = ((s,f)->{
+            s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kYellow);
+            return false;
+        });
     };
 
     @FunctionalInterface
     public interface Animation {
-        void tick(Lightstrip strip, double frame);
+        boolean tick(Lightstrip strip, double frame);
     }
 
     class Lightstrip {
@@ -69,50 +73,69 @@ public class LightstripSubsystem extends SubsystemBase {
         }
     }
 
+    class ScheduledAnimation implements Comparable<ScheduledAnimation> {
+        Animation animation;
+        int frameCount;
+        int order;
+
+        ScheduledAnimation(Animation animation, int order) {
+            super();
+            this.animation = animation;
+            this.order = order;
+            frameCount = 0;
+        }
+
+        boolean tick(Lightstrip lightstrip) {
+            frameCount += 1;
+            return animation.tick(lightstrip, frameCount);
+        }
+
+        public int getOrder() {
+            return order;
+        }
+
+        @Override
+        public int compareTo(ScheduledAnimation animation) {
+            return ((ScheduledAnimation) animation).getOrder() - this.order;
+        }
+
+    }
+
     Lightstrip strip;
-    Animation animation;
-    Timer cancelTimer; // stops temporary animations
-    Timer frameTimer; // counts frames
-    int frameCount;
-    Optional<Double> timeout;
+    ArrayList<ScheduledAnimation> animations;
+    Timer frameTimer;
 
     public LightstripSubsystem() {
         strip = new Lightstrip(Leds.PORT,Leds.LED_COUNT);
 
-        animation = Animations.OFF.animation;
-        timeout = Optional.empty();
+        animations = new ArrayList<>(2);
+
+        animations.add(new ScheduledAnimation(Animations.off, 0));
     }
 
     @Override
     public void periodic() {
-        if (timeout.isPresent() && cancelTimer.hasElapsed(timeout.get())) {
-            selectAnimation();
+        if (!frameTimer.advanceIfElapsed(1/Leds.FRAME_RATE)) {
+            return;
         }
-        if (frameTimer.advanceIfElapsed(1/Leds.FRAME_RATE)) {
-            frameCount += 1;
-            animation.tick(strip, frameCount);
+        Collections.sort(animations);
+        Iterator<ScheduledAnimation> i = animations.iterator();
+        while (i.hasNext()) {
+            ScheduledAnimation animation = i.next();
+            if (!animation.tick(strip)) {
+                animations.remove(animation);
+            }
         }
     }
 
-    public void selectAnimation() {
-        setAnimation(Animations.OFF.animation);
+    public ScheduledAnimation scheduleAnimation(Animation animation, int order) {
+        ScheduledAnimation scheduledAnimation = new ScheduledAnimation((Animation) animation, order);
+        animations.add(scheduledAnimation);
+        return scheduledAnimation;
     }
 
-    public void setAnimation(Animation animation, Optional<Double> timeout) {
-        this.animation = animation;
-        this.timeout = timeout;
-        frameCount = 0;
-        cancelTimer.reset();
-        frameTimer.reset();
-        if (timeout.isPresent()) cancelTimer.start();
-    }
-
-    public void setAnimation(Animation animation, double timeout) {
-        setAnimation(animation, timeout);
-    }
-
-    public void setAnimation(Animation animation) {
-        setAnimation(animation, Optional.empty());
+    public void cancelAnimation(ScheduledAnimation animation) {
+        animations.remove(animation);
     }
 
 }
