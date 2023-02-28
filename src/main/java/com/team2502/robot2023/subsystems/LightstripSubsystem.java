@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Leds;
@@ -18,27 +19,42 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightstripSubsystem extends SubsystemBase {
 
-    public static class Animations {
-        static Animation off = ((s,f)->{
+    /** Class for static animations not tied to a subsystem 
+     * 
+     * {@link Animation}s that need to accept data inputs should be defined elsewhere
+     * */
+    public static final class Animations {
+        public static final Animation off = ((s,f)->{
             s.buffer.setRGB(0,0,0,0);
             return false;
         });
-        Animation request_cube = ((s,f)->{
+        public static final Animation request_cube = ((s,f)->{
             s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kPurple);
             return false;
         });
-        Animation request_cone = ((s,f)->{
+        public static final Animation request_cone = ((s,f)->{
             s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kYellow);
+            return false;
+        });
+        public static final Animation orbit_demo = ((s,f)->{
+            Rotation2d angle = Rotation2d.fromDegrees(f*3);
+            Rotation2d offset = Rotation2d.fromDegrees(30);
+            s.fillColor(angle.minus(offset),angle.plus(offset),Color.kWhite);
             return false;
         });
     };
 
     @FunctionalInterface
     public interface Animation {
+        /** preform one tick of an animation
+         *
+         * @param strip led strip to set colors on
+         * @param frame execution count, starts at 1
+         */
         boolean tick(Lightstrip strip, double frame);
     }
 
-    class Lightstrip {
+    public class Lightstrip {
         AddressableLED strip;
         public AddressableLEDBuffer buffer;
 
@@ -71,9 +87,21 @@ public class LightstripSubsystem extends SubsystemBase {
                 buffer.setLED(i, color);
             }
         }
+
+        /** fill angle range based using given function
+         *
+         * @param from robot-centric angle to start range (counterclockwise)
+         * @param to robot-centric angle to end range (must be greater than from)
+         * @param mapFunction rotation to color transform
+         */
+        public void fillMap(Rotation2d from, Rotation2d to, Function<Rotation2d,Color> mapFunction) {
+            for (int i = getID(from); i < getID(to); i++) {
+                buffer.setLED(i, mapFunction.apply(getAngle(i)));
+            }
+        }
     }
 
-    class ScheduledAnimation implements Comparable<ScheduledAnimation> {
+    public class ScheduledAnimation implements Comparable<ScheduledAnimation> {
         Animation animation;
         int frameCount;
         int order;
@@ -96,7 +124,7 @@ public class LightstripSubsystem extends SubsystemBase {
 
         @Override
         public int compareTo(ScheduledAnimation animation) {
-            return ((ScheduledAnimation) animation).getOrder() - this.order;
+            return animation.getOrder() - this.order;
         }
 
     }

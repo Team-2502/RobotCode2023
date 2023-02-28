@@ -15,7 +15,7 @@ import com.team2502.robot2023.commands.RunConveyorCommand;
 import com.team2502.robot2023.commands.RunElevatorCommand;
 import com.team2502.robot2023.commands.RunIntakeCommand;
 import com.team2502.robot2023.commands.GotoAbsoluteCommand;
-
+import com.team2502.robot2023.commands.RunAnimationCommand;
 import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
@@ -98,6 +98,9 @@ public class RobotContainer {
 
         new JoystickButton(JOYSTICK_DEBUG, 6)
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
+
+        new JoystickButton(JOYSTICK_DEBUG, 7)
+            .whileTrue( new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.orbit_demo, 1));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
