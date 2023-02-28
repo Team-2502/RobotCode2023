@@ -113,7 +113,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void zeroElevator() {
-        pitchElevator.getEncoder().setPosition(0);
+        rightElevator.getEncoder().setPosition(0);
     }
 
     private void NTInit() {

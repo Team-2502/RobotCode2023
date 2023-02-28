@@ -12,6 +12,7 @@ import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
 import com.team2502.robot2023.autonomous.AutoChooser.CommandFactory;
 import com.team2502.robot2023.commands.BalanceCommand;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
+import com.team2502.robot2023.commands.YawLockedTranspose;
 
 /**
  * class for autonomous command groups
@@ -22,6 +23,51 @@ public enum Autos { // first auto is default
             Commands.deadline(Commands.waitSeconds(1.65), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-1,0,0));})),
             new BalanceCommand(d, false),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+        ONE_CUBE_MID_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence(
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0))),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            new BalanceCommand(d, false),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+        ONE_CUBE_SOUTH_BACKUP_HETERO((d,i,e,m) -> Commands.sequence(
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.parallel(
+                Commands.sequence(
+                    Commands.deadline(Commands.waitSeconds(3.5), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0))),
+                    new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+                ),
+                Commands.sequence(
+                    Commands.waitSeconds(1.5),
+                    new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+                    Commands.waitSeconds(2),
+                    new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
+                )
+            )
         )),
 
         ONE_CUBE_SOUTH_BACKUP_TIMED((d,i,e,m) -> Commands.sequence(
@@ -38,13 +84,13 @@ public enum Autos { // first auto is default
             Commands.waitSeconds(1.2),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
             Commands.waitSeconds(1.2),
-            Commands.deadline(Commands.waitSeconds(.8), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.8,0,0));})),
+            Commands.deadline(Commands.waitSeconds(.7), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.8,0,0));})),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
             Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.parallel(
                 Commands.sequence(
-                    Commands.deadline(Commands.waitSeconds(3.2), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-.8,0,0));})),
+                    Commands.deadline(Commands.waitSeconds(3.5), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-.8,0,0));})),
                     new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
                 ),
                 Commands.sequence(
