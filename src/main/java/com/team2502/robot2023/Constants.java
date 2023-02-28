@@ -137,8 +137,9 @@ public final class Constants {
             public static enum ElevatorPosition {
                 BOTTOM(0),
                 MIDDLE(1),
-                TOP(-47.9),
-                CUBE_TOP(-48.5);
+                SAFE_PITCH(-29),
+                CUBE_TOP(-48.5),
+                TOP(-47.9);
 
                 public final double position;
                 private ElevatorPosition(double position) {

@@ -82,6 +82,18 @@ public class ElevatorSubsystem extends SubsystemBase {
         pitchElevator.set(speed);
     }
 
+    public double getLinear() {
+        return rightElevator.getEncoder().getPosition();
+    }
+
+    public boolean safePitch() {
+        if (rightElevator.getEncoder().getPosition() < ElevatorPosition.SAFE_PITCH.position) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void home() {
         while (!limitSwitch.get()) {
             setLinearSpeed(0.1);
