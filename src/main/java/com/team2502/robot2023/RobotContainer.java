@@ -132,6 +132,7 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> CONVEYOR.run(0.0)));
 
         // Home commands
+        /*
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_HOME)
                 .onTrue(new InstantCommand(() -> INTAKE.home(), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.stopLift(), INTAKE));
@@ -143,6 +144,7 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_HOME)
                 .onTrue(new InstantCommand(() -> MANIPULATOR.home(), MANIPULATOR))
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0), MANIPULATOR));
+         */
     }
 
     /**
