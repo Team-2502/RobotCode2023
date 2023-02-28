@@ -7,27 +7,20 @@ package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.autonomous.AutoChooser;
-import com.team2502.robot2023.commands.BalanceCommand;
-import com.team2502.robot2023.commands.DriveCommand;
-import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
-import com.team2502.robot2023.commands.FollowPathRelativeCommand;
-import com.team2502.robot2023.commands.RunConveyorCommand;
-import com.team2502.robot2023.commands.RunElevatorCommand;
-import com.team2502.robot2023.commands.RunIntakeCommand;
-import com.team2502.robot2023.commands.GotoAbsoluteCommand;
+import com.team2502.robot2023.commands.*;
 
 import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import java.util.Set;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -72,13 +65,13 @@ public class RobotContainer {
         RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.55, -0.4));
 
         JoystickButton ElevatorBot = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT);
-        ElevatorBot.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
+        ElevatorBot.onTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
 
         JoystickButton ElevatorMid = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID);
-        ElevatorMid.onTrue(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE));
+        ElevatorMid.onTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE));
 
         JoystickButton ElevatorTop = new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP);
-        ElevatorTop.whenPressed(new RunElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.TOP));
+        ElevatorTop.onTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.TOP));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_OUT)
             .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.OUT), ELEVATOR));
