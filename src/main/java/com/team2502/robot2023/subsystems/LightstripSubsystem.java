@@ -25,7 +25,9 @@ public class LightstripSubsystem extends SubsystemBase {
      * */
     public static final class Animations {
         public static final Animation off = ((s,f)->{
-            s.buffer.setRGB(0,0,0,0);
+            for (int i = 0; i < Leds.LED_COUNT; i++) {
+                s.buffer.setRGB(i,0,0,0);
+            }
             return false;
         });
         public static final Animation request_cube = ((s,f)->{
@@ -37,7 +39,7 @@ public class LightstripSubsystem extends SubsystemBase {
             return false;
         });
         public static final Animation orbit_demo = ((s,f)->{
-            Rotation2d angle = Rotation2d.fromDegrees(f*3);
+            Rotation2d angle = Rotation2d.fromDegrees(f*Leds.FRAME_TIME*90);
             Rotation2d offset = Rotation2d.fromDegrees(30);
             s.fillColor(angle.minus(offset),angle.plus(offset),Color.kWhite);
             return false;
@@ -67,8 +69,18 @@ public class LightstripSubsystem extends SubsystemBase {
             strip.start();
         }
 
+        /** compute led ID for the given robot-centric angle
+         *
+         * assumes that the LED strip is installed such that LED zero 
+         * is straight ahead, and further LEDs go counterclockwise
+         *
+         * @param angle counterclockwise robot-centric angle
+         * @return led ID closest to that angle
+         */
         public int getID(Rotation2d angle) {
-            return (int) ((angle.getDegrees()%360)/90)*(Leds.LED_LEFT-Leds.LED_AHEAD) + Leds.LED_AHEAD;
+            return (int) (((angle.getDegrees()+360)%360)/90) // quadrants ccw
+                *(Leds.LED_LEFT-Leds.LED_AHEAD) // multiply by quadrant led count
+                + Leds.LED_AHEAD;
         }
 
         public Rotation2d getAngle(int id) {
@@ -82,10 +94,7 @@ public class LightstripSubsystem extends SubsystemBase {
          * @param color color to set range to
          */
         public void fillColor(Rotation2d from, Rotation2d to, Color color) {
-            // assumes led strip goes counterclockwise
-            for (int i = getID(from); i < getID(to); i++) {
-                buffer.setLED(i, color);
-            }
+            fillMap(from,to,(c)->{return color;});
         }
 
         /** fill angle range based using given function
@@ -95,7 +104,8 @@ public class LightstripSubsystem extends SubsystemBase {
          * @param mapFunction rotation to color transform
          */
         public void fillMap(Rotation2d from, Rotation2d to, Function<Rotation2d,Color> mapFunction) {
-            for (int i = getID(from); i < getID(to); i++) {
+            for (int i = getID(from); i != getID(to) % Leds.LED_COUNT; i++) {
+                i %= Leds.LED_COUNT;
                 buffer.setLED(i, mapFunction.apply(getAngle(i)));
             }
         }
@@ -124,7 +134,7 @@ public class LightstripSubsystem extends SubsystemBase {
 
         @Override
         public int compareTo(ScheduledAnimation animation) {
-            return animation.getOrder() - this.order;
+            return this.order - animation.getOrder();
         }
 
     }
@@ -135,8 +145,10 @@ public class LightstripSubsystem extends SubsystemBase {
 
     public LightstripSubsystem() {
         strip = new Lightstrip(Leds.PORT,Leds.LED_COUNT);
+        frameTimer = new Timer();
+        frameTimer.start();
 
-        animations = new ArrayList<>(2);
+        animations = new ArrayList<ScheduledAnimation>(2);
 
         animations.add(new ScheduledAnimation(Animations.off, 0));
     }
