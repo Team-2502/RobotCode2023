@@ -40,14 +40,12 @@ public enum Autos { // first auto is default
             new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
             Commands.waitSeconds(1.2),
             Commands.deadline(Commands.waitSeconds(.8), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.4,0,0));})),
-            Commands.deadline(Commands.waitSeconds(.4), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.2,0,0));})),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
             Commands.deadline(Commands.waitSeconds(1.25), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.parallel(
                 Commands.sequence(
-                    Commands.deadline(Commands.waitSeconds(.8), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.4,0,0));})),
-                    Commands.deadline(Commands.waitSeconds(.4), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.2,0,0));})),
+                    Commands.deadline(Commands.waitSeconds(1.2), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-.4,0,0));})),
                     new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
                 ),
                 Commands.sequence(
