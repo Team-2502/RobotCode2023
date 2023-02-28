@@ -26,7 +26,7 @@ public class SetElevatorCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        if (elevator.getLinear() <= elevator.getLinear() + 1 || elevator.getLinear() >= elevator.getLinear() - 1) {
+        if (elevator.getLinear() <= elevator.getLinear() + 1 && elevator.getLinear() >= elevator.getLinear() - 1) {
             return true;
         } else {
             return false;
