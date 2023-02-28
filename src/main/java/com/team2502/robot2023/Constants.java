@@ -137,7 +137,8 @@ public final class Constants {
             public static enum ElevatorPosition {
                 BOTTOM(0),
                 MIDDLE(1),
-                TOP(-47.9);
+                TOP(-47.9),
+                CUBE_TOP(-48.5);
 
                 public final double position;
                 private ElevatorPosition(double position) {
@@ -147,6 +148,7 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
+                CUBE_TOP(-68),
                 OUT(-72);
 
                 public final double position;
