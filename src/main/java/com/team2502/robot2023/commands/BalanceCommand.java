@@ -26,27 +26,23 @@ public class BalanceCommand extends CommandBase {
         this.sideways = sideways;
 
         this.rollPID = new PIDController(0.02, 0, 0);
-        rollPID.setTolerance(5);
         addRequirements(drivetrain);
     }
 
     @Override
-    public void execute() {
+    public void initialize() {
         drivetrain.setTurnNeutralMode(NeutralMode.Brake);
         drivetrain.setPowerNeutralMode(NeutralMode.Coast);
+    }
 
+    @Override
+    public void execute() {
         ChassisSpeeds speeds;
         if (sideways) {
             speeds = new ChassisSpeeds(0, rollPID.calculate(drivetrain.getRoll()), 0);
         } else {
             speeds = new ChassisSpeeds(-rollPID.calculate(drivetrain.getPitch()), 0, 0);
         }
-        if (rollPID.atSetpoint()) {
-            drivetrain.stop();
-        } else {
-            drivetrain.setSpeeds(speeds);
-        }
-
         SmartDashboard.putNumber("roller", rollPID.getPositionError());
     }
 
