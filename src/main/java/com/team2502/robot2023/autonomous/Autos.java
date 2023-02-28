@@ -25,6 +25,41 @@ public enum Autos { // first auto is default
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
+        ONE_CUBE_SOUTH_BACKUP_TIMED((d,i,e,m) -> Commands.sequence(
+            //new InstantCommand(() -> {
+            //    m.home();
+            //    m.set(ManipulatorPosition.CONE);
+            //}),
+            //Commands.waitSeconds(2),
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            //Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
+            //new InstantCommand(() -> m.setSpeed(0.0)),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.8), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.4,0,0));})),
+            Commands.deadline(Commands.waitSeconds(.4), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.2,0,0));})),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.25), new InstantCommand(() -> m.setSpeed(-0.3))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.parallel(
+                Commands.sequence(
+                    Commands.deadline(Commands.waitSeconds(.8), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.4,0,0));})),
+                    Commands.deadline(Commands.waitSeconds(.4), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.2,0,0));})),
+                    new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+                ),
+                Commands.sequence(
+                    Commands.waitSeconds(1.5),
+                    new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+                    Commands.waitSeconds(2),
+                    new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
+                )
+            )
+        )),
+
+
         ONE_CUBE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(
             //new InstantCommand(() -> {
             //    m.home();
@@ -33,21 +68,21 @@ public enum Autos { // first auto is default
             //Commands.waitSeconds(2),
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
-            Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
-            Commands.waitSeconds(2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
-            Commands.waitSeconds(2),
+            //Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
+            //new InstantCommand(() -> m.setSpeed(0.0)),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
             Commands.deadline(Commands.waitSeconds(2.8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-1")),
             Commands.deadline(Commands.waitSeconds(1.25), new InstantCommand(() -> m.setSpeed(-0.3))),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.parallel(
                 Commands.deadline(Commands.waitSeconds(5), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")),
                 Commands.sequence(
-                    Commands.waitSeconds(2),
+                    Commands.waitSeconds(1.5),
                     new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-                    Commands.waitSeconds(3),
+                    Commands.waitSeconds(2),
                     new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
                 )
             )
