@@ -55,6 +55,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         SmartDashboard.putData("Test: Wrist IN", new InstantCommand(() -> { setPitch(ElevatorPitch.STOWED);}));
 
         SmartDashboard.putData("Elevator HOME", new InstantCommand(() -> { home();}));
+        SmartDashboard.putData("Elevator ZERO", new InstantCommand(() -> { zeroElevator();}));
+        SmartDashboard.putData("Pitch ZERO", new InstantCommand(() -> { zeroPitch();}));
     }
 
     @Override
@@ -104,6 +106,14 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         rightElevator.getEncoder().setPosition(0);
         set(ElevatorPosition.BOTTOM);
+    }
+
+    public void zeroPitch() {
+        pitchElevator.getEncoder().setPosition(0);
+    }
+
+    public void zeroElevator() {
+        pitchElevator.getEncoder().setPosition(0);
     }
 
     private void NTInit() {
