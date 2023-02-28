@@ -25,14 +25,14 @@ public class BalanceCommand extends CommandBase {
         this.drivetrain = drivetrain;
         this.sideways = sideways;
 
-        this.rollPID = new PIDController(0.02, 0, 0);
+        this.rollPID = new PIDController(0.03, 0, 0);
         addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
         drivetrain.setTurnNeutralMode(NeutralMode.Brake);
-        drivetrain.setPowerNeutralMode(NeutralMode.Coast);
+        drivetrain.setPowerNeutralMode(NeutralMode.Brake);
     }
 
     @Override
@@ -44,6 +44,7 @@ public class BalanceCommand extends CommandBase {
             speeds = new ChassisSpeeds(-rollPID.calculate(drivetrain.getPitch()), 0, 0);
         }
         SmartDashboard.putNumber("roller", rollPID.getPositionError());
+        drivetrain.setSpeeds(speeds);
     }
 
     @Override

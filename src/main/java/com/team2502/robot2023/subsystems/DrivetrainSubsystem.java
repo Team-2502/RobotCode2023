@@ -74,6 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private PIDController xPidController;
     private PIDController yPidController;
     private PIDController rPidController;
+	private float pitchOffset;
 
     public DrivetrainSubsystem(){
         PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
@@ -116,6 +117,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.xPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.yPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+
+        pitchOffset = 0;
 
         fieldOrientedOffset = 0;
 
@@ -386,8 +389,12 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return navX.getAngle();
     }
 
+    public void resetPitch() {
+        pitchOffset = navX.getPitch();
+    }
+
     public double getRoll() {
-        return navX.getPitch(); // rio sideways
+        return navX.getPitch()-pitchOffset; // rio sideways
     }
     public double getPitch() {
         return navX.getRoll(); // rio sideways
@@ -454,5 +461,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
         SmartDashboard.putNumber("Meters Traveled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
+        SmartDashboard.putNumber("pitch", getPitch());
     }
 }
