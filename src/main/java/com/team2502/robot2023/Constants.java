@@ -31,7 +31,7 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 2;
+        public static final int RESET_HEADING = 3;
         public static final int RUN_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
 
@@ -59,6 +59,8 @@ public final class Constants {
 
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
+
+        public static final int ELEVATOR_ZERO = 16;
 
         // Home commands
         public static final int INTAKE_HOME = 14;
@@ -106,19 +108,44 @@ public final class Constants {
 
         // Manipulator
         public static final int GRIPPER_MOTOR = 20;
-        public static final int SWITCH_GRIPPER = 3;
+        public static final int SWITCH_GRIPPER = 7;
 
     }
 
     public static final class Subsystems {
+        public static final class Leds {
+            public static final int PORT = 7; // pwm:
+            public static final int LED_COUNT = 50; // logical, not physical count (same on 2815)
+            public static final int FRAME_RATE = 15;
+            public static final int FRAME_TIME = 1/FRAME_RATE; // seconds per frame
+
+            public static final int LED_AHEAD = 0; // Led id corresponding to center of front
+            public static final int LED_LEFT = LED_COUNT/4; // Led id corresponding to center of left side
+
+        }
+
         public static final class Elevator {
+            public static final boolean NT_TUNE = false;
+
             public static final double ELEVATOR_LIM_TOP = -50;
             public static final double ELEVATOR_LIM_BOTTOM = 0;
+
+            public static final double ELEVATOR_P = 0.5;
+            public static final double ELEVATOR_I = 0.0;
+            public static final double ELEVATOR_D = 0.0;
+            public static final int ELEVATOR_MIN_OUTPUT = -1;
+            public static final int ELEVATOR_MAX_OUTPUT = 1;
+
+            public static final double PITCH_P = 0.5;
+            public static final double PITCH_I = 0.0;
+            public static final double PITCH_D = 0.0;
+            public static final int PITCH_MIN_OUTPUT = -1;
+            public static final int PITCH_MAX_OUTPUT = 1;
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
                 MIDDLE(1),
-                TOP(2);
+                TOP(-47.9);
 
                 public final double position;
                 private ElevatorPosition(double position) {
@@ -128,7 +155,7 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
-                OUT(1);
+                OUT(-72);
 
                 public final double position;
                 private ElevatorPitch(double position) {
@@ -138,9 +165,16 @@ public final class Constants {
         }
 
         public static final class Manipulator {
+            public static final double GRIPPER_P = 0.5;
+            public static final double GRIPPER_I = 0.0;
+            public static final double GRIPPER_D = 0.0;
+
             public static enum ManipulatorPosition {
-                OPEN(0),
-                CLOSED(1);
+                OPEN(8),
+                STOWED(41), // does not intersect stowed intake
+                CONE(115), // TODO : measure
+                CUBE(81),  // TODO : measure 
+                CLOSED(160);
 
                 public final double position;
                 private ManipulatorPosition(double position) {
