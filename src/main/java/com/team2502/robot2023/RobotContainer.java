@@ -63,8 +63,6 @@ public class RobotContainer {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
 
-        new JoystickButton(JOYSTICK_DEBUG, OI.RESET_MODULES)
-            .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
 
         JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
         RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.55, 0.6));
@@ -86,20 +84,7 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_IN)
             .onTrue(new InstantCommand(() -> ELEVATOR.setPitch(Constants.Subsystems.Elevator.ElevatorPitch.STOWED), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
-        //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
-
-        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+1)
-                .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
-
-        new JoystickButton(JOYSTICK_DEBUG, 5)
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
-
-        new JoystickButton(JOYSTICK_DEBUG, 6)
-            .whileTrue( new BalanceCommand(DRIVETRAIN, false));
-
-        new JoystickButton(JOYSTICK_DEBUG, 7)
+        new JoystickButton(JOYSTICK_DEBUG, 1)
             .whileTrue( new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.orbit_demo, 1));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,7 +27,7 @@ public class LightstripSubsystem extends SubsystemBase {
     public static final class Animations {
         public static final Animation off = ((s,f)->{
             for (int i = 0; i < Leds.LED_COUNT; i++) {
-                s.buffer.setRGB(i,0,0,0);
+                s.buffer.setRGB(i,55,0,0);
             }
             return false;
         });
@@ -38,10 +39,14 @@ public class LightstripSubsystem extends SubsystemBase {
             s.fillColor(Rotation2d.fromDegrees(-90),Rotation2d.fromDegrees(90),Color.kYellow);
             return false;
         });
+        public static final Animation orbit_demo_simple = ((s,f)->{
+            s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,255,148,0);
+            return false;
+        });
         public static final Animation orbit_demo = ((s,f)->{
             Rotation2d angle = Rotation2d.fromDegrees(f*Leds.FRAME_TIME*90);
             Rotation2d offset = Rotation2d.fromDegrees(30);
-            s.fillColor(angle.minus(offset),angle.plus(offset),Color.kWhite);
+            s.fillColor(angle.minus(offset),angle.plus(offset),Color.kPeru);
             return false;
         });
     };
@@ -65,6 +70,11 @@ public class LightstripSubsystem extends SubsystemBase {
             strip.setLength(count);
             buffer = new AddressableLEDBuffer(count);
 
+            strip.setData(buffer);
+            strip.start();
+        }
+
+        public void flush() {
             strip.setData(buffer);
             strip.start();
         }
@@ -150,8 +160,8 @@ public class LightstripSubsystem extends SubsystemBase {
 
         animations = new ArrayList<ScheduledAnimation>(2);
 
-        animations.add(new ScheduledAnimation(Animations.off, 0));
-        animations.add(new ScheduledAnimation(Animations.orbit_demo, 2));
+        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, 2));
+        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, -2));
     }
 
     @Override
@@ -161,12 +171,19 @@ public class LightstripSubsystem extends SubsystemBase {
         }
         Collections.sort(animations);
         Iterator<ScheduledAnimation> i = animations.iterator();
+
+        SmartDashboard.putNumber("ani count",animations.size());
         while (i.hasNext()) {
             ScheduledAnimation animation = i.next();
-            if (!animation.tick(strip)) {
-                animations.remove(animation);
-            }
+            animation.tick(strip);
+            strip.buffer.setRGB(5,255,148,0);
+            strip.flush();
+//            if (animation.tick(strip)) {
+ //               animations.remove(animation);
+  //          }
         }
+        strip.buffer.setRGB(5,255,148,0);
+        strip.flush();
     }
 
     public ScheduledAnimation scheduleAnimation(Animation animation, int order) {
