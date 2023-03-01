@@ -151,6 +151,7 @@ public class LightstripSubsystem extends SubsystemBase {
         animations = new ArrayList<ScheduledAnimation>(2);
 
         animations.add(new ScheduledAnimation(Animations.off, 0));
+        animations.add(new ScheduledAnimation(Animations.orbit_demo, 2));
     }
 
     @Override
