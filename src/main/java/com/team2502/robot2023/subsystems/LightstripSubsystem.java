@@ -40,7 +40,7 @@ public class LightstripSubsystem extends SubsystemBase {
             return false;
         });
         public static final Animation orbit_demo_simple = ((s,f)->{
-            s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,255,148,0);
+            s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,20,148,0);
             return false;
         });
         public static final Animation orbit_demo = ((s,f)->{
