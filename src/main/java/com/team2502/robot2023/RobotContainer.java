@@ -91,7 +91,7 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_DEBUG, 5)
             .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
 
-        new JoystickButton(JOYSTICK_DEBUG, 6)
+        new JoystickButton(JOYSTICK_DRIVE_RIGHT, 6)
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
