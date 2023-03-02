@@ -34,12 +34,12 @@ public final class Constants {
         public static final int RESET_HEADING = 3;
         public static final int RUN_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
+        public static final int RET_MODE = 4;
 
         // Driver Left
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
 
-        public static final int RET_MODE = 3;
 
         // DBG
         public static final int DEBUG_RUN = 1;
