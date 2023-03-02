@@ -224,8 +224,8 @@ public final class Constants {
         public static final class Drivetrain {
             public static final double MAX_VEL = 6; // driver speed gain (m/s)
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
-            public static final double RET_VEL = 6; // driver speed gain (m/s)
-            public static final double RET_ROT = 3; // driver rotation gain (rad/s)
+            public static final double RET_VEL = 3; // driver speed gain (m/s)
+            public static final double RET_ROT = 1.5; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 1.4;
