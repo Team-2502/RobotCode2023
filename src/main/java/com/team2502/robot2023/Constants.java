@@ -39,6 +39,8 @@ public final class Constants {
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
 
+        public static final int RET_MODE = 3;
+
         // DBG
         public static final int DEBUG_RUN = 1;
         public static final int RESET_MODULES = 4;
@@ -222,6 +224,8 @@ public final class Constants {
         public static final class Drivetrain {
             public static final double MAX_VEL = 6; // driver speed gain (m/s)
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
+            public static final double RET_VEL = 6; // driver speed gain (m/s)
+            public static final double RET_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 1.4;
