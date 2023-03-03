@@ -71,13 +71,13 @@ public class RobotContainer {
             .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP, Constants.Subsystems.Elevator.ElevatorPitch.GROUND_PICKUP));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CONE_BOTTOM, Constants.Subsystems.Elevator.ElevatorPitch.CONE_BOTTOM));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE, Constants.Subsystems.Elevator.ElevatorPitch.CONE_MID));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CUBE_TOP, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CONE_TOP, Constants.Subsystems.Elevator.ElevatorPitch.CONE_TOP));
 
         new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
         //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));

@@ -140,10 +140,12 @@ public final class Constants {
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
-                MIDDLE(-30), // TODO: measure
+                MIDDLE(-26.14), // TODO: measure
                 SAFE_PITCH(-29),
                 GROUND_PICKUP(-1.69),
                 CUBE_TOP(-48.5),
+                CONE_BOTTOM(0),
+                CONE_TOP(-49.7),
                 TOP(-50); // TODO: measure
 
                 public final double position;
@@ -157,6 +159,9 @@ public final class Constants {
                 FRAME_INTERSECT(-25), // TODO: measure on hardware
                 GROUND_PICKUP(-41.76),
                 CUBE_TOP(-68),
+                CONE_TOP(-86.76),
+                CONE_MID(-79.76),
+                CONE_BOTTOM(-72),
                 OUT(-72);
 
                 public final double position;
