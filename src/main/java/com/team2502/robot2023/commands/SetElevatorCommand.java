@@ -1,7 +1,5 @@
 package com.team2502.robot2023.commands;
 
-import org.apache.commons.lang3.Range;
-
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.*;
 import com.team2502.robot2023.subsystems.ElevatorSubsystem;
@@ -34,9 +32,9 @@ public class SetElevatorCommand extends CommandBase {
     @Override
     public void initialize() {
         // calculate if this manuver will cross the deadzone caused by the back of the frame
-        reposition = Range.between(elevator.getPitch(),pitch.position) // range the manipulator needs to cross
-            .isOverlappedBy(Range.between(ElevatorPitch.STOWED.position,ElevatorPitch.GROUND_PICKUP.position)); // range it would be blocked by the frame
-
+        // lang3.Range is not installed
+        reposition = (elevator.getPitch() > ElevatorPitch.FRAME_INTERSECT.position && pitch.position < ElevatorPitch.FRAME_INTERSECT.position)
+            || (elevator.getPitch() < ElevatorPitch.FRAME_INTERSECT.position && pitch.position > ElevatorPitch.FRAME_INTERSECT.position);
     }
 
     @Override
@@ -56,8 +54,6 @@ public class SetElevatorCommand extends CommandBase {
             }
         }
     }
-
-
 
     private boolean elevatorAt(ElevatorPosition linear) {
         return Math.abs(linear.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD;
