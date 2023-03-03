@@ -47,6 +47,7 @@ public final class Constants {
 
         // Operator
         public static final int ELEVATOR_STO = 14;
+        public static final int ELEVATOR_GROUND = 15;
         public static final int ELEVATOR_BOT = 13;
         public static final int ELEVATOR_MID = 12;
         public static final int ELEVATOR_TOP = 11;
@@ -137,6 +138,7 @@ public final class Constants {
                 BOTTOM(0),
                 MIDDLE(-30), // TODO: measure
                 SAFE_PITCH(-29),
+                GROUND_PICKUP(-1.69),
                 CUBE_TOP(-48.5),
                 TOP(-50); // TODO: measure
 
@@ -149,7 +151,7 @@ public final class Constants {
             public static enum ElevatorPitch {
                 STOWED(0),
                 FRAME_INTERSECT(-25), // TODO: measure on hardware
-                GROUND_PICKUP(-32), // TODO: measure on hardware
+                GROUND_PICKUP(-38.47),
                 CUBE_TOP(-68),
                 OUT(-72);
 

@@ -67,6 +67,9 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_STO)
             .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
 
+        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_GROUND)
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP, Constants.Subsystems.Elevator.ElevatorPitch.GROUND_PICKUP));
+
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT)
             .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
 
@@ -90,10 +93,10 @@ public class RobotContainer {
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.6), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.3), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.6), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_EXTEND)

@@ -2,6 +2,7 @@ package com.team2502.robot2023.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
@@ -34,6 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
         pitchElevator.setSmartCurrentLimit(39);
+
+        pitchElevator.setIdleMode(IdleMode.kBrake);
 
         rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
         rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
