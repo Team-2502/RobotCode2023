@@ -37,10 +37,10 @@ public enum Autos { // first auto is default
             Commands.waitSeconds(1.2),
             new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
             Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
-            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-0.9,0,0))),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
             Commands.waitSeconds(0.2),
-            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0))),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(1,0,0))),
             Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
             Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
