@@ -52,7 +52,9 @@ public enum Autos { // first auto is default
             Commands.waitSeconds(1.2),
             Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            new InstantCommand(() -> m.enableSoft(false)),
             Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.enableSoft(true)),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.parallel(
                 Commands.sequence(

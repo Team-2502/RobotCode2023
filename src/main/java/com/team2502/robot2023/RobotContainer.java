@@ -93,10 +93,10 @@ public class RobotContainer {
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.6), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.45), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.6), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.45), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_EXTEND)
