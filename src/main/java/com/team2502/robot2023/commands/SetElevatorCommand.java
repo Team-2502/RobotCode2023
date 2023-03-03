@@ -19,7 +19,6 @@ public class SetElevatorCommand extends CommandBase {
         this.pitch = ElevatorPitch.STOWED;
         this.reposition = true;
 
-
         addRequirements(elevator);
     }
 
@@ -42,17 +41,19 @@ public class SetElevatorCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (reposition) {
-            elevator.set(ElevatorPosition.SAFE_PITCH);
-            if (elevatorAt(ElevatorPosition.SAFE_PITCH)) {
-                elevator.setPitch(pitch);
-                if (pitchAt(pitch)) {
-                    reposition = false;
-                }
-            }
-        } else {
+        if (!reposition) {
             elevator.setPitch(pitch);
             elevator.set(linear);
+            return;
+        }
+
+        // repositioning
+        elevator.set(ElevatorPosition.SAFE_PITCH); // extend (presumably) to the safepoint
+        if (elevatorAt(ElevatorPosition.SAFE_PITCH)) {
+            elevator.setPitch(pitch); // pitch over once safe
+            if (pitchAt(pitch)) {
+                reposition = false; // end repositioning mode once at setpoint
+            }
         }
     }
 
