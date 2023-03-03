@@ -153,6 +153,7 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
+                GROUND_PICKUP(-32), // TODO: measure on hardware
                 CUBE_TOP(-68),
                 OUT(-72);
 

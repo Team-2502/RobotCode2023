@@ -1,5 +1,7 @@
 package com.team2502.robot2023.commands;
 
+import org.apache.commons.lang3.Range;
+
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.*;
 import com.team2502.robot2023.subsystems.ElevatorSubsystem;
@@ -7,37 +9,66 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SetElevatorCommand extends CommandBase {
     private ElevatorSubsystem elevator;
-    private ElevatorPosition pos;
+    private ElevatorPosition linear;
+    private ElevatorPitch pitch;
+    private boolean reposition;
 
     public SetElevatorCommand(ElevatorSubsystem elevator, ElevatorPosition pos) {
         this.elevator = elevator;
-        this.pos = pos;
+        this.linear = pos;
+        this.pitch = ElevatorPitch.STOWED;
+        this.reposition = true;
+
+
+        addRequirements(elevator);
+    }
+
+    public SetElevatorCommand(ElevatorSubsystem elevator, ElevatorPosition pos, ElevatorPitch pitch) {
+        this.elevator = elevator;
+        this.linear = pos;
+        this.pitch = pitch;
+        this.reposition = true;
 
         addRequirements(elevator);
     }
 
     @Override
+    public void initialize() {
+        // calculate if this manuver will cross the deadzone caused by the back of the frame
+        reposition = Range.between(elevator.getPitch(),pitch.position) // range the manipulator needs to cross
+            .isOverlappedBy(Range.between(ElevatorPitch.STOWED.position,ElevatorPitch.GROUND_PICKUP.position)); // range it would be blocked by the frame
+
+    }
+
+    @Override
     public void execute() {
-        if (!elevator.safePitch() && !pitchStowed()) {
-            elevator.setLinearSpeed(0);
+        if (reposition) {
+            elevator.set(ElevatorPosition.SAFE_PITCH);
+            if (elevatorAt(ElevatorPosition.SAFE_PITCH)) {
+                elevator.setPitch(pitch);
+                if (pitchAt(pitch)) {
+                    reposition = false;
+                }
+            }
         } else {
-            elevator.set(pos);
+            elevator.setPitch(pitch);
+            elevator.set(linear);
         }
-
-        elevator.setPitch(elevator.safePitch() ? ElevatorPitch.OUT : ElevatorPitch.STOWED);
     }
 
-    private boolean elevatorAtSetpoint() {
-        return Math.abs(pos.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD;
+
+
+    private boolean elevatorAt(ElevatorPosition linear) {
+        return Math.abs(linear.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD;
     }
 
-    private boolean pitchStowed() {
-        return Math.abs(ElevatorPitch.STOWED.position-elevator.getPitch()) < Constants.Subsystems.Elevator.PITCH_THRESHOLD;
+    private boolean pitchAt(ElevatorPitch pitch) {
+        return Math.abs(pitch.position-elevator.getPitch()) < Constants.Subsystems.Elevator.PITCH_THRESHOLD;
     }
 
     @Override
     public boolean isFinished() {
-        if (Math.abs(pos.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD) {
+        if (elevatorAt(linear) && pitchAt(pitch)) {
             return true;
         } else {
             return false;
