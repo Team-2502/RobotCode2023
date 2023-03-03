@@ -129,12 +129,14 @@ public final class Constants {
             public static final double ELEVATOR_D = 0.0;
             public static final int ELEVATOR_MIN_OUTPUT = -1;
             public static final int ELEVATOR_MAX_OUTPUT = 1;
+            public static final double ELEVATOR_THRESHOLD = 1; // rotations until accepted
 
             public static final double PITCH_P = 0.5;
             public static final double PITCH_I = 0.0;
             public static final double PITCH_D = 0.0;
             public static final int PITCH_MIN_OUTPUT = -1;
             public static final int PITCH_MAX_OUTPUT = 1;
+            public static final double PITCH_THRESHOLD = 1;
 
             public static enum ElevatorPosition {
                 BOTTOM(0),

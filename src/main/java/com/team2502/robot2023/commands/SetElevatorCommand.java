@@ -1,5 +1,6 @@
 package com.team2502.robot2023.commands;
 
+import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.*;
 import com.team2502.robot2023.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -17,16 +18,26 @@ public class SetElevatorCommand extends CommandBase {
 
     @Override
     public void execute() {
-        elevator.set(pos);
-
-        if (elevator.safePitch()) {
-            elevator.setPitch(ElevatorPitch.OUT);
+        if (!elevator.safePitch() && !pitchStowed()) {
+            elevator.setLinearSpeed(0);
+        } else {
+            elevator.set(pos);
         }
+
+        elevator.setPitch(elevator.safePitch() ? ElevatorPitch.OUT : ElevatorPitch.STOWED);
+    }
+
+    private boolean elevatorAtSetpoint() {
+        return Math.abs(pos.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD;
+    }
+
+    private boolean pitchStowed() {
+        return Math.abs(ElevatorPitch.STOWED.position-elevator.getPitch()) < Constants.Subsystems.Elevator.PITCH_THRESHOLD;
     }
 
     @Override
     public boolean isFinished() {
-        if (elevator.getLinear() <= elevator.getLinear() + 1 && elevator.getLinear() >= elevator.getLinear() - 1) {
+        if (Math.abs(pos.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD) {
             return true;
         } else {
             return false;
@@ -35,6 +46,8 @@ public class SetElevatorCommand extends CommandBase {
 
     @Override
     public void end(boolean kInterrupted) {
+        elevator.setPitchSpeed(0);
+        elevator.setLinearSpeed(0);
         elevator.stop();
     }
 }

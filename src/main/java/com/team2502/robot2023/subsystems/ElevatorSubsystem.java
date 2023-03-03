@@ -88,6 +88,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         return rightElevator.getEncoder().getPosition();
     }
 
+    public double getPitch() {
+        return pitchElevator.getEncoder().getPosition();
+    }
+
+    /** @return is it safe to unstow the arm */
     public boolean safePitch() {
         if (rightElevator.getEncoder().getPosition() < ElevatorPosition.SAFE_PITCH.position) {
             return true;
