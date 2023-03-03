@@ -155,7 +155,7 @@ public final class Constants {
             public static enum ElevatorPitch {
                 STOWED(0),
                 FRAME_INTERSECT(-25), // TODO: measure on hardware
-                GROUND_PICKUP(-38.47),
+                GROUND_PICKUP(-41.76),
                 CUBE_TOP(-68),
                 OUT(-72);
 
