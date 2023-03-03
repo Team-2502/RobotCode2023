@@ -20,6 +20,32 @@ import com.team2502.robot2023.commands.TimeLeftCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
+        ONE_CUBE_MID_LEAVE_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( // score one cube mid, leave community and balance
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetHeading),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0))),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-0.9,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.waitSeconds(0.2),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0))),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
         ONE_CUBE_MID_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence(
             new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
@@ -68,32 +94,6 @@ public enum Autos { // first auto is default
                     new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
                 )
             )
-        )),
-
-        ONE_CUBE_MID_LEAVE_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( // score one cube mid, leave community and balance
-            new InstantCommand(d::resetPitch),
-            new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
-            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
-            Commands.waitSeconds(1.2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
-            Commands.waitSeconds(1.2),
-            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
-            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
-            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0))),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-            Commands.waitSeconds(1.2),
-            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
-            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
-            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-0.9,0,0))),
-            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
-            Commands.waitSeconds(0.2),
-            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0))),
-            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
-            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
-            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
         ENGAGE((d,i,e,m) -> Commands.sequence( 
