@@ -46,12 +46,10 @@ public final class Constants {
         public static final int RESET_MODULES = 4;
 
         // Operator
-        public static final int ELEVATOR_BOT = 12;
-        public static final int ELEVATOR_MID = 11;
-        public static final int ELEVATOR_TOP = 15;
-
-        public static final int MANIPULATOR_OUT = 14;
-        public static final int MANIPULATOR_IN = 13;
+        public static final int ELEVATOR_STO = 14;
+        public static final int ELEVATOR_BOT = 13;
+        public static final int ELEVATOR_MID = 12;
+        public static final int ELEVATOR_TOP = 11;
 
         public static final int ELEVATOR_EXTEND = 9;
         public static final int ELEVATOR_RETRACT = 8;
@@ -62,14 +60,11 @@ public final class Constants {
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
 
-        public static final int ELEVATOR_ZERO = 16;
 
         public static final int RUN_CONVEYOR = 3;
         public static final int RUN_CONVEYOR_BACK = 4;
 
         // Home commands
-        public static final int INTAKE_HOME = 14;
-        public static final int ELEVATOR_HOME = 15;
         public static final int MANIPULATOR_HOME = 16;
     }
 
@@ -140,10 +135,10 @@ public final class Constants {
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
-                MIDDLE(1),
+                MIDDLE(-30), // TODO: measure
                 SAFE_PITCH(-29),
                 CUBE_TOP(-48.5),
-                TOP(-47.9);
+                TOP(-50); // TODO: measure
 
                 public final double position;
                 private ElevatorPosition(double position) {
