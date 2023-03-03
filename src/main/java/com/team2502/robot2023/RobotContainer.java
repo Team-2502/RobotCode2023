@@ -65,7 +65,7 @@ public class RobotContainer {
         RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.55, -0.4));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_STO)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.BOTTOM));
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_GROUND)
             .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP, Constants.Subsystems.Elevator.ElevatorPitch.GROUND_PICKUP));
@@ -77,7 +77,7 @@ public class RobotContainer {
             .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
 
         new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.TOP, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
+            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CUBE_TOP, Constants.Subsystems.Elevator.ElevatorPitch.OUT));
 
         new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
         //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
