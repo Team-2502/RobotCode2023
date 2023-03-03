@@ -71,12 +71,14 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
-    public void detuneLinear() {
+    public void detune() {
         pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT_TELEOP);
+        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT_TELEOP);
     }
 
-    public void retuneLinear() {
+    public void retune() {
         pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
+        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
     }
 
     public void setPitch(ElevatorPitch pitch) {
