@@ -389,7 +389,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return navX.getAngle();
     }
 
-    public void resetPitch() {
+    public void resetRoll() {
         pitchOffset = navX.getPitch();
     }
 

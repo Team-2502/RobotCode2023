@@ -27,7 +27,7 @@ public enum Autos { // first auto is default
         )),
 
         ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( 
-            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetRoll),
             new InstantCommand(d::resetHeading),
             Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
             Commands.deadline(new TimeLeftCommand(1), new BalanceCommand(d, false)),
