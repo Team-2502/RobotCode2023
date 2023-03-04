@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
@@ -73,6 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private PIDController xPidController;
     private PIDController yPidController;
     private PIDController rPidController;
+	private float pitchOffset;
 
     public DrivetrainSubsystem(){
         PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
@@ -116,9 +118,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.yPidController = new PIDController(Drivetrain.DRIVETRAIN_MOVE_P, Drivetrain.DRIVETRAIN_MOVE_I, Drivetrain.DRIVETRAIN_MOVE_D);
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
 
+        pitchOffset = 0;
+
         fieldOrientedOffset = 0;
 
         queryStation(); // set inversions if on blue
+        SmartDashboard.putString("alliance", alliance.name());
+        SmartDashboard.putData("alliance flush", new InstantCommand(() -> queryStation()));
     }
 
     /** ask driver station which alliance we are on
@@ -142,7 +148,11 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 return new Pose2d(
                         AprilTags.FIELD_CENTER_X -input.getX(), 
                         input.getY(), 
-                        Rotation2d.fromDegrees(90).minus(input.getRotation())); // TODO: ascertain north
+                        input.getRotation() // reflect over north
+                            .minus(Rotation2d.fromDegrees(90))
+                            .unaryMinus()
+                            .plus(Rotation2d.fromDegrees(90))
+                        );
             default:
                 return input;
         }
@@ -379,6 +389,17 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return navX.getAngle();
     }
 
+    public void resetRoll() {
+        pitchOffset = navX.getPitch();
+    }
+
+    public double getRoll() {
+        return navX.getPitch()-pitchOffset; // rio sideways
+    }
+    public double getPitch() {
+        return navX.getRoll(); // rio sideways
+    }
+
     public double getAverageTemp() {
         double fl = drivetrainPowerFrontLeft.getTemperature();
         double fr = drivetrainPowerFrontRight.getTemperature();
@@ -440,5 +461,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Avg Drivetrain Temp", getAverageTemp());
         SmartDashboard.putNumber("Meters Traveled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
+        SmartDashboard.putNumber("pitch", getPitch());
     }
 }

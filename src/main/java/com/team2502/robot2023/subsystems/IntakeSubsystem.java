@@ -32,11 +32,13 @@ public class IntakeSubsystem extends SubsystemBase {
         rightMotor.setSmartCurrentLimit(39);
         leftMotor.setSmartCurrentLimit(39);
 
+        leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
         //Sets Left Motor To Spin Opposite Direction To Work With Right Motor
         leftMotor.setInverted(true);
 
-        leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        leftLiftMotor.follow(rightLiftMotor, true);
 
         leftLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_LEFT_INTAKE);
         rightLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_RIGHT_INTAKE);
@@ -50,6 +52,10 @@ public class IntakeSubsystem extends SubsystemBase {
     public void run(double leftSpeed, double rightSpeed) {
         leftMotor.set(-leftSpeed);
         rightMotor.set(-rightSpeed);
+    }
+
+    public void runLift(double speed) {
+        rightLiftMotor.set(speed);
     }
 
     void runLeft(double speed) {
