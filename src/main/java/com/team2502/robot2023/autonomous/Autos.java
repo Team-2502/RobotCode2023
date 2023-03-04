@@ -122,6 +122,29 @@ public enum Autos { // first auto is default
             )
         )),
 
+        ONE_CUBE_MID_ENGAGE_UNIHETERO((d,i,e,m) -> Commands.sequence( // score one cube mid and balance
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetOffset),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0), true)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), true)),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), true)),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), true)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+
         ENGAGE((d,i,e,m) -> Commands.sequence( 
             Commands.deadline(Commands.waitSeconds(1.65), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-1,0,0));})),
             new BalanceCommand(d, false),
