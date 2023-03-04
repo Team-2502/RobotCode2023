@@ -65,6 +65,8 @@ public final class Constants {
         public static final int RUN_CONVEYOR = 3;
         public static final int RUN_CONVEYOR_BACK = 4;
 
+        public static final int ELEVATOR_OVERRIDE = 5;
+
         // Home commands
         public static final int MANIPULATOR_HOME = 16;
     }
