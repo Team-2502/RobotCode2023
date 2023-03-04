@@ -40,9 +40,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
         leftLiftMotor.follow(rightLiftMotor, true);
 
-        leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-
         leftLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_LEFT_INTAKE);
         rightLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_RIGHT_INTAKE);
     }
