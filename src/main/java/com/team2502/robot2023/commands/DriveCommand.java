@@ -38,6 +38,8 @@ public class DriveCommand extends CommandBase {
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
+    private final byte[] m_axes = new byte[Joystick.AxisType.values().length];
+
     public DriveCommand(DrivetrainSubsystem drivetrain, Joystick joystickDriveLeft, Joystick joystickDriveRight, XboxController controller) {
         this.drivetrain = drivetrain;
         this.controller = controller;
@@ -45,9 +47,9 @@ public class DriveCommand extends CommandBase {
         rightJoystick = joystickDriveRight;
 
         typeEntry.addOption("Split Arcade", Drivetype.VirtualSplitArcade);
-        typeEntry.addOption("adhi mode", Drivetype.VirtualTank);
+        typeEntry.addOption("Adhi mode", Drivetype.VirtualTank);
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
-        typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
+        typeEntry.addOption("Nolan mode", Drivetype.RobotOrientedCenteredRot);
 	    typeEntry.addOption("Field Twist", Drivetype.FieldOrientedTwist);
         typeEntry.setDefaultOption("Robot Oriented", Drivetype.RobotOriented);
         SmartDashboard.putData("Drive Type", typeEntry);
@@ -97,11 +99,7 @@ public class DriveCommand extends CommandBase {
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;
                 case FieldOriented:
-                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            -leftJoystick.getX() * Drivetrain.MAX_VEL,
-                            rightJoystick.getX() * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(-drivetrain.getHeading()));
+                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(-leftJoystick.getY() * Drivetrain.MAX_VEL, -leftJoystick.getX() * Drivetrain.MAX_VEL, rightJoystick.getX() * Drivetrain.MAX_ROT, Rotation2d.fromDegrees(-drivetrain.getHeading()));
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX());
                     //centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
