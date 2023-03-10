@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
-import com.team2502.robot2023.Constants.Subsystems.AprilTags;
+import com.team2502.robot2023.Constants.Subsystems.Field;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain.*;
 
@@ -77,8 +77,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	private float rollOffset;
 	private float pitchOffset;
 
+    private PhotonVisionSubsystem vision;
+
     public DrivetrainSubsystem(){
-        PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
+        vision = new PhotonVisionSubsystem(this);
 
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
@@ -148,12 +150,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         switch (alliance) {
             case Blue:
                 return new Pose2d(
-                        AprilTags.FIELD_CENTER_X -input.getX(), 
+                        Field.FIELD_CENTER_X -input.getX(), 
                         input.getY(), 
-                        input.getRotation() // reflect over north
-                            .minus(Rotation2d.fromDegrees(90))
-                            .unaryMinus()
-                            .plus(Rotation2d.fromDegrees(90))
+                        Rotation2d.fromDegrees(90) // north
+                            .minus(input.getRotation())
                         );
             default:
                 return input;
@@ -184,16 +184,16 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     private SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderFrontLeft.getPosition()
+                drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderFrontRight.getPosition()
+                drivetrainEncoderFrontRight.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderBackLeft.getPosition()
+                drivetrainEncoderBackLeft.getPosition()
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderBackRight.getPosition()
+                drivetrainEncoderBackRight.getPosition()
         );
 
         SwerveModulePosition FRPosition = new SwerveModulePosition(
@@ -234,6 +234,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public void setPose(Pose2d pose) {
         pose = reflectPose(pose);
+        setPose(pose);
+    }
+
+    public void setPoseRaw(Pose2d pose) {
         pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
         odometry.resetPosition(Rotation2d.fromDegrees(-getHeading()), getModulePositions(), pose);
     }
@@ -429,6 +433,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
         pose = getRawPose();
 
+        if (vision.newPoseThisFrame()) {
+            setPoseRaw(vision.getPose());
+        }
+
         
 
         SmartDashboard.putBoolean("GTA en?", controlMode == ControlModes.POSE);
@@ -439,7 +447,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 break;
             case POSE:
                 double xPower = xPidController.calculate(pose.getX());
-                double yPower = yPidController.calculate(pose.getY());
+                double yPower = -yPidController.calculate(pose.getY());
                 //double rPower = rPidController.calculate(pose.getRotation().getRadians());
                 double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()+180));
 
@@ -459,6 +467,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         double[] position = {getRawPose().getX(), getRawPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
+        field.getObject("vision").setPose(vision.getPose());
+
         field.setRobotPose(getRawPose());
         SmartDashboard.putData("field", field);
 

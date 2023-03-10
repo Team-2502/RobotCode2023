@@ -7,6 +7,7 @@ package com.team2502.robot2023;
 import java.util.*;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -206,10 +207,10 @@ public final class Constants {
             }
         }
 
-        public static final class AprilTags {
+        public static final class Field {
             public static final double FIELD_CENTER_X = 8.294; // TODO: get from cad
             
-            public static final AprilTagFieldLayout field;
+            public static final AprilTagFieldLayout apriltagPositions;
 
             //x y z coordinates are in meters, rotations are in radians
             static {
@@ -225,12 +226,49 @@ public final class Constants {
                     new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
                     )
                 );
-                field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
+                apriltagPositions = new AprilTagFieldLayout(tagList, 16.54, 8.02);
             }
             //field length, field width are in meters
+
+            static final double COLUMN_GAP = 1; // distance between adjacent posts on the same level // TODO
+            static final double ROW_GAP = 1; // distance between levels // TODO
+
+            static final Translation3d CUBE_SOUTH_HIGH = new Translation3d(13.39, 0, 0.9017); // TODO
+            static final Translation3d CUBE_SOUTH_MID = new Translation3d(0, 0, 0.6); // TODO
+            static final double CUBE_OFFSET = CUBE_SOUTH_HIGH.getZ() - CUBE_SOUTH_MID.getZ();
+
+            static final Translation3d CONE_SOUTH_HIGH = new Translation3d(13.39, 0, 1.1684); // TODO
+            static final Translation3d CONE_SOUTH_MID = new Translation3d(0, 0, 0.8636); // TODO
+            static final double CONE_OFFSET = CONE_SOUTH_HIGH.getZ() - CONE_SOUTH_MID.getZ();
+
+            /** array of cone post translations, with [0][0] corresponding to the southwest post */
+            public static final Translation3d[][] CONE_GRIDS;
+            /** array of cube post translations, with [0][0] corresponding to the southwest post */
+            public static final Translation3d[][] CUBE_GRIDS;
+
+            static { // calculate all scoring positions from bottom two grid locations
+                Translation3d[][] conePosts = new Translation3d[2][6];
+                Translation3d[][] cubePosts = new Translation3d[2][3];
+
+                for (int i = 0; i < 2; i++) { // row
+                    int cones = 0; // not just a modulo
+                    for (int j = 0; i < 9; i++) { // column
+                        if (j%3 == 1) {
+                            cubePosts[i][(int)j/3] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CUBE_OFFSET).plus(CUBE_SOUTH_MID);
+                        } else {
+                            conePosts[i][cones] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CONE_OFFSET).plus(CONE_SOUTH_MID);
+                            cones++;
+                        }
+                        
+                    }
+                }
+
+                CONE_GRIDS = conePosts;
+                CUBE_GRIDS = cubePosts;
+            }
         }
         public static final class PhotonVision {
-            public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
+            public static final String CAMERA_NAME = "USB_2M_GS_camera";
             public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.66), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
