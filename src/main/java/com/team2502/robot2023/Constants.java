@@ -7,6 +7,7 @@ package com.team2502.robot2023;
 import java.util.*;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -228,6 +229,30 @@ public final class Constants {
                 apriltagPositions = new AprilTagFieldLayout(tagList, 16.54, 8.02);
             }
             //field length, field width are in meters
+
+            public static final double MID_HEIGHT_CUBE = 0.6;
+            public static final Pose3d CUBE_SOUTH_HIGH = new Pose3d(13.39, 0, 0.9017, new Rotation3d(0,0,0));
+            public static final Pose3d CUBE_SOUTH_MID = new Pose3d(0, 0, 0.6, new Rotation3d(0,0,0));
+
+            public static final Pose3d CONE_SOUTH_HIGH = new Pose3d(13.39, 0, 1.1684, new Rotation3d(0,0,0));
+            public static final Pose3d CONE_SOUTH_MID = new Pose3d(0, 0, 0.8636, new Rotation3d(0,0,0));
+
+            public static final Pose2d[][] cone = new Pose2d[2][6];
+            public static final Pose2d[][] cube = new Pose2d[2][6];
+
+            static {
+                Pose2d[][] conePosts = new Pose2d[2][6];
+                Pose2d[][] cubePosts = new Pose2d[2][3];
+
+                for (int i = 0; i < 2; i++) { // row
+                    for (int j = 0; i < 9; i++) { // column
+                        if (j%3 == 1) {
+                            cubePosts[i][j] = CONE_SOUTH_MID.
+                        }
+                        
+                    }
+                }
+            }
         }
         public static final class PhotonVision {
             public static final String CAMERA_NAME = "USB_2M_GS_camera";
