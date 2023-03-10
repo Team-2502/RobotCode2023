@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
-import com.team2502.robot2023.Constants.Subsystems.AprilTags;
+import com.team2502.robot2023.Constants.Subsystems.Field;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain.*;
 
@@ -150,7 +150,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         switch (alliance) {
             case Blue:
                 return new Pose2d(
-                        AprilTags.FIELD_CENTER_X -input.getX(), 
+                        Field.FIELD_CENTER_X -input.getX(), 
                         input.getY(), 
                         Rotation2d.fromDegrees(90) // north
                             .minus(input.getRotation())

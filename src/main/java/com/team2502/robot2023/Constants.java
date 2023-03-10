@@ -206,10 +206,10 @@ public final class Constants {
             }
         }
 
-        public static final class AprilTags {
+        public static final class Field {
             public static final double FIELD_CENTER_X = 8.294; // TODO: get from cad
             
-            public static final AprilTagFieldLayout field;
+            public static final AprilTagFieldLayout apriltagPositions;
 
             //x y z coordinates are in meters, rotations are in radians
             static {
@@ -225,7 +225,7 @@ public final class Constants {
                     new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
                     )
                 );
-                field = new AprilTagFieldLayout(tagList, 16.54, 8.02);
+                apriltagPositions = new AprilTagFieldLayout(tagList, 16.54, 8.02);
             }
             //field length, field width are in meters
         }

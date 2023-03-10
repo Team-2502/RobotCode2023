@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import com.team2502.robot2023.Constants.Subsystems.PhotonVision;
 import com.team2502.robot2023.Constants;
-import com.team2502.robot2023.Constants.Subsystems.AprilTags;
+import com.team2502.robot2023.Constants.Subsystems.Field;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
@@ -33,7 +33,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     
     public PhotonVisionSubsystem(DrivetrainSubsystem drivetrain) {
         camera = new PhotonCamera(PhotonVision.CAMERA_NAME);
-        fieldLayout = AprilTags.field;
+        fieldLayout = Field.apriltagPositions;
         estimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, Constants.Subsystems.PhotonVision.ROBOT_TO_PHOTONVISION);
 
         latestPose = new Pose2d();
