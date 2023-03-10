@@ -230,28 +230,41 @@ public final class Constants {
             }
             //field length, field width are in meters
 
-            public static final double MID_HEIGHT_CUBE = 0.6;
-            public static final Pose3d CUBE_SOUTH_HIGH = new Pose3d(13.39, 0, 0.9017, new Rotation3d(0,0,0));
-            public static final Pose3d CUBE_SOUTH_MID = new Pose3d(0, 0, 0.6, new Rotation3d(0,0,0));
+            static final double COLUMN_GAP = 1; // distance between adjacent posts on the same level // TODO
+            static final double ROW_GAP = 1; // distance between levels // TODO
 
-            public static final Pose3d CONE_SOUTH_HIGH = new Pose3d(13.39, 0, 1.1684, new Rotation3d(0,0,0));
-            public static final Pose3d CONE_SOUTH_MID = new Pose3d(0, 0, 0.8636, new Rotation3d(0,0,0));
+            static final Translation3d CUBE_SOUTH_HIGH = new Translation3d(13.39, 0, 0.9017); // TODO
+            static final Translation3d CUBE_SOUTH_MID = new Translation3d(0, 0, 0.6); // TODO
+            static final double CUBE_OFFSET = CUBE_SOUTH_HIGH.getZ() - CUBE_SOUTH_MID.getZ();
 
-            public static final Pose2d[][] cone = new Pose2d[2][6];
-            public static final Pose2d[][] cube = new Pose2d[2][6];
+            static final Translation3d CONE_SOUTH_HIGH = new Translation3d(13.39, 0, 1.1684); // TODO
+            static final Translation3d CONE_SOUTH_MID = new Translation3d(0, 0, 0.8636); // TODO
+            static final double CONE_OFFSET = CONE_SOUTH_HIGH.getZ() - CONE_SOUTH_MID.getZ();
 
-            static {
-                Pose2d[][] conePosts = new Pose2d[2][6];
-                Pose2d[][] cubePosts = new Pose2d[2][3];
+            /** array of cone post translations, with [0][0] corresponding to the southwest post */
+            public static final Translation3d[][] CONE_GRIDS;
+            /** array of cube post translations, with [0][0] corresponding to the southwest post */
+            public static final Translation3d[][] CUBE_GRIDS;
+
+            static { // calculate all scoring positions from bottom two grid locations
+                Translation3d[][] conePosts = new Translation3d[2][6];
+                Translation3d[][] cubePosts = new Translation3d[2][3];
 
                 for (int i = 0; i < 2; i++) { // row
+                    int cones = 0; // not just a modulo
                     for (int j = 0; i < 9; i++) { // column
                         if (j%3 == 1) {
-                            cubePosts[i][j] = CONE_SOUTH_MID.
+                            cubePosts[i][(int)j/3] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CUBE_OFFSET).plus(CUBE_SOUTH_MID);
+                        } else {
+                            conePosts[i][cones] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CONE_OFFSET).plus(CONE_SOUTH_MID);
+                            cones++;
                         }
                         
                     }
                 }
+
+                CONE_GRIDS = conePosts;
+                CUBE_GRIDS = cubePosts;
             }
         }
         public static final class PhotonVision {
