@@ -182,16 +182,16 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     private SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderFrontLeft.getPosition()
+                drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderFrontRight.getPosition()
+                drivetrainEncoderFrontRight.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderBackLeft.getPosition()
+                drivetrainEncoderBackLeft.getPosition()
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
-                -drivetrainEncoderBackRight.getPosition()
+                drivetrainEncoderBackRight.getPosition()
         );
 
         SwerveModulePosition FRPosition = new SwerveModulePosition(
