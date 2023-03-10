@@ -230,7 +230,7 @@ public final class Constants {
             //field length, field width are in meters
         }
         public static final class PhotonVision {
-            public static final String CAMERA_NAME = "HD_Pro_Webcam_C920";
+            public static final String CAMERA_NAME = "USB_2M_GS_camera";
             public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.66), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {

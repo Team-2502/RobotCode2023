@@ -77,8 +77,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	private float rollOffset;
 	private float pitchOffset;
 
+    private PhotonVisionSubsystem vision;
+
     public DrivetrainSubsystem(){
-        PhotonVisionSubsystem vision = new PhotonVisionSubsystem();
+        vision = new PhotonVisionSubsystem(this);
 
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
@@ -459,6 +461,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         double[] position = {getRawPose().getX(), getRawPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
+        field.getObject("vision").setPose(vision.getPose());
+
         field.setRobotPose(getRawPose());
         SmartDashboard.putData("field", field);
 
