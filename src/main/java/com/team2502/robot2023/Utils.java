@@ -2,6 +2,7 @@ package com.team2502.robot2023;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.math.geometry.Translation3d;
 
 /** class for any math beyond a line or two */
 public class Utils {
@@ -64,5 +65,21 @@ public class Utils {
         if (val >= 0.075) { return val; }
         else if (val <= -0.075) { return val; }
         else { return 0; }
+    }
+
+    public static Translation3d nearest(Translation3d[][] transforms, Translation3d input) {
+        Translation3d nearest = input;
+        double nearestDistance = Double.MAX_VALUE;
+
+        for (Translation3d[] transformRow : transforms) {
+            for (Translation3d transform : transformRow) {
+                double distance = transform.getDistance(input);
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearest = transform;
+                }
+            }
+        }
+        return nearest;
     }
 }
