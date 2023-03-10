@@ -100,7 +100,7 @@ public class DriveCommand extends CommandBase {
                 case FieldOriented:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                             -leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            -leftJoystick.getX() * Drivetrain.MAX_VEL,
+                            leftJoystick.getX() * Drivetrain.MAX_VEL,
                             rightJoystick.getX() * Drivetrain.MAX_ROT,
                             Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX()).rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
