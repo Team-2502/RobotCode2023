@@ -74,6 +74,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     private PIDController xPidController;
     private PIDController yPidController;
     private PIDController rPidController;
+	private float rollOffset;
 	private float pitchOffset;
 
     public DrivetrainSubsystem(){
@@ -119,6 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
 
         pitchOffset = 0;
+        rollOffset = 0;
 
         fieldOrientedOffset = 0;
 
@@ -390,14 +392,18 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void resetPitch() {
-        pitchOffset = navX.getPitch();
+        pitchOffset = navX.getRoll();
+    }
+
+    public void resetRoll() {
+        rollOffset = navX.getPitch();
     }
 
     public double getRoll() {
-        return navX.getPitch()-pitchOffset; // rio sideways
+        return navX.getPitch()-rollOffset; // rio sideways
     }
     public double getPitch() {
-        return navX.getRoll(); // rio sideways
+        return navX.getRoll()-pitchOffset; // rio sideways
     }
 
     public double getAverageTemp() {

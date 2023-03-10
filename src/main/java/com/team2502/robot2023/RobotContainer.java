@@ -106,6 +106,10 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.5), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_OVERRIDE)
+                .onTrue(new InstantCommand(() -> ELEVATOR.enableSoft(false), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.enableSoft(true), ELEVATOR));
+
         new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_GRAB)
                 .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.6)))
                 .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));

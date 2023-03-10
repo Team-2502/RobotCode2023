@@ -71,6 +71,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
+    public void enableSoft(boolean enable) {
+        rightElevator.enableSoftLimit(SoftLimitDirection.kForward,enable);
+        rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,enable);
+    }
+
     public void detune() {
         pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT_TELEOP);
         pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT_TELEOP);
