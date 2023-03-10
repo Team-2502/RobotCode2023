@@ -34,22 +34,23 @@ public final class Constants {
         public static final int RESET_HEADING = 3;
         public static final int RUN_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
+        public static final int RET_MODE = 4;
 
         // Driver Left
         public static final int RUN_INTAKE_BACK = 1;
         public static final int RAISE_INTAKE = 2;
+
 
         // DBG
         public static final int DEBUG_RUN = 1;
         public static final int RESET_MODULES = 4;
 
         // Operator
-        public static final int ELEVATOR_BOT = 12;
-        public static final int ELEVATOR_MID = 11;
-        public static final int ELEVATOR_TOP = 15;
-
-        public static final int MANIPULATOR_OUT = 14;
-        public static final int MANIPULATOR_IN = 13;
+        public static final int ELEVATOR_STO = 14;
+        public static final int ELEVATOR_GROUND = 15;
+        public static final int ELEVATOR_BOT = 13;
+        public static final int ELEVATOR_MID = 12;
+        public static final int ELEVATOR_TOP = 11;
 
         public static final int ELEVATOR_EXTEND = 9;
         public static final int ELEVATOR_RETRACT = 8;
@@ -60,14 +61,13 @@ public final class Constants {
         public static final int MANIPULATOR_GRAB = 1;
         public static final int MANIPULATOR_RELEASE = 2;
 
-        public static final int ELEVATOR_ZERO = 16;
 
         public static final int RUN_CONVEYOR = 3;
         public static final int RUN_CONVEYOR_BACK = 4;
 
+        public static final int ELEVATOR_OVERRIDE = 5;
+
         // Home commands
-        public static final int INTAKE_HOME = 14;
-        public static final int ELEVATOR_HOME = 15;
         public static final int MANIPULATOR_HOME = 16;
     }
 
@@ -125,21 +125,30 @@ public final class Constants {
             public static final double ELEVATOR_P = 0.5;
             public static final double ELEVATOR_I = 0.0;
             public static final double ELEVATOR_D = 0.0;
-            public static final int ELEVATOR_MIN_OUTPUT = -1;
-            public static final int ELEVATOR_MAX_OUTPUT = 1;
+            public static final double ELEVATOR_MIN_OUTPUT = -1;
+            public static final double ELEVATOR_MAX_OUTPUT = 1;
+            public static final double ELEVATOR_MIN_OUTPUT_TELEOP = -0.65;
+            public static final double ELEVATOR_MAX_OUTPUT_TELEOP = 0.65;
+            public static final double ELEVATOR_THRESHOLD = 1; // rotations until accepted
 
             public static final double PITCH_P = 0.5;
             public static final double PITCH_I = 0.0;
             public static final double PITCH_D = 0.0;
-            public static final int PITCH_MIN_OUTPUT = -1;
-            public static final int PITCH_MAX_OUTPUT = 1;
+            public static final double PITCH_MIN_OUTPUT = -1;
+            public static final double PITCH_MAX_OUTPUT = 1;
+            public static final double PITCH_MIN_OUTPUT_TELEOP = -0.5;
+            public static final double PITCH_MAX_OUTPUT_TELEOP = 0.5;
+            public static final double PITCH_THRESHOLD = 1;
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
-                MIDDLE(1),
+                MIDDLE(-26.14), // TODO: measure
                 SAFE_PITCH(-29),
+                GROUND_PICKUP(-1.69),
                 CUBE_TOP(-48.5),
-                TOP(-47.9);
+                CONE_BOTTOM(0),
+                CONE_TOP(-49.7),
+                TOP(-50); // TODO: measure
 
                 public final double position;
                 private ElevatorPosition(double position) {
@@ -149,7 +158,12 @@ public final class Constants {
 
             public static enum ElevatorPitch {
                 STOWED(0),
+                FRAME_INTERSECT(-25), // TODO: measure on hardware
+                GROUND_PICKUP(-41.76),
                 CUBE_TOP(-68),
+                CONE_TOP(-86.76),
+                CONE_MID(-79.76),
+                CONE_BOTTOM(-72),
                 OUT(-72);
 
                 public final double position;
@@ -222,6 +236,8 @@ public final class Constants {
         public static final class Drivetrain {
             public static final double MAX_VEL = 6; // driver speed gain (m/s)
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
+            public static final double RET_VEL = 3; // driver speed gain (m/s)
+            public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 1.4;

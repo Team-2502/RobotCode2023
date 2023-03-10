@@ -36,6 +36,11 @@ public class ManipulatorSubsystem extends SubsystemBase {
         SmartDashboard.putData("Test: Gripper HOME", new InstantCommand(() -> { home();}));
     }
 
+    public void enableSoft(boolean enable) {
+        gripper.enableSoftLimit(SoftLimitDirection.kForward,enable);
+        gripper.enableSoftLimit(SoftLimitDirection.kReverse,enable);
+    }
+
     private void setupPID() {
         SparkMaxPIDController pid = gripper.getPIDController();
 

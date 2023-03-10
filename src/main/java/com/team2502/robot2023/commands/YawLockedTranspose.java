@@ -23,12 +23,24 @@ public class YawLockedTranspose extends CommandBase {
     private double yawGoal;
     private ChassisSpeeds speeds;
     private PIDController rPidController;
+    private boolean fieldOffset; // use teleop heading as goal
 
     public YawLockedTranspose(DrivetrainSubsystem drivetrain, ChassisSpeeds speeds) {
         this.drivetrain = drivetrain;
         yawGoal = drivetrain.getHeading();
         this.speeds = speeds;
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+        this.fieldOffset = false;
+
+        addRequirements(drivetrain);
+    }
+
+    public YawLockedTranspose(DrivetrainSubsystem drivetrain, ChassisSpeeds speeds, boolean fieldOffset) {
+        this.drivetrain = drivetrain;
+        yawGoal = drivetrain.getHeading();
+        this.speeds = speeds;
+        this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+        this.fieldOffset = fieldOffset;
 
         addRequirements(drivetrain);
     }
@@ -36,6 +48,8 @@ public class YawLockedTranspose extends CommandBase {
     @Override
     public void initialize() {
         yawGoal = drivetrain.getHeading();
+
+        if (fieldOffset) { yawGoal += drivetrain.fieldOrientedOffset; }
     }
 
     @Override

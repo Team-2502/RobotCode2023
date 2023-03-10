@@ -3,6 +3,7 @@ package com.team2502.robot2023.commands;
 import static com.team2502.robot2023.Utils.deadzone;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
@@ -48,8 +49,8 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("adhi mode", Drivetype.VirtualTank);
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
         typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
-	    typeEntry.addOption("Field Twist", Drivetype.FieldOrientedTwist);
-        typeEntry.setDefaultOption("Robot Oriented", Drivetype.RobotOriented);
+        typeEntry.addOption("Robot Oriented", Drivetype.RobotOriented);
+	    typeEntry.setDefaultOption("Field Twist", Drivetype.FieldOrientedTwist);
         SmartDashboard.putData("Drive Type", typeEntry);
 
         controllerEntry.addOption("Joystick", DriveController.Joystick);
@@ -107,9 +108,8 @@ public class DriveCommand extends CommandBase {
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            -leftJoystick.getX() * Drivetrain.MAX_VEL,
-                            -rightJoystick.getZ() * Drivetrain.MAX_ROT,
+                            leftJoystick.getY() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -leftJoystick.getX() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL), -rightJoystick.getZ() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);

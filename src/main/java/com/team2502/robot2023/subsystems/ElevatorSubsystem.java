@@ -2,6 +2,7 @@ package com.team2502.robot2023.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
@@ -34,6 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
         pitchElevator.setSmartCurrentLimit(39);
+
+        pitchElevator.setIdleMode(IdleMode.kBrake);
 
         rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
         rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
@@ -68,6 +71,21 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
+    public void enableSoft(boolean enable) {
+        rightElevator.enableSoftLimit(SoftLimitDirection.kForward,enable);
+        rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,enable);
+    }
+
+    public void detune() {
+        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT_TELEOP);
+        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT_TELEOP);
+    }
+
+    public void retune() {
+        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
+        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
+    }
+
     public void setPitch(ElevatorPitch pitch) {
         pitchElevator.getPIDController().setReference(pitch.position, CANSparkMax.ControlType.kPosition);
     }
@@ -88,6 +106,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         return rightElevator.getEncoder().getPosition();
     }
 
+    public double getPitch() {
+        return pitchElevator.getEncoder().getPosition();
+    }
+
+    /** @return is it safe to unstow the arm */
     public boolean safePitch() {
         if (rightElevator.getEncoder().getPosition() < ElevatorPosition.SAFE_PITCH.position) {
             return true;

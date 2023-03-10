@@ -20,22 +20,60 @@ import com.team2502.robot2023.commands.TimeLeftCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
-        ENGAGE((d,i,e,m) -> Commands.sequence( 
-            Commands.deadline(Commands.waitSeconds(1.65), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-1,0,0));})),
-            new BalanceCommand(d, false),
+        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO((d,i,e,m) -> Commands.sequence( // score one cube mid, leave community and balance
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetOffset),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0), true)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), true)),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), true)),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), true)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.waitSeconds(0.2),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(1,0,0), true)),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), true)),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
-        ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( 
-            new InstantCommand(d::resetRoll),
+        ONE_CUBE_MID_LEAVE_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( // score one cube mid, leave community and balance
+            new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
-            Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
-            Commands.deadline(new TimeLeftCommand(1), new BalanceCommand(d, false)),
-            Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
+            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
+            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
+            Commands.waitSeconds(1.2),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.setSpeed(0.0)),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0))),
+            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
+            Commands.waitSeconds(1.2),
+            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            Commands.waitSeconds(0.2),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(1,0,0))),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
         ONE_CUBE_MID_ENGAGE_HETERO((d,i,e,m) -> Commands.sequence(
+            new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
             new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
@@ -57,6 +95,7 @@ public enum Autos { // first auto is default
         )),
 
         ONE_CUBE_SOUTH_BACKUP_HETERO((d,i,e,m) -> Commands.sequence(
+            new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
             new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
@@ -65,7 +104,9 @@ public enum Autos { // first auto is default
             Commands.waitSeconds(1.2),
             Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0))),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
+            new InstantCommand(() -> m.enableSoft(false)),
             Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
+            new InstantCommand(() -> m.enableSoft(true)),
             new InstantCommand(() -> m.setSpeed(0.0)),
             Commands.parallel(
                 Commands.sequence(
@@ -81,132 +122,42 @@ public enum Autos { // first auto is default
             )
         )),
 
-        ONE_CUBE_SOUTH_BACKUP_TIMED((d,i,e,m) -> Commands.sequence(
-            //new InstantCommand(() -> {
-            //    m.home();
-            //    m.set(ManipulatorPosition.CONE);
-            //}),
-            //Commands.waitSeconds(2),
-            new InstantCommand(d::resetHeading),
+        ONE_CUBE_MID_ENGAGE_UNIHETERO((d,i,e,m) -> Commands.sequence( // score one cube mid and balance
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetOffset),
             new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
-            //Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
-            //new InstantCommand(() -> m.setSpeed(0.0)),
             new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
             Commands.waitSeconds(1.2),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
             Commands.waitSeconds(1.2),
-            Commands.deadline(Commands.waitSeconds(.7), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(.8,0,0));})),
+            Commands.deadline(Commands.waitSeconds(.57), new YawLockedTranspose(d, new ChassisSpeeds(.8,0,0), true)),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();}),
             Commands.deadline(Commands.waitSeconds(1.05), new InstantCommand(() -> m.setSpeed(-0.6))),
             new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.parallel(
-                Commands.sequence(
-                    Commands.deadline(Commands.waitSeconds(3.5), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-.8,0,0));})),
-                    new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
-                ),
-                Commands.sequence(
-                    Commands.waitSeconds(1.5),
-                    new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-                    Commands.waitSeconds(2),
-                    new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
-                )
-            )
-        )),
-
-
-        ONE_CUBE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(
-            //new InstantCommand(() -> {
-            //    m.home();
-            //    m.set(ManipulatorPosition.CONE);
-            //}),
-            //Commands.waitSeconds(2),
-            new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
-            //Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
-            //new InstantCommand(() -> m.setSpeed(0.0)),
-            new InstantCommand(() -> e.set(ElevatorPosition.CUBE_TOP)),
-            Commands.waitSeconds(1.2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.CUBE_TOP)),
-            Commands.waitSeconds(1.2),
-            Commands.deadline(Commands.waitSeconds(2.8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-1")),
-            Commands.deadline(Commands.waitSeconds(1.25), new InstantCommand(() -> m.setSpeed(-0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.parallel(
-                Commands.deadline(Commands.waitSeconds(5), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")),
-                Commands.sequence(
-                    Commands.waitSeconds(1.5),
-                    new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-                    Commands.waitSeconds(2),
-                    new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM))
-                )
-            )
-        )),
-
-        ONE_CONE_SOUTH_BACKUP((d,i,e,m) -> Commands.sequence(
-            //new InstantCommand(() -> {
-            //    m.home();
-            //    m.set(ManipulatorPosition.CONE);
-            //}),
-            //Commands.waitSeconds(2),
-            new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(13.85,0.5259,Rotation2d.fromDegrees(180))), d),
-            Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
-            Commands.waitSeconds(2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
-            Commands.waitSeconds(2),
-            new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-1"),
-            Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
-            //Commands.waitSeconds(2),
+            Commands.deadline(Commands.waitSeconds(0.57), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), true)),
             new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-            Commands.waitSeconds(3),
+            Commands.waitSeconds(1.2),
             new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
-            new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/s1-2")
+            Commands.deadline(Commands.waitSeconds(1.55), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), true)),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), true)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
-        ONE_CONE_SOUTH_NO_ENCODER((d,i,e,m) -> Commands.sequence(
-            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(-0.3))),
-            new InstantCommand(() -> e.setLinearSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(-0.2))),
-            new InstantCommand(() -> e.setPitchSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(.5), new InstantCommand(() -> m.setSpeed(-0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(4), new InstantCommand(() -> e.setPitchSpeed(0.2))),
-            new InstantCommand(() -> e.setPitchSpeed(0.0)),
-            Commands.deadline(Commands.waitSeconds(2), new InstantCommand(() -> e.setLinearSpeed(0.3))),
-            new InstantCommand(() -> e.setLinearSpeed(0.0)),
-            new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
-            new FollowPathAbsoluteCommand(d, "testpath")
+
+        ENGAGE((d,i,e,m) -> Commands.sequence( 
+            Commands.deadline(Commands.waitSeconds(1.65), new InstantCommand(() -> {d.setSpeeds(new ChassisSpeeds(-1,0,0));})),
+            new BalanceCommand(d, false),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
-        ONE_CODE_SOUTH_STATIC((d,i,e,m) -> Commands.sequence(
-            //new InstantCommand(() -> {
-            //    m.home();
-            //    m.set(ManipulatorPosition.CONE);
-            //}),
-            //Commands.waitSeconds(2),
-            Commands.deadline(Commands.waitSeconds(.75), new InstantCommand(() -> m.setSpeed(0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            new InstantCommand(() -> e.set(ElevatorPosition.TOP)),
-            Commands.waitSeconds(2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.OUT)),
-            Commands.waitSeconds(1.5),
-            Commands.deadline(Commands.waitSeconds(.95), new InstantCommand(() -> m.setSpeed(-0.3))),
-            new InstantCommand(() -> m.setSpeed(0.0)),
-            //new InstantCommand(() -> m.set(ManipulatorPosition.OPEN)),
-            //Commands.waitSeconds(2),
-            new InstantCommand(() -> e.setPitch(ElevatorPitch.STOWED)),
-            Commands.waitSeconds(3),
-            new InstantCommand(() -> e.set(ElevatorPosition.BOTTOM)),
+        ENGAGE_HETERO((d,i,e,m) -> Commands.sequence( 
+            new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
-            new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
-            new FollowPathAbsoluteCommand(d, "testpath")
+            Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            Commands.deadline(new TimeLeftCommand(1), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
         LEAVE_COMMUNITY("Leave CT spawn", (d,i,e,m) -> Commands.sequence(

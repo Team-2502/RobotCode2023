@@ -25,7 +25,7 @@ public class BalanceCommand extends CommandBase {
         this.drivetrain = drivetrain;
         this.sideways = sideways;
 
-        this.rollPID = new PIDController(0.025, 0, 0);
+        this.rollPID = new PIDController(0.015, 0, 0);
         addRequirements(drivetrain);
     }
 
