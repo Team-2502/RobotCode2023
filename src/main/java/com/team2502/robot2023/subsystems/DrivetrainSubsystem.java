@@ -234,6 +234,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public void setPose(Pose2d pose) {
         pose = reflectPose(pose);
+        setPose(pose);
+    }
+
+    public void setPoseRaw(Pose2d pose) {
         pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
         odometry.resetPosition(Rotation2d.fromDegrees(-getHeading()), getModulePositions(), pose);
     }
@@ -430,7 +434,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         pose = getRawPose();
 
         if (vision.newPoseThisFrame()) {
-            setPose(vision.getPose());
+            setPoseRaw(vision.getPose());
         }
 
         
