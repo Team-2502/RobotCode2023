@@ -215,15 +215,15 @@ public final class Constants {
             //x y z coordinates are in meters, rotations are in radians
             static {
                 List<AprilTag> tagList = new ArrayList<>(
-                Arrays.asList(
-                    new AprilTag(1, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
+                Arrays.asList( // TODO: undo
+                    new AprilTag(8, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(2, new Pose3d(15.51358903, 2.748031496, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(3, new Pose3d(15.51358903, 4.424434849, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(4, new Pose3d(16.17881636, 6.7498095, 0.695453391, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(5, new Pose3d(0.361950724, 6.7498095, 0.695453391, new Rotation3d(0,0, 0))),
                     new AprilTag(6, new Pose3d(1.027432055, 4.424434849, 0.462788926, new Rotation3d(0,0, 0))),
                     new AprilTag(7, new Pose3d(1.027432055, 2.748031496, 0.462788926, new Rotation3d(0,0, 0))),
-                    new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
+                    new AprilTag(1, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
                     )
                 );
                 apriltagPositions = new AprilTagFieldLayout(tagList, 16.54, 8.02);
@@ -241,35 +241,35 @@ public final class Constants {
             static final Translation3d CONE_SOUTH_MID = new Translation3d(0, 0, 0.8636); // TODO
             static final double CONE_OFFSET = CONE_SOUTH_HIGH.getZ() - CONE_SOUTH_MID.getZ();
 
-            /** array of cone post translations, with [0][0] corresponding to the southwest post */
-            public static final Translation3d[][] CONE_GRIDS;
-            /** array of cube post translations, with [0][0] corresponding to the southwest post */
-            public static final Translation3d[][] CUBE_GRIDS;
+            ///** array of cone post translations, with [0][0] corresponding to the southwest post */
+            //public static final Translation3d[][] CONE_GRIDS;
+            ///** array of cube post translations, with [0][0] corresponding to the southwest post */
+            //public static final Translation3d[][] CUBE_GRIDS;
 
-            static { // calculate all scoring positions from bottom two grid locations
-                Translation3d[][] conePosts = new Translation3d[2][6];
-                Translation3d[][] cubePosts = new Translation3d[2][3];
+            //static { // calculate all scoring positions from bottom two grid locations
+            //    Translation3d[][] conePosts = new Translation3d[2][6];
+            //    Translation3d[][] cubePosts = new Translation3d[2][3];
 
-                for (int i = 0; i < 2; i++) { // row
-                    int cones = 0; // not just a modulo
-                    for (int j = 0; i < 9; i++) { // column
-                        if (j%3 == 1) {
-                            cubePosts[i][(int)j/3] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CUBE_OFFSET).plus(CUBE_SOUTH_MID);
-                        } else {
-                            conePosts[i][cones] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CONE_OFFSET).plus(CONE_SOUTH_MID);
-                            cones++;
-                        }
-                        
-                    }
-                }
+            //    for (int i = 0; i < 1; i++) { // row
+            //        int cones = 0; // not just a modulo
+            //        for (int j = 0; i < 8; i++) { // column
+            //            if (j%3 == 1) {
+            //                cubePosts[i][(int)j/3] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CUBE_OFFSET).plus(CUBE_SOUTH_MID);
+            //            } else {
+            //                conePosts[i][cones] = new Translation3d(i*ROW_GAP, j*COLUMN_GAP, i*CONE_OFFSET).plus(CONE_SOUTH_MID);
+            //                cones++;
+            //            }
+            //            
+            //        }
+            //    }
 
-                CONE_GRIDS = conePosts;
-                CUBE_GRIDS = cubePosts;
-            }
+            //    CONE_GRIDS = conePosts;
+            //    CUBE_GRIDS = cubePosts;
+            //}
         }
         public static final class PhotonVision {
             public static final String CAMERA_NAME = "USB_2M_GS_camera";
-            public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.66), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
+            public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
             public static final double MAX_VEL = 6; // driver speed gain (m/s)
@@ -278,12 +278,12 @@ public final class Constants {
             public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 1.4;
+            public static final double DRIVETRAIN_MOVE_P = 0.6;
             public static final double DRIVETRAIN_MOVE_I = 0.0003;
             public static final double DRIVETRAIN_MOVE_D = 0.0;
             public static final double DRIVETRAIN_MOVE_A = 3;
-            public static final double DRIVETRAIN_TURN_P = 1.6;
-            public static final double DRIVETRAIN_TURN_I = 0.0007;
+            public static final double DRIVETRAIN_TURN_P = 0.2;
+            public static final double DRIVETRAIN_TURN_I = 0.0000;
             public static final double DRIVETRAIN_TURN_D = 0;
             public static final double DRIVETRAIN_TURN_A = 2;
                                                    

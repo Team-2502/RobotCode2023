@@ -5,6 +5,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -46,8 +47,14 @@ public class PhotonVisionSubsystem extends SubsystemBase {
         estimator.setReferencePose(drivetrain.getPose());
         Optional<EstimatedRobotPose> pose = estimator.update();
         
-        newPoseThisFrame = pose.isPresent();
-        if (pose.isPresent()) {
+        PhotonTrackedTarget target = camera.getLatestResult().getBestTarget();
+        if (target != null) {
+            SmartDashboard.putNumber("pv ambi", target.getPoseAmbiguity());
+            SmartDashboard.putNumber("pv area", target.getArea());
+        }
+
+        newPoseThisFrame = pose.isPresent() && target != null && target.getArea() > 1.5;
+        if (pose.isPresent() && target != null && target.getArea() > 1.5) {
             latestPose = pose.get().estimatedPose.toPose2d();
         }
 

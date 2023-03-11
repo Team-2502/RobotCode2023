@@ -234,7 +234,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public void setPose(Pose2d pose) {
         pose = reflectPose(pose);
-        setPose(pose);
+        setPoseRaw(pose);
     }
 
     public void setPoseRaw(Pose2d pose) {
@@ -434,7 +434,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         pose = getRawPose();
 
         if (vision.newPoseThisFrame()) {
-            setPoseRaw(vision.getPose());
+            Pose2d visionPose = vision.getPose();
+            setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
         }
 
         
