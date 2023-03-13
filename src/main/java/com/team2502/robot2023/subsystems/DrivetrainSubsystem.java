@@ -229,6 +229,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
         this.yPidController.setSetpoint(pose.getY());
         this.rPidController.setSetpoint(pose.getRotation().getRadians());
 
+        //SmartDashboard.putNumber("rSP", rPidController.getSetpoint());
+
+        //setSpeeds(new ChassisSpeeds(-(pose.getX() / 100), -(pose.getY() / 100), pose.getRotation().getRadians() / 100));
+
         field.getObject("target").setPose(pose);
     }
 
@@ -450,13 +454,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 double xPower = xPidController.calculate(pose.getX());
                 double yPower = -yPidController.calculate(pose.getY());
                 //double rPower = rPidController.calculate(pose.getRotation().getRadians());
-                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()+180));
+                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()));
 
                 SmartDashboard.putNumber("GTA xp", xPower);
                 SmartDashboard.putNumber("GTA yp", yPower);
                 SmartDashboard.putNumber("GTA rp", rPower);
 
-                ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
+                ChassisSpeeds speeds = new ChassisSpeeds(-xPower, -yPower, rPower);
                 //ChassisSpeeds speeds = new ChassisSpeeds(xTrap.calculate(xPower), yTrap.calculate(yPower), rTrap.calculate(rPower));
                 setSpeeds(speeds);
 
@@ -479,5 +483,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Meters Traveled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
         SmartDashboard.putNumber("pitch", getPitch());
+        SmartDashboard.putNumber("Current SP", rPidController.getSetpoint());
     }
 }

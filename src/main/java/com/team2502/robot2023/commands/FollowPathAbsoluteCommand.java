@@ -49,15 +49,15 @@ public class FollowPathAbsoluteCommand extends CommandBase {
         SmartDashboard.putNumber("FPR iy", path.sample(0).poseMeters.getY());
         SmartDashboard.putNumber("FPR cx", path.sample(elapsed.get()).poseMeters.getX());
         SmartDashboard.putNumber("FPR cy", path.sample(elapsed.get()).poseMeters.getY());
-        SmartDashboard.putNumber("FPR cr", path.sample(elapsed.get()).poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("FPR cr", path.sample(elapsed.get()).poseMeters.getRotation().getRadians());
         SmartDashboard.putNumber("FPR el", elapsed.get());
 
         
         if (elapsed.get() < path.getTotalTimeSeconds()) {
             Pose2d targ = path.sample(elapsed.get()).poseMeters;
-            drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),Rotation2d.fromDegrees(
-                            0
-                            )));
+            SmartDashboard.putNumber("TARGR", targ.getRotation().getRadians());
+            drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),
+                    Rotation2d.fromDegrees(-11/* TODO find if this from init */)));
         }
     }
 

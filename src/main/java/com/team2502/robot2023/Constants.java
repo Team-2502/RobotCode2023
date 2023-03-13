@@ -7,11 +7,7 @@ package com.team2502.robot2023;
 import java.util.*;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.*;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -241,6 +237,25 @@ public final class Constants {
             static final Translation3d CONE_SOUTH_MID = new Translation3d(0, 0, 0.8636); // TODO
             static final double CONE_OFFSET = CONE_SOUTH_HIGH.getZ() - CONE_SOUTH_MID.getZ();
 
+            public static final ArrayList scoreLocations;
+
+            static {
+                List<Pose2d> scoreLocationsList = new ArrayList<>(
+                        Arrays.asList(
+                                new Pose2d(1.75, 0.5, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 1.07, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 1.6, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 2.2, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 2.75, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 3.3, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 3.85, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 4.42, Rotation2d.fromDegrees(0)),
+                                new Pose2d(1.75, 4.95, Rotation2d.fromDegrees(0))
+                        )
+                );
+                scoreLocations = new ArrayList(scoreLocationsList);
+            }
+
             ///** array of cone post translations, with [0][0] corresponding to the southwest post */
             //public static final Translation3d[][] CONE_GRIDS;
             ///** array of cube post translations, with [0][0] corresponding to the southwest post */
@@ -278,11 +293,11 @@ public final class Constants {
             public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 0.6;
+            public static final double DRIVETRAIN_MOVE_P = 1; // 0.6
             public static final double DRIVETRAIN_MOVE_I = 0.0003;
-            public static final double DRIVETRAIN_MOVE_D = 0.0;
+            public static final double DRIVETRAIN_MOVE_D = 0.25;
             public static final double DRIVETRAIN_MOVE_A = 3;
-            public static final double DRIVETRAIN_TURN_P = 0.2;
+            public static final double DRIVETRAIN_TURN_P = 1;
             public static final double DRIVETRAIN_TURN_I = 0.0000;
             public static final double DRIVETRAIN_TURN_D = 0;
             public static final double DRIVETRAIN_TURN_A = 2;

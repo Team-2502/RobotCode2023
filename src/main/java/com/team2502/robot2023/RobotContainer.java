@@ -89,9 +89,11 @@ public class RobotContainer {
 
         SmartDashboard.putData("reset pose", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
         SmartDashboard.putData("run path pose", new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
+        SmartDashboard.putData("reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.5, 2.75, Rotation2d.fromDegrees(180))), DRIVETRAIN));
+        SmartDashboard.putData("B reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(2, 2.75, Rotation2d.fromDegrees(0))), DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_DEBUG, 5)
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
+            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/chargestation-circle"));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, 6)
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
