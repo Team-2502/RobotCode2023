@@ -66,11 +66,60 @@ public final class Constants {
         public static final int RIGHT_INTAKE_MOTOR = 15;
         public static final int LEFT_INTAKE_MOTOR = 16;
 
+        // Elevator
+        public static final int LEFT_ELEVATOR_MOTOR = 17;
+        public static final int RIGHT_ELEVATOR_MOTOR = 18;
+        public static final int PITCH_ELEVATOR_MOTOR = 19;
+        public static final int SWITCH_ELEVATOR = 2;
+
     }
 
     public static final class Subsystems {
-        public static final class Intake {
-            public static final float DEPLOY_SPEED = 0.1f;
+        public static final class Elevator {
+            public static final boolean NT_TUNE = false;
+
+            public static final double ELEVATOR_LIM_TOP = -50;
+            public static final double ELEVATOR_LIM_BOTTOM = 0;
+
+            public static final double ELEVATOR_P = 0.5;
+            public static final double ELEVATOR_I = 0.0;
+            public static final double ELEVATOR_D = 0.0;
+            public static final double ELEVATOR_MIN_OUTPUT = -1;
+            public static final double ELEVATOR_MAX_OUTPUT = 1;
+            public static final double ELEVATOR_MIN_OUTPUT_TELEOP = -0.65;
+            public static final double ELEVATOR_MAX_OUTPUT_TELEOP = 0.65;
+            public static final double ELEVATOR_THRESHOLD = 1; // rotations until accepted
+
+            public static final double PITCH_P = 0.5;
+            public static final double PITCH_I = 0.0;
+            public static final double PITCH_D = 0.0;
+            public static final double PITCH_MIN_OUTPUT = -1;
+            public static final double PITCH_MAX_OUTPUT = 1;
+            public static final double PITCH_MIN_OUTPUT_TELEOP = -0.5;
+            public static final double PITCH_MAX_OUTPUT_TELEOP = 0.5;
+            public static final double PITCH_THRESHOLD = 1;
+
+            public static enum ElevatorPosition {
+                BOTTOM(0), MIDDLE(-26.14), // TODO: measure
+                SAFE_PITCH(-29), GROUND_PICKUP(-1.69), CUBE_TOP(-48.5), CONE_BOTTOM(0), CONE_TOP(-49.7), TOP(-50); // TODO: measure
+
+                public final double position;
+
+                private ElevatorPosition(double position) {
+                    this.position = position;
+                }
+            }
+
+            public static enum ElevatorPitch {
+                STOWED(0), FRAME_INTERSECT(-25), // TODO: measure on hardware
+                GROUND_PICKUP(-41.76), CUBE_TOP(-68), CONE_TOP(-86.76), CONE_MID(-79.76), CONE_BOTTOM(-72), OUT(-72);
+
+                public final double position;
+
+                private ElevatorPitch(double position) {
+                    this.position = position;
+                }
+            }
         }
 
         public static final class AprilTags {
