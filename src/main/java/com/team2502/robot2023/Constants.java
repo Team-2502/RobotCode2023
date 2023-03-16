@@ -61,9 +61,10 @@ public final class Constants {
         // Conveyor Belt
         public static final int CONVEYOR = 13;
 
-        // Intake Motors
+        // Intake
         public static final int INTAKE = 14;
         public static final int INTAKE_PITCH = 15;
+        public static final int SWITCH_INTAKE = 3;
 
         // Elevator
         public static final int LEFT_ELEVATOR_MOTOR = 17;
