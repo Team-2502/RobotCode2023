@@ -62,9 +62,8 @@ public final class Constants {
         public static final int CONVEYOR = 13;
 
         // Intake Motors
-        public static final int LIFT_INTAKE_MOTOR = 14;
-        public static final int RIGHT_INTAKE_MOTOR = 15;
-        public static final int LEFT_INTAKE_MOTOR = 16;
+        public static final int INTAKE = 14;
+        public static final int INTAKE_PITCH = 15;
 
         // Elevator
         public static final int LEFT_ELEVATOR_MOTOR = 17;
@@ -75,6 +74,23 @@ public final class Constants {
     }
 
     public static final class Subsystems {
+        public static final class Intake {
+
+            public static final int INTAKE_P = 0;
+            public static final int INTAKE_I = 0;
+            public static final int INTAKE_D = 0;
+
+            public static enum IntakePosition {
+                IN(0), OUT(0), LEVEL(0); // TODO: measure
+
+                public final double position;
+
+                private IntakePosition(double position) {
+                    this.position = position;
+                }
+            }
+        }
+
         public static final class Elevator {
             public static final boolean NT_TUNE = false;
 
