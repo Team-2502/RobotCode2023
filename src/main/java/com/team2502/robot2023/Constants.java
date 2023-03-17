@@ -28,8 +28,10 @@ public final class Constants {
 
         // Driver Right
         public static final int RESET_HEADING = 2;
+        public static final int DRIVER_INTAKE = 1;
 
         // Driver Left
+        public static final int DRIVER_OUTAKE = 1;
 
         // Operator
         public static final int ELEVATOR_EXTEND = 9;

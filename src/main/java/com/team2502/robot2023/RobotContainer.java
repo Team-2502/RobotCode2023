@@ -49,7 +49,6 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
-
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
@@ -57,7 +56,6 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
-
         new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_RETRACT)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
@@ -65,7 +63,6 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
                 .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
-
         new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
                 .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
@@ -73,10 +70,16 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
                 .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), ELEVATOR));
-
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_IN)
-                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), ELEVATOR))
+                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.DRIVER_INTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
+        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.DRIVER_OUTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
     }
 
     /**
