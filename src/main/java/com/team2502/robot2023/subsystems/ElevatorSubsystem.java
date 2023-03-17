@@ -30,6 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         rightElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         leftPitchElevator = new CANSparkMax(Constants.HardwareMap.LEFT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+        rightPitchElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         leftElevator.follow(rightElevator, true);
 
