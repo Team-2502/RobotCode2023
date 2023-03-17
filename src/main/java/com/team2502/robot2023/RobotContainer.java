@@ -8,12 +8,15 @@ package com.team2502.robot2023;
 import com.team2502.robot2023.commands.DriveCommand;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
+import com.team2502.robot2023.subsystems.ElevatorSubsystem;
+import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import com.team2502.robot2023.Constants.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -30,6 +33,9 @@ public class RobotContainer {
 
     protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
 
+    protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
+    protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
+
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
 
@@ -39,6 +45,38 @@ public class RobotContainer {
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_RETRACT)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
+                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), ELEVATOR));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_IN)
+                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), ELEVATOR));
     }
 
     /**

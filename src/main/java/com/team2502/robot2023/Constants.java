@@ -30,11 +30,19 @@ public final class Constants {
         public static final int RESET_HEADING = 2;
 
         // Driver Left
-        public static final int ALLIGN_LEFT = 3;
-        public static final int ALLIGN_CENTER = 2;
-        public static final int ALLIGN_RIGHT = 4;
 
-        public static final int MOVE_INCHES = 2;
+        // Operator
+        public static final int ELEVATOR_EXTEND = 9;
+        public static final int ELEVATOR_RETRACT = 8;
+
+        public static final int ARM_EXTEND = 6;
+        public static final int ARM_RETRACT = 7;
+
+        public static final int INTAKE = 1;
+        public static final int OUTAKE = 2;
+
+        public static final int INTAKE_OUT = 3;
+        public static final int INTAKE_IN = 4;
     }
 
     public static final class HardwareMap {
