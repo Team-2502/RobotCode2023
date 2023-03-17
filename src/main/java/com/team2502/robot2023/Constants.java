@@ -69,7 +69,8 @@ public final class Constants {
         // Elevator
         public static final int LEFT_ELEVATOR_MOTOR = 17;
         public static final int RIGHT_ELEVATOR_MOTOR = 18;
-        public static final int PITCH_ELEVATOR_MOTOR = 19;
+        public static final int LEFT_PITCH_ELEVATOR_MOTOR = 19;
+        public static final int RIGHT_PITCH_ELEVATOR_MOTOR = 20;
         public static final int SWITCH_ELEVATOR = 2;
 
     }

@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ElevatorSubsystem extends SubsystemBase {
     private CANSparkMax leftElevator;
     private CANSparkMax rightElevator;
-    private CANSparkMax pitchElevator;
+    private CANSparkMax leftPitchElevator;
+    private CANSparkMax rightPitchElevator;
 
     private SparkMaxPIDController pid;
     private SparkMaxPIDController pitchPid;
@@ -28,15 +29,19 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevator = new CANSparkMax(Constants.HardwareMap.LEFT_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         rightElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        pitchElevator = new CANSparkMax(Constants.HardwareMap.PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+        leftPitchElevator = new CANSparkMax(Constants.HardwareMap.LEFT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         leftElevator.follow(rightElevator, true);
 
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
-        pitchElevator.setSmartCurrentLimit(39);
+        leftPitchElevator.setSmartCurrentLimit(39);
+        rightElevator.setSmartCurrentLimit(39);
 
-        pitchElevator.setIdleMode(IdleMode.kBrake);
+        leftPitchElevator.setIdleMode(IdleMode.kBrake);
+        rightPitchElevator.setIdleMode(IdleMode.kBrake);
+
+        rightPitchElevator.follow(leftPitchElevator, true);
 
         rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
         rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
@@ -46,7 +51,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_ELEVATOR);
 
         pid = rightElevator.getPIDController();
-        pitchPid = pitchElevator.getPIDController();
+        pitchPid = leftPitchElevator.getPIDController();
         setupPID();
 
         NTInit();setupPID();
@@ -65,7 +70,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("elev pos", rightElevator.getEncoder().getPosition());
-        SmartDashboard.putNumber("wrist pos", pitchElevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("wrist pos", leftPitchElevator.getEncoder().getPosition());
         if (Constants.Subsystems.Elevator.NT_TUNE) {
             NTUpdate();
         }
@@ -87,7 +92,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPitch(ElevatorPitch pitch) {
-        pitchElevator.getPIDController().setReference(pitch.position, CANSparkMax.ControlType.kPosition);
+        leftPitchElevator.getPIDController().setReference(pitch.position, CANSparkMax.ControlType.kPosition);
     }
 
     public void set(ElevatorPosition pos) {
@@ -99,7 +104,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPitchSpeed(double speed) {
-        pitchElevator.set(speed);
+        leftPitchElevator.set(speed);
     }
 
     public double getLinear() {
@@ -107,7 +112,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public double getPitch() {
-        return pitchElevator.getEncoder().getPosition();
+        return leftPitchElevator.getEncoder().getPosition();
     }
 
     /** @return is it safe to unstow the arm */
@@ -132,7 +137,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void zeroPitch() {
-        pitchElevator.getEncoder().setPosition(0);
+        leftPitchElevator.getEncoder().setPosition(0);
     }
 
     public void zeroElevator() {
@@ -159,7 +164,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         pitchPid.setI(Constants.Subsystems.Elevator.PITCH_I);
         pitchPid.setD(Constants.Subsystems.Elevator.PITCH_D);
         pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
-        pitchElevator.burnFlash();
+        leftPitchElevator.burnFlash();
     }
 
     public void NTUpdate() {
@@ -174,6 +179,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     public void stop() {
         rightElevator.stopMotor();
         leftElevator.stopMotor();
-        pitchElevator.stopMotor();
+        leftPitchElevator.stopMotor();
+        rightPitchElevator.stopMotor();
     }
 }
