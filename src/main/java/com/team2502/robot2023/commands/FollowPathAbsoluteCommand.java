@@ -55,9 +55,12 @@ public class FollowPathAbsoluteCommand extends CommandBase {
         
         if (elapsed.get() < path.getTotalTimeSeconds()) {
             Pose2d targ = path.sample(elapsed.get()).poseMeters;
-            SmartDashboard.putNumber("TARGR", targ.getRotation().getRadians());
+            SmartDashboard.putNumber("TARGR", targ.getRotation().getDegrees());
             drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),
-                    Rotation2d.fromDegrees(-11/* TODO find if this from init */)));
+                    
+                    Rotation2d.fromDegrees(drivetrain.fieldOrientedOffset)
+                    ));
+                    //Rotation2d.fromDegrees(0/* TODO find if this from init */)));
         }
     }
 

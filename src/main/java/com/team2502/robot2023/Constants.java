@@ -293,12 +293,12 @@ public final class Constants {
             public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
-            public static final double DRIVETRAIN_MOVE_P = 1; // 0.6
+            public static final double DRIVETRAIN_MOVE_P = 2.7; // 0.6
             public static final double DRIVETRAIN_MOVE_I = 0.0003;
             public static final double DRIVETRAIN_MOVE_D = 0.25;
             public static final double DRIVETRAIN_MOVE_A = 3;
-            public static final double DRIVETRAIN_TURN_P = 1;
-            public static final double DRIVETRAIN_TURN_I = 0.0000;
+            public static final double DRIVETRAIN_TURN_P = 2;
+            public static final double DRIVETRAIN_TURN_I = 0.001;
             public static final double DRIVETRAIN_TURN_D = 0;
             public static final double DRIVETRAIN_TURN_A = 2;
                                                    

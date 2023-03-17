@@ -93,7 +93,7 @@ public class RobotContainer {
         SmartDashboard.putData("B reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(2, 2.75, Rotation2d.fromDegrees(0))), DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_DEBUG, 5)
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/chargestation-circle"));
+            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/circle"));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, 6)
             .whileTrue( new BalanceCommand(DRIVETRAIN, false));
