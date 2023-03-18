@@ -43,11 +43,6 @@ public class RobotContainer {
     protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
 
-    protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
-    protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
-    protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
-    protected final ManipulatorSubsystem MANIPULATOR = new ManipulatorSubsystem();
-
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
 
@@ -105,8 +100,7 @@ public class RobotContainer {
         return AutoChooser.getAutoInstance().getInstance(
                 DRIVETRAIN,
                 INTAKE,
-                ELEVATOR,
-                MANIPULATOR
+                ELEVATOR
         );
     }
 }

@@ -28,12 +28,11 @@ public final class Constants {
 
         // Driver Right
         public static final int RESET_HEADING = 3;
-        public static final int RUN_INTAKE = 1;
+        public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
         public static final int RET_MODE = 4;
 
         // Driver Left
-        public static final int RUN_INTAKE_BACK = 1;
         public static final int DRIVER_OUTAKE = 1;
         public static final int RAISE_INTAKE = 2;
 
