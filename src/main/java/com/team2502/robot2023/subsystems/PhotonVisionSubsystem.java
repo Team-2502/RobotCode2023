@@ -26,6 +26,7 @@ import com.team2502.robot2023.Constants.Subsystems.Field;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
     private PhotonCamera camera;
+    private PhotonCamera cameraIntake;
     private AprilTagFieldLayout fieldLayout;
     private PhotonPoseEstimator estimator;
     private Pose2d latestPose;
@@ -37,6 +38,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
         fieldLayout = Field.apriltagPositions;
         estimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, Constants.Subsystems.PhotonVision.ROBOT_TO_PHOTONVISION);
 
+
+        cameraIntake = new PhotonCamera("intake");
+
         latestPose = new Pose2d();
         newPoseThisFrame = false;
         this.drivetrain = drivetrain;
@@ -44,6 +48,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // apriltags
         estimator.setReferencePose(drivetrain.getPose());
         Optional<EstimatedRobotPose> pose = estimator.update();
         
@@ -56,6 +61,14 @@ public class PhotonVisionSubsystem extends SubsystemBase {
         newPoseThisFrame = pose.isPresent() && target != null && target.getArea() > 1.5;
         if (pose.isPresent() && target != null && target.getArea() > 1.5) {
             latestPose = pose.get().estimatedPose.toPose2d();
+        }
+
+        // intake
+        if (cameraIntake.hasTargets()) {
+            target = cameraIntake.getLatestResult().getBestTarget();
+
+            SmartDashboard.putNumber("PV item x", target.getYaw());
+            SmartDashboard.putNumber("PV item y", target.getPitch());
         }
 
         SmartDashboard.putNumber("PV Posex", getPose().getX());
