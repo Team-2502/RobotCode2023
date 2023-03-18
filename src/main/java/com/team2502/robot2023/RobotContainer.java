@@ -77,11 +77,11 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
-                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), INTAKE))
-                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), INTAKE));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(-0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_IN)
-                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(0.3), INTAKE))
-                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), INTAKE));
+                .onTrue(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(0.3), ELEVATOR))
+                .onFalse(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.DRIVER_INTAKE)
                 .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), INTAKE))

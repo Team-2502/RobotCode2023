@@ -196,12 +196,12 @@ public final class Constants {
             public static final int INTAKE_I = 0;
             public static final int INTAKE_D = 0;
 
-            public static final double ELBOW_ROT_TO_DEGREE = 360 / (2 * 80); // 80:1 gearbox 2:1 gears
-            public static final double WRIST_ROT_TO_DEGREE = 360 * 2 / 16; // 16:1 gearbox 1:2 chain
+            public static final double ELBOW_ROT_TO_DEGREE = 360 / (48/30) / 80; // 80:1 gearbox 2:1 gears
+            public static final double WRIST_ROT_TO_DEGREE = 360 / 2 / 16; // 16:1 gearbox 2:1 chain
 
             // zero degrees is level with floor ahead of robot
             public static final double ELBOW_ZERO_ANGLE = 80;
-            public static final double WRIST_ZERO_ANGLE = ELBOW_ZERO_ANGLE + 180 + 30;
+            public static final double WRIST_ZERO_ANGLE = -ELBOW_ZERO_ANGLE + 255;
 
             public static enum IntakePosition {
                 IN(0,0),

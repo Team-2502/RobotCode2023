@@ -8,6 +8,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
 import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
+import com.team2502.robot2023.Constants.Subsystems.Intake.IntakePosition;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,9 +20,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     private CANSparkMax rightElevator;
     private CANSparkMax leftPitchElevator;
     private CANSparkMax rightPitchElevator;
+    private CANSparkMax pitchIntake;
 
     private SparkMaxPIDController pid;
     private SparkMaxPIDController pitchPid;
+    private SparkMaxPIDController intakePid;
 
     private DigitalInput limitSwitch;
 
@@ -32,23 +35,23 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftPitchElevator = new CANSparkMax(Constants.HardwareMap.LEFT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         rightPitchElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+        pitchIntake = new CANSparkMax(Constants.HardwareMap.INTAKE_PITCH, CANSparkMaxLowLevel.MotorType.kBrushless);
+
         // TODO get followers working
-        //leftElevator.follow(rightElevator, true);
         //leftElevator.burnFlash();
-        leftElevator.restoreFactoryDefaults();
-        rightElevator.restoreFactoryDefaults();
         leftElevator.setIdleMode(IdleMode.kBrake);
         rightElevator.setIdleMode(IdleMode.kBrake);
-        leftElevator.burnFlash();
-        rightElevator.burnFlash();
+        leftElevator.follow(rightElevator, true);
 
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
         leftPitchElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
+        pitchIntake.setSmartCurrentLimit(39);
 
         leftPitchElevator.setIdleMode(IdleMode.kBrake);
         rightPitchElevator.setIdleMode(IdleMode.kBrake);
+        pitchIntake.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         rightPitchElevator.follow(leftPitchElevator, true);
 
@@ -61,6 +64,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         pid = rightElevator.getPIDController();
         pitchPid = leftPitchElevator.getPIDController();
+        intakePid = pitchIntake.getPIDController();
         setupPID();
 
         NTInit();setupPID();
@@ -78,6 +82,15 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double elbowAngle = (-leftPitchElevator.getEncoder().getPosition() * Constants.Subsystems.Intake.ELBOW_ROT_TO_DEGREE) + Constants.Subsystems.Intake.ELBOW_ZERO_ANGLE;
+        SmartDashboard.putNumber("elbow ang raw", leftPitchElevator.getEncoder().getPosition());
+        SmartDashboard.putNumber("elbow ang", elbowAngle);
+
+        double wristAngle = (-pitchIntake.getEncoder().getPosition() * Constants.Subsystems.Intake.WRIST_ROT_TO_DEGREE) + Constants.Subsystems.Intake.WRIST_ZERO_ANGLE;
+        wristAngle += elbowAngle;
+        SmartDashboard.putNumber("wrist ang raw", pitchIntake.getEncoder().getPosition());
+        SmartDashboard.putNumber("wrist ang", wristAngle);
+
         SmartDashboard.putNumber("elev pos", rightElevator.getEncoder().getPosition());
         SmartDashboard.putNumber("wrist pos", leftPitchElevator.getEncoder().getPosition());
         if (Constants.Subsystems.Elevator.NT_TUNE) {
@@ -110,7 +123,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setLinearSpeed(double speed) {
         rightElevator.set(speed);
-        leftElevator.set(-speed);
     }
 
     public void setPitchSpeed(double speed) {
@@ -132,6 +144,30 @@ public class ElevatorSubsystem extends SubsystemBase {
         } else {
             return false;
         }
+    }
+
+    public void setArmPitch(IntakePosition position) {
+        pitchIntake.getPIDController().setReference(position.pitchElbow, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void setArmPitchSpeed(double speed) {
+        pitchIntake.set(speed);
+    }
+
+    public void homeArm() {
+        while (!limitSwitch.get()) {
+            setPitchSpeed(0.1);
+            if (pitchIntake.getOutputCurrent() > 15) {
+                break;
+            }
+        }
+
+        pitchIntake.getEncoder().setPosition(0);
+        setArmPitch(IntakePosition.IN);
+    }
+
+    public void zeroArm() {
+        pitchIntake.getEncoder().setPosition(0);
     }
 
     public void home() {
@@ -175,6 +211,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         pitchPid.setD(Constants.Subsystems.Elevator.PITCH_D);
         pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
         leftPitchElevator.burnFlash();
+
+        intakePid.setP(Constants.Subsystems.Intake.INTAKE_P);
+        intakePid.setI(Constants.Subsystems.Intake.INTAKE_I);
+        intakePid.setD(Constants.Subsystems.Intake.INTAKE_D);
+        pitchIntake.burnFlash();
     }
 
     public void NTUpdate() {
