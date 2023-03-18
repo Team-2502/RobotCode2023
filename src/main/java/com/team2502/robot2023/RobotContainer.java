@@ -40,7 +40,7 @@ public class RobotContainer {
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
     protected final Joystick JOYSTICK_OPERATOR = new Joystick(OI.JOYSTICK_OPERATOR);
-    protected final Joystick JOYSTICK_DEBUG = new Joystick(Constants.OI.JOYSTICK_DEBUG);
+    protected final Joystick JOYSTICK_FIGHT = new Joystick(Constants.OI.JOYSTICK_FIGHT);
 
     protected final ArmSubsystem ELEVATOR = new ArmSubsystem();
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
@@ -72,10 +72,10 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), INTAKE))
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
         new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), INTAKE))
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.7), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
@@ -98,17 +98,31 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
                 .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_GROUND)
+        JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
+
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
+            .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_BOT)
-            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
-
-        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_MID)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
+            .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_TOP)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
+            .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP));
+
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
+            .and(cubeButton.negate())
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_GROUND_PICKUP, IntakePosition.CONE_GROUND));
+
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
+            .and(cubeButton.negate())
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_MID, IntakePosition.CONE_MID));
+
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
+            .and(cubeButton.negate())
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_TOP, IntakePosition.CONE_TOP));
     }
 
     /**

@@ -22,7 +22,7 @@ public final class Constants {
         public static final int JOYSTICK_DRIVE_RIGHT = 0;
         public static final int JOYSTICK_DRIVE_LEFT = 1;
         public static final int JOYSTICK_OPERATOR = 2;
-        public static final int JOYSTICK_DEBUG = 5;
+        public static final int JOYSTICK_FIGHT = 5;
 
         // Buttons
 
@@ -39,15 +39,16 @@ public final class Constants {
 
 
         // DBG
-        public static final int DEBUG_RUN = 1;
-        public static final int RESET_MODULES = 4;
+        public static final int DEBUG_RUN = 2;
+        public static final int RESET_MODULES = 3;
+        public static final int CUBE_LAYER = 1;
+        public static final int ELEVATOR_GROUND = 4;
+        public static final int ELEVATOR_MID = 5;
+        public static final int ELEVATOR_TOP = 6;
 
         // Operator
         public static final int ELEVATOR_STO = 14;
-        public static final int ELEVATOR_GROUND = 15;
         public static final int ELEVATOR_BOT = 13;
-        public static final int ELEVATOR_MID = 12;
-        public static final int ELEVATOR_TOP = 11;
 
         public static final int ELEVATOR_EXTEND = 9;
         public static final int ELEVATOR_RETRACT = 8;
@@ -144,9 +145,11 @@ public final class Constants {
                 SAFE_PITCH(-29),
                 GROUND_PICKUP(-1.69),
                 CONE_BOTTOM(0),
-                CONE_TOP(-49.7),
-                CUBE_MID(19), // -48
-                CUBE_TOP(57), // -48
+                CUBE_MID(19), 
+                CUBE_TOP(57), 
+                CONE_GROUND_PICKUP(9),
+                CONE_MID(60), // 
+                CONE_TOP(60),  // TODO
                 TOP(-50); // TODO: measure
 
                 public final double position;
@@ -192,8 +195,10 @@ public final class Constants {
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
                 INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
-                CUBE_GROUND(100,72),
                 CONE_GROUND(134,-11),
+                CONE_MID(316,127),
+                CONE_TOP(316,127), // TODO
+                CUBE_GROUND(100,72),
                 CUBE_MID(316,138),
                 CUBE_TOP(336,127);
 
@@ -316,9 +321,9 @@ public final class Constants {
         }
         public static final class Drivetrain {
             public static final double MAX_VEL = 11; // driver speed gain (m/s)
-            public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
+            public static final double MAX_ROT = 9; // driver rotation gain (rad/s)
             public static final double RET_VEL = 3; // driver speed gain (m/s)
-            public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)
+            public static final double RET_ROT = 3; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 2.7; // 0.6
