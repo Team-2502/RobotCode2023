@@ -39,10 +39,11 @@ public final class Constants {
 
 
         // DBG
-        public static final int DEBUG_RUN = 2;
+        public static final int DEBUG_RUN = 9;
         public static final int RESET_MODULES = 3;
         public static final int CUBE_LAYER = 1;
         public static final int ELEVATOR_GROUND = 4;
+        public static final int ELEVATOR_SINGLE = 2;
         public static final int ELEVATOR_MID = 5;
         public static final int ELEVATOR_TOP = 6;
 
@@ -144,12 +145,13 @@ public final class Constants {
                 MIDDLE(-26.14), // TODO: measure
                 SAFE_PITCH(-29),
                 GROUND_PICKUP(-1.69),
+                CONE_SINGLE(0),
                 CONE_BOTTOM(0),
                 CUBE_MID(19), 
                 CUBE_TOP(57), 
                 CONE_GROUND_PICKUP(9),
-                CONE_MID(60), // 
-                CONE_TOP(60),  // TODO
+                CONE_MID(60),
+                CONE_TOP(87),  
                 TOP(-50); // TODO: measure
 
                 public final double position;
@@ -195,9 +197,10 @@ public final class Constants {
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
                 INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
-                CONE_GROUND(134,-11),
+                CONE_GROUND(143,-9),
                 CONE_MID(316,127),
-                CONE_TOP(316,127), // TODO
+                CONE_TOP(300,131), 
+                CONE_SINGLE(146,72), 
                 CUBE_GROUND(100,72),
                 CUBE_MID(316,138),
                 CUBE_TOP(336,127);

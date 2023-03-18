@@ -116,6 +116,10 @@ public class RobotContainer {
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_GROUND_PICKUP, IntakePosition.CONE_GROUND));
 
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE)
+            .and(cubeButton.negate())
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_SINGLE, IntakePosition.CONE_SINGLE));
+
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_MID, IntakePosition.CONE_MID));
@@ -123,6 +127,10 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_TOP, IntakePosition.CONE_TOP));
+
+		// Debug
+        new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
+			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/circle"));
     }
 
     /**
