@@ -97,6 +97,18 @@ public class RobotContainer {
 
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
                 .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_GROUND)
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_BOT)
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_MID)
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_TOP)
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP));
     }
 
     /**

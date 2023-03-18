@@ -1,7 +1,7 @@
 all: deploy
 
 deploy:
-	rp ./gradlew deploy && git tag -f onbot
+	rp ./gradlew deploy && git tag -f oncomp
 
 
 push: 

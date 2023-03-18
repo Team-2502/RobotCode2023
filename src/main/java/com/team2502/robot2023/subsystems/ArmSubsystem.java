@@ -78,6 +78,7 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putData("Elevator HOME", new InstantCommand(() -> { home();}));
         SmartDashboard.putData("Elevator ZERO", new InstantCommand(() -> { zeroElevator();}));
         SmartDashboard.putData("Pitch ZERO", new InstantCommand(() -> { zeroPitch();}));
+        SmartDashboard.putData("Arm ZERO", new InstantCommand(() -> { zeroArm();}));
     }
 
     @Override

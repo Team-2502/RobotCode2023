@@ -55,8 +55,8 @@ public final class Constants {
         public static final int MANIPULATOR_EXTEND = 6;
         public static final int MANIPULATOR_RETRACT = 7;
 
-        public static final int MANIPULATOR_GRAB = 1;
-        public static final int MANIPULATOR_RELEASE = 2;
+        public static final int MANIPULATOR_GRAB = 2;
+        public static final int MANIPULATOR_RELEASE = 1;
 
 
         public static final int RUN_CONVEYOR = 3;
@@ -143,9 +143,10 @@ public final class Constants {
                 MIDDLE(-26.14), // TODO: measure
                 SAFE_PITCH(-29),
                 GROUND_PICKUP(-1.69),
-                CUBE_TOP(-48.5),
                 CONE_BOTTOM(0),
                 CONE_TOP(-49.7),
+                CUBE_MID(19), // -48
+                CUBE_TOP(57), // -48
                 TOP(-50); // TODO: measure
 
                 public final double position;
@@ -191,7 +192,10 @@ public final class Constants {
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
                 INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
-                CUBE_GROUND(100,72);
+                CUBE_GROUND(100,72),
+                CONE_GROUND(134,-11),
+                CUBE_MID(316,138),
+                CUBE_TOP(336,127);
 
                 public final double pitchElbow;
                 public final double pitchWrist;
