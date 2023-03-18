@@ -6,6 +6,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Intake.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -31,6 +32,13 @@ public class IntakeSubsystem extends SubsystemBase {
         setupPid();
     }
 
+    @Override
+    public void periodic() {
+        double wristAngle = (pitchIntake.getEncoder().getPosition() * Constants.Subsystems.Intake.WRIST_ROT_TO_DEGREE) + Constants.Subsystems.Intake.WRIST_ZERO_ANGLE;
+        SmartDashboard.putNumber("elbow ang raw", pitchIntake.getEncoder().getPosition());
+        SmartDashboard.putNumber("elbow ang", wristAngle);
+    }
+
     private void setupPid() {
         pid.setP(Constants.Subsystems.Intake.INTAKE_P);
         pid.setI(Constants.Subsystems.Intake.INTAKE_I);
@@ -39,7 +47,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setPitch(IntakePosition position) {
-        pitchIntake.getPIDController().setReference(position.position, CANSparkMax.ControlType.kPosition);
+        pitchIntake.getPIDController().setReference(position.pitchElbow, CANSparkMax.ControlType.kPosition);
     }
 
     public void setSpeed(double speed) {

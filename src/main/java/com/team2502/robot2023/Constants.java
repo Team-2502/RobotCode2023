@@ -196,15 +196,26 @@ public final class Constants {
             public static final int INTAKE_I = 0;
             public static final int INTAKE_D = 0;
 
+            public static final double ELBOW_ROT_TO_DEGREE = 360 / (2 * 80); // 80:1 gearbox 2:1 gears
+            public static final double WRIST_ROT_TO_DEGREE = 360 * 2 / 16; // 16:1 gearbox 1:2 chain
+
+            // zero degrees is level with floor ahead of robot
+            public static final double ELBOW_ZERO_ANGLE = 80;
+            public static final double WRIST_ZERO_ANGLE = ELBOW_ZERO_ANGLE + 180 + 30;
+
             public static enum IntakePosition {
-                IN(0),
-                OUT(0),
-                LEVEL(0); // TODO: measure
+                IN(0,0),
+                OUT(0,0),
+                LEVEL(0,0), 
+                CONE_OUT(12,0),
+                INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE); // don't use as setpoint
 
-                public final double position;
+                public final double pitchElbow;
+                public final double pitchWrist;
 
-                private IntakePosition(double position) {
-                    this.position = position;
+                private IntakePosition(double elbowAngle, double wristAngle) {
+                    this.pitchElbow = elbowAngle / ELBOW_ROT_TO_DEGREE;
+                    this.pitchWrist = wristAngle / WRIST_ROT_TO_DEGREE;
                 }
             }
         }
