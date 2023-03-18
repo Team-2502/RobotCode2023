@@ -87,6 +87,8 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("elbow ang", elbowAngle);
 
         double wristAngle = (-pitchIntake.getEncoder().getPosition() * Constants.Subsystems.Arm.WRIST_ROT_TO_DEGREE) + Constants.Subsystems.Arm.WRIST_ZERO_ANGLE;
+        SmartDashboard.putNumber("wrist ang soli raw", pitchIntake.getEncoder().getPosition());
+        SmartDashboard.putNumber("wrist ang soli", wristAngle);
         wristAngle += elbowAngle;
         SmartDashboard.putNumber("wrist ang raw", pitchIntake.getEncoder().getPosition());
         SmartDashboard.putNumber("wrist ang", wristAngle);
@@ -146,8 +148,12 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
+    public void setArmWrist(IntakePosition position) {
+        pitchIntake.getPIDController().setReference(position.pitchWrist, CANSparkMax.ControlType.kPosition);
+    }
+
     public void setArmPitch(IntakePosition position) {
-        pitchIntake.getPIDController().setReference(position.pitchElbow, CANSparkMax.ControlType.kPosition);
+        leftPitchElevator.getPIDController().setReference(position.pitchElbow, CANSparkMax.ControlType.kPosition);
     }
 
     public void setArmPitchSpeed(double speed) {
@@ -215,6 +221,7 @@ public class ArmSubsystem extends SubsystemBase {
         intakePid.setP(Constants.Subsystems.Arm.INTAKE_P);
         intakePid.setI(Constants.Subsystems.Arm.INTAKE_I);
         intakePid.setD(Constants.Subsystems.Arm.INTAKE_D);
+        pitchPid.setOutputRange(Constants.Subsystems.Arm.INTAKE_MIN_OUTPUT, Constants.Subsystems.Arm.INTAKE_MAX_OUTPUT);
         pitchIntake.burnFlash();
     }
 

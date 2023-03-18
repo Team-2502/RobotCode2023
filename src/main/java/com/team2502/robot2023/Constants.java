@@ -35,6 +35,7 @@ public final class Constants {
         // Driver Left
         public static final int DRIVER_OUTAKE = 1;
         public static final int RAISE_INTAKE = 2;
+        public static final int CUBE_GROUND = 3;
 
 
         // DBG
@@ -169,9 +170,11 @@ public final class Constants {
                 }
             }
 
-            public static final int INTAKE_P = 0;
-            public static final int INTAKE_I = 0;
-            public static final int INTAKE_D = 0;
+            public static final double INTAKE_P = 0.5;
+            public static final double INTAKE_I = 0;
+            public static final double INTAKE_D = 0;
+            public static final double INTAKE_MIN_OUTPUT = -0.2;
+            public static final double INTAKE_MAX_OUTPUT = 0.2;
 
             public static final double ELBOW_ROT_TO_DEGREE = 360 / (48/30) / 80; // 80:1 gearbox 2:1 gears
             public static final double WRIST_ROT_TO_DEGREE = 360 / 2 / 16; // 16:1 gearbox 2:1 chain
@@ -181,18 +184,20 @@ public final class Constants {
             public static final double WRIST_ZERO_ANGLE = -ELBOW_ZERO_ANGLE + 255;
 
             public static enum IntakePosition {
+                // elbow, wrist
                 IN(0,0),
                 OUT(0,0),
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
-                INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE); // don't use as setpoint
+                INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
+                CUBE_GROUND(100,72);
 
                 public final double pitchElbow;
                 public final double pitchWrist;
 
                 private IntakePosition(double elbowAngle, double wristAngle) {
-                    this.pitchElbow = elbowAngle / ELBOW_ROT_TO_DEGREE;
-                    this.pitchWrist = wristAngle / WRIST_ROT_TO_DEGREE;
+                    this.pitchElbow = -(elbowAngle-ELBOW_ZERO_ANGLE) / ELBOW_ROT_TO_DEGREE;
+                    this.pitchWrist = -(wristAngle - WRIST_ZERO_ANGLE) / WRIST_ROT_TO_DEGREE;
                 }
             }
         }
@@ -305,7 +310,7 @@ public final class Constants {
             public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
-            public static final double MAX_VEL = 6; // driver speed gain (m/s)
+            public static final double MAX_VEL = 11; // driver speed gain (m/s)
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s)
             public static final double RET_VEL = 3; // driver speed gain (m/s)
             public static final double RET_ROT = 0.9; // driver rotation gain (rad/s)

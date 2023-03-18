@@ -6,6 +6,8 @@
 package com.team2502.robot2023;
 
 import com.team2502.robot2023.Constants.OI;
+import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPosition;
+import com.team2502.robot2023.Constants.Subsystems.Arm.IntakePosition;
 import com.team2502.robot2023.autonomous.AutoChooser;
 import com.team2502.robot2023.commands.*;
 
@@ -84,11 +86,14 @@ public class RobotContainer {
                 .onFalse(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(0.0), ELEVATOR));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.DRIVER_INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), INTAKE))
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.7), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.DRIVER_OUTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), INTAKE))
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+
+        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND)
+                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
     }
 
     /**
