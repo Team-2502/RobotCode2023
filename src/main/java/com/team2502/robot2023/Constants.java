@@ -185,6 +185,7 @@ public final class Constants {
 
             public static enum IntakePosition {
                 // elbow, wrist
+                // (elbow ang), (wrist ang soli) on NT
                 IN(0,0),
                 OUT(0,0),
                 LEVEL(0,0), 

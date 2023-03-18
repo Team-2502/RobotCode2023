@@ -77,7 +77,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	private float rollOffset;
 	private float pitchOffset;
 
-    private PhotonVisionSubsystem vision;
+    public PhotonVisionSubsystem vision;
 
     public DrivetrainSubsystem(){
         vision = new PhotonVisionSubsystem(this);

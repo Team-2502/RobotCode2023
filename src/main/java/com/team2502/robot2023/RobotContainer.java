@@ -94,6 +94,9 @@ public class RobotContainer {
 
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND)
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
+
+        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
+                .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
     }
 
     /**

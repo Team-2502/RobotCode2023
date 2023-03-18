@@ -32,6 +32,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     private Pose2d latestPose;
     private boolean newPoseThisFrame;
     private DrivetrainSubsystem drivetrain;
+
+
+    public Optional<PhotonTrackedTarget> gamePiece;
     
     public PhotonVisionSubsystem(DrivetrainSubsystem drivetrain) {
         camera = new PhotonCamera(PhotonVision.CAMERA_NAME);
@@ -66,6 +69,10 @@ public class PhotonVisionSubsystem extends SubsystemBase {
         // intake
         if (cameraIntake.hasTargets()) {
             target = cameraIntake.getLatestResult().getBestTarget();
+
+            if (target==null) { return; } // horrible api
+
+            gamePiece = Optional.of(target);
 
             SmartDashboard.putNumber("PV item x", target.getYaw());
             SmartDashboard.putNumber("PV item y", target.getPitch());
