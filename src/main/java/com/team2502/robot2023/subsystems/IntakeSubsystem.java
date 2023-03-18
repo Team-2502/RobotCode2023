@@ -2,92 +2,67 @@ package com.team2502.robot2023.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Intake.*;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
-    //Define motors
-    private final CANSparkMax leftLiftMotor;
-    private final CANSparkMax rightLiftMotor;
-    private final CANSparkMax rightMotor;
-    private final CANSparkMax leftMotor;
+    private CANSparkMax pitchIntake;
+    private CANSparkMax intake;
 
-    private DigitalInput leftLimitSwitch;
-    private DigitalInput rightLimitSwitch;
+    private SparkMaxPIDController pid;
 
+    private DigitalInput limitSwitch;
 
     public IntakeSubsystem() {
-        // Pulls Motor Info From Constants and Defines Motor Type
-        leftLiftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_LIFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightLiftMotor = new CANSparkMax(Constants.HardwareMap.RIGHT_LIFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-        rightMotor = new CANSparkMax(Constants.HardwareMap.RIGHT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-        leftMotor = new CANSparkMax(Constants.HardwareMap.LEFT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+        pitchIntake = new CANSparkMax(Constants.HardwareMap.INTAKE_PITCH, CANSparkMaxLowLevel.MotorType.kBrushless);
+        intake = new CANSparkMax(Constants.HardwareMap.INTAKE, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        //Sets Speed Limit To Motors
-        leftLiftMotor.setSmartCurrentLimit(39);
-        rightLiftMotor.setSmartCurrentLimit(39);
-        rightMotor.setSmartCurrentLimit(39);
-        leftMotor.setSmartCurrentLimit(39);
+        //limitSwitch = new DigitalInput(Constants.HardwareMap.INTAKE_PITCH);
 
-        leftLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-        rightLiftMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+        pitchIntake.setSmartCurrentLimit(39);
+        intake.setSmartCurrentLimit(39);
 
-        //Sets Left Motor To Spin Opposite Direction To Work With Right Motor
-        leftMotor.setInverted(true);
+        pitchIntake.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-        leftLiftMotor.follow(rightLiftMotor, true);
-
-        leftLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_LEFT_INTAKE);
-        rightLimitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_RIGHT_INTAKE);
+        pid = pitchIntake.getPIDController();
+        setupPid();
     }
 
-    public void set(IntakePosition pos) {
-        leftLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
-        rightLiftMotor.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kSmartMotion);
+    private void setupPid() {
+        pid.setP(Constants.Subsystems.Intake.INTAKE_P);
+        pid.setI(Constants.Subsystems.Intake.INTAKE_I);
+        pid.setD(Constants.Subsystems.Intake.INTAKE_D);
+        pitchIntake.burnFlash();
     }
 
-    public void run(double leftSpeed, double rightSpeed) {
-        leftMotor.set(-leftSpeed);
-        rightMotor.set(-rightSpeed);
+    public void setPitch(IntakePosition position) {
+        pitchIntake.getPIDController().setReference(position.position, CANSparkMax.ControlType.kPosition);
     }
 
-    public void runLift(double speed) {
-        rightLiftMotor.set(speed);
+    public void setSpeed(double speed) {
+        intake.set(speed);
     }
 
-    void runLeft(double speed) {
-        leftMotor.set(-speed);
-    }
-
-    void runRight(double speed) {
-        rightMotor.set(-speed);
+    public void setPitchSpeed(double speed) {
+        pitchIntake.set(speed);
     }
 
     public void home() {
-        while (leftLimitSwitch.get()) {
-            runLeft(-0.1);
+        while (!limitSwitch.get()) {
+            setPitchSpeed(0.1);
+            if (pitchIntake.getOutputCurrent() > 15) {
+                break;
+            }
         }
 
-        while (rightLimitSwitch.get()) {
-            runRight(-0.1);
-        }
-
-        leftLiftMotor.getEncoder().setPosition(0);
-        rightLiftMotor.getEncoder().setPosition(0);
-
-        set(IntakePosition.RETRACTED);
+        pitchIntake.getEncoder().setPosition(0);
+        setPitch(IntakePosition.IN);
     }
 
-    public void stop() {
-        leftMotor.stopMotor();
-        rightMotor.stopMotor();
-    }
-
-    public void stopLift() {
-        leftLiftMotor.stopMotor();
-        rightLiftMotor.stopMotor();
+    public void zero() {
+        pitchIntake.getEncoder().setPosition(0);
     }
 }

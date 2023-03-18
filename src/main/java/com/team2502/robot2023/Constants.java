@@ -23,7 +23,6 @@ public final class Constants {
         public static final int JOYSTICK_DRIVE_LEFT = 1;
         public static final int JOYSTICK_OPERATOR = 2;
         public static final int JOYSTICK_DEBUG = 5;
-        public static final int CONTROLLER = 3;
 
         // Buttons
 
@@ -35,6 +34,7 @@ public final class Constants {
 
         // Driver Left
         public static final int RUN_INTAKE_BACK = 1;
+        public static final int DRIVER_OUTAKE = 1;
         public static final int RAISE_INTAKE = 2;
 
 
@@ -64,7 +64,15 @@ public final class Constants {
 
         public static final int ELEVATOR_OVERRIDE = 5;
 
-        // Home commands
+        public static final int ARM_EXTEND = 6;
+        public static final int ARM_RETRACT = 7;
+
+        public static final int INTAKE = 1;
+        public static final int OUTAKE = 2;
+
+        public static final int INTAKE_OUT = 3;
+        public static final int INTAKE_IN = 4;
+
         public static final int MANIPULATOR_HOME = 16;
     }
 
@@ -93,23 +101,16 @@ public final class Constants {
         public static final int CONVEYOR = 13;
 
         // Intake
-        public static final int LEFT_LIFT_INTAKE_MOTOR = 14;
-        public static final int RIGHT_LIFT_INTAKE_MOTOR = 21;
-        public static final int RIGHT_INTAKE_MOTOR = 15;
-        public static final int LEFT_INTAKE_MOTOR = 16;
-        public static final int SWITCH_LEFT_INTAKE = 0;
-        public static final int SWITCH_RIGHT_INTAKE = 1;
+        public static final int INTAKE = 14;
+        public static final int INTAKE_PITCH = 15;
+        public static final int SWITCH_INTAKE = 3;
 
         // Elevator
         public static final int LEFT_ELEVATOR_MOTOR = 17;
         public static final int RIGHT_ELEVATOR_MOTOR = 18;
-        public static final int PITCH_ELEVATOR_MOTOR = 19;
+        public static final int LEFT_PITCH_ELEVATOR_MOTOR = 19;
+        public static final int RIGHT_PITCH_ELEVATOR_MOTOR = 20;
         public static final int SWITCH_ELEVATOR = 2;
-
-        // Manipulator
-        public static final int GRIPPER_MOTOR = 20;
-        public static final int SWITCH_GRIPPER = 7;
-
     }
 
     public static final class Subsystems {
@@ -191,12 +192,18 @@ public final class Constants {
             
         }
 
-        public static final class Intake {
+        public static final class Intake{
+            public static final int INTAKE_P = 0;
+            public static final int INTAKE_I = 0;
+            public static final int INTAKE_D = 0;
+
             public static enum IntakePosition {
-                DEPLOYED(0),
-                RETRACTED(1);
+                IN(0),
+                OUT(0),
+                LEVEL(0); // TODO: measure
 
                 public final double position;
+
                 private IntakePosition(double position) {
                     this.position = position;
                 }

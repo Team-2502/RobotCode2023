@@ -13,6 +13,8 @@ import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import com.team2502.robot2023.subsystems.ElevatorSubsystem;
+import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import com.team2502.robot2023.Constants.*;
 
 import java.util.Set;
 
@@ -34,10 +37,11 @@ public class RobotContainer {
 
     protected final Joystick JOYSTICK_DRIVE_LEFT = new Joystick(Constants.OI.JOYSTICK_DRIVE_LEFT);
     protected final Joystick JOYSTICK_DRIVE_RIGHT = new Joystick(Constants.OI.JOYSTICK_DRIVE_RIGHT);
-    protected final Joystick JOYSTICK_OPERATOR = new Joystick(Constants.OI.JOYSTICK_OPERATOR);
+    protected final Joystick JOYSTICK_OPERATOR = new Joystick(OI.JOYSTICK_OPERATOR);
     protected final Joystick JOYSTICK_DEBUG = new Joystick(Constants.OI.JOYSTICK_DEBUG);
 
-    protected final XboxController CONTROLLER = new XboxController(Constants.OI.CONTROLLER);
+    protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
+    protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
 
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
     protected final ConveyorSubsystem CONVEYOR = new ConveyorSubsystem();
@@ -45,7 +49,7 @@ public class RobotContainer {
     protected final ManipulatorSubsystem MANIPULATOR = new ManipulatorSubsystem();
 
     public RobotContainer() {
-        DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT, CONTROLLER));
+        DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
 
         AutoChooser.putToSmartDashboard();
 
@@ -54,93 +58,42 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
-        ResetHeading.onTrue(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
-
-        new JoystickButton(JOYSTICK_DEBUG, OI.RESET_MODULES)
-            .onTrue(new InstantCommand(DRIVETRAIN::setSwerveInit, DRIVETRAIN));
-
-        JoystickButton RunIntake = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RUN_INTAKE);
-        RunIntake.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, 0.5, 0.55, 0.4));
-
-        JoystickButton RunIntakeBack = new JoystickButton(JOYSTICK_DRIVE_LEFT, Constants.OI.RUN_INTAKE_BACK);
-        RunIntakeBack.whileTrue(new RunIntakeCommand(INTAKE, CONVEYOR, -0.5, -0.55, -0.4));
-
-        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_STO)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP));
-
-        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_GROUND)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.GROUND_PICKUP, Constants.Subsystems.Elevator.ElevatorPitch.GROUND_PICKUP));
-
-        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_BOT)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CONE_BOTTOM, Constants.Subsystems.Elevator.ElevatorPitch.CONE_BOTTOM));
-
-        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_MID)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.MIDDLE, Constants.Subsystems.Elevator.ElevatorPitch.CONE_MID));
-
-        new JoystickButton(JOYSTICK_OPERATOR, Constants.OI.ELEVATOR_TOP)
-            .whileTrue(new SetElevatorCommand(ELEVATOR, Constants.Subsystems.Elevator.ElevatorPosition.CONE_TOP, Constants.Subsystems.Elevator.ElevatorPitch.CONE_TOP));
-
-        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN)
-        //    .whileTrue( new GotoAbsoluteCommand(DRIVETRAIN, new Pose2d(0, 0, new Rotation2d(0))));
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "testpath"));
-
-        new JoystickButton(JOYSTICK_DEBUG, OI.DEBUG_RUN+1)
-                .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
-
-        SmartDashboard.putData("reset pose", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), DRIVETRAIN));
-        SmartDashboard.putData("run path pose", new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/test-curve"));
-        SmartDashboard.putData("reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(14.5, 2.75, Rotation2d.fromDegrees(180))), DRIVETRAIN));
-        SmartDashboard.putData("B reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(2, 2.75, Rotation2d.fromDegrees(0))), DRIVETRAIN));
-
-        new JoystickButton(JOYSTICK_DEBUG, 5)
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/circle"));
-
-        new JoystickButton(JOYSTICK_DRIVE_RIGHT, 6)
-            .whileTrue( new BalanceCommand(DRIVETRAIN, false));
+        ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.45), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.5), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.45), ELEVATOR))
+                .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.5), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setLinearSpeed(0.0), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_EXTEND)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.5), ELEVATOR))
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_EXTEND)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
-        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RETRACT)
-                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.5), ELEVATOR))
+        new JoystickButton(JOYSTICK_OPERATOR, OI.ARM_RETRACT)
+                .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_OVERRIDE)
-                .onTrue(new InstantCommand(() -> ELEVATOR.enableSoft(false), ELEVATOR))
-                .onFalse(new InstantCommand(() -> ELEVATOR.enableSoft(true), ELEVATOR));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_GRAB)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(0.6)))
-                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
-        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_RELEASE)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.setSpeed(-0.6)))
-                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0)));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
+                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(-0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), INTAKE));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_IN)
+                .onTrue(new InstantCommand(() -> INTAKE.setPitchSpeed(0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setPitchSpeed(0.0), INTAKE));
 
-        new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.LOWER_INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.runLift(0.2)))
-                .onFalse(new InstantCommand(() -> INTAKE.runLift(0.0)));
-
-        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.RAISE_INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.runLift(-0.2)))
-                .onFalse(new InstantCommand(() -> INTAKE.runLift(0.0)));
-
-        new JoystickButton(JOYSTICK_OPERATOR, OI.RUN_CONVEYOR)
-                .onTrue(new InstantCommand(() -> CONVEYOR.run(0.4)))
-                .onFalse(new InstantCommand(() -> CONVEYOR.run(0.0)));
-        new JoystickButton(JOYSTICK_OPERATOR, OI.RUN_CONVEYOR_BACK)
-                .onTrue(new InstantCommand(() -> CONVEYOR.run(-0.4)))
-                .onFalse(new InstantCommand(() -> CONVEYOR.run(0.0)));
-
-        new JoystickButton(JOYSTICK_OPERATOR, OI.MANIPULATOR_HOME)
-                .onTrue(new InstantCommand(() -> MANIPULATOR.home(), MANIPULATOR))
-                .onFalse(new InstantCommand(() -> MANIPULATOR.setSpeed(0.0), MANIPULATOR));
+        new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.DRIVER_INTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.DRIVER_OUTAKE)
+                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.3), INTAKE))
+                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
     }
 
     /**
