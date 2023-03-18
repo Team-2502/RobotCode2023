@@ -7,8 +7,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
-import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
+import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPitch;
+import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPosition;
 import com.team2502.robot2023.autonomous.AutoChooser.CommandFactory;
 import com.team2502.robot2023.commands.BalanceCommand;
 import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;

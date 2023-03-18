@@ -13,7 +13,7 @@ import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import com.team2502.robot2023.subsystems.ElevatorSubsystem;
+import com.team2502.robot2023.subsystems.ArmSubsystem;
 import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
@@ -40,7 +40,7 @@ public class RobotContainer {
     protected final Joystick JOYSTICK_OPERATOR = new Joystick(OI.JOYSTICK_OPERATOR);
     protected final Joystick JOYSTICK_DEBUG = new Joystick(Constants.OI.JOYSTICK_DEBUG);
 
-    protected final ElevatorSubsystem ELEVATOR = new ElevatorSubsystem();
+    protected final ArmSubsystem ELEVATOR = new ArmSubsystem();
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
 
     public RobotContainer() {

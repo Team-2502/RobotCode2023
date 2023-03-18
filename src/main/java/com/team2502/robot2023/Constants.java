@@ -113,7 +113,7 @@ public final class Constants {
     }
 
     public static final class Subsystems {
-        public static final class Elevator {
+        public static final class Arm {
             public static final boolean NT_TUNE = false;
 
             public static final double ELEVATOR_LIM_TOP = -50;
@@ -168,30 +168,7 @@ public final class Constants {
                     this.position = position;
                 }
             }
-        }
 
-        public static final class Manipulator {
-            public static final double GRIPPER_P = 0.5;
-            public static final double GRIPPER_I = 0.0;
-            public static final double GRIPPER_D = 0.0;
-
-            public static enum ManipulatorPosition {
-                OPEN(8),
-                STOWED(41), // does not intersect stowed intake
-                CONE(115), // TODO : measure
-                CUBE(81),  // TODO : measure 
-                CLOSED(160);
-
-                public final double position;
-                private ManipulatorPosition(double position) {
-                    this.position = position;
-                }
-            }
-
-            
-        }
-
-        public static final class Intake{
             public static final int INTAKE_P = 0;
             public static final int INTAKE_I = 0;
             public static final int INTAKE_D = 0;
@@ -218,6 +195,30 @@ public final class Constants {
                     this.pitchWrist = wristAngle / WRIST_ROT_TO_DEGREE;
                 }
             }
+        }
+
+        public static final class Manipulator {
+            public static final double GRIPPER_P = 0.5;
+            public static final double GRIPPER_I = 0.0;
+            public static final double GRIPPER_D = 0.0;
+
+            public static enum ManipulatorPosition {
+                OPEN(8),
+                STOWED(41), // does not intersect stowed intake
+                CONE(115), // TODO : measure
+                CUBE(81),  // TODO : measure 
+                CLOSED(160);
+
+                public final double position;
+                private ManipulatorPosition(double position) {
+                    this.position = position;
+                }
+            }
+
+            
+        }
+
+        public static final class Intake{
         }
 
         public static final class Field {

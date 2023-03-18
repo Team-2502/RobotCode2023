@@ -1,17 +1,17 @@
 package com.team2502.robot2023.commands;
 
 import com.team2502.robot2023.Constants;
-import com.team2502.robot2023.Constants.Subsystems.Elevator.*;
-import com.team2502.robot2023.subsystems.ElevatorSubsystem;
+import com.team2502.robot2023.Constants.Subsystems.Arm.*;
+import com.team2502.robot2023.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class SetElevatorCommand extends CommandBase {
-    private ElevatorSubsystem elevator;
+public class SetArmCommand extends CommandBase {
+    private ArmSubsystem elevator;
     private ElevatorPosition linear;
     private ElevatorPitch pitch;
     private boolean reposition;
 
-    public SetElevatorCommand(ElevatorSubsystem elevator, ElevatorPosition pos) {
+    public SetArmCommand(ArmSubsystem elevator, ElevatorPosition pos) {
         this.elevator = elevator;
         this.linear = pos;
         this.pitch = ElevatorPitch.STOWED;
@@ -20,7 +20,7 @@ public class SetElevatorCommand extends CommandBase {
         addRequirements(elevator);
     }
 
-    public SetElevatorCommand(ElevatorSubsystem elevator, ElevatorPosition pos, ElevatorPitch pitch) {
+    public SetArmCommand(ArmSubsystem elevator, ElevatorPosition pos, ElevatorPitch pitch) {
         this.elevator = elevator;
         this.linear = pos;
         this.pitch = pitch;
@@ -56,11 +56,11 @@ public class SetElevatorCommand extends CommandBase {
     }
 
     private boolean elevatorAt(ElevatorPosition linear) {
-        return Math.abs(linear.position-elevator.getLinear()) < Constants.Subsystems.Elevator.ELEVATOR_THRESHOLD;
+        return Math.abs(linear.position-elevator.getLinear()) < Constants.Subsystems.Arm.ELEVATOR_THRESHOLD;
     }
 
     private boolean pitchAt(ElevatorPitch pitch) {
-        return Math.abs(pitch.position-elevator.getPitch()) < Constants.Subsystems.Elevator.PITCH_THRESHOLD;
+        return Math.abs(pitch.position-elevator.getPitch()) < Constants.Subsystems.Arm.PITCH_THRESHOLD;
     }
 
     @Override

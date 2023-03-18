@@ -6,16 +6,16 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.SparkMaxPIDController;
 import com.team2502.robot2023.Constants;
-import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPitch;
-import com.team2502.robot2023.Constants.Subsystems.Elevator.ElevatorPosition;
-import com.team2502.robot2023.Constants.Subsystems.Intake.IntakePosition;
+import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPitch;
+import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPosition;
+import com.team2502.robot2023.Constants.Subsystems.Arm.IntakePosition;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class ArmSubsystem extends SubsystemBase {
     private CANSparkMax leftElevator;
     private CANSparkMax rightElevator;
     private CANSparkMax leftPitchElevator;
@@ -28,7 +28,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     private DigitalInput limitSwitch;
 
-    public ElevatorSubsystem() {
+    public ArmSubsystem() {
         leftElevator = new CANSparkMax(Constants.HardwareMap.LEFT_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         rightElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
@@ -82,18 +82,18 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double elbowAngle = (-leftPitchElevator.getEncoder().getPosition() * Constants.Subsystems.Intake.ELBOW_ROT_TO_DEGREE) + Constants.Subsystems.Intake.ELBOW_ZERO_ANGLE;
+        double elbowAngle = (-leftPitchElevator.getEncoder().getPosition() * Constants.Subsystems.Arm.ELBOW_ROT_TO_DEGREE) + Constants.Subsystems.Arm.ELBOW_ZERO_ANGLE;
         SmartDashboard.putNumber("elbow ang raw", leftPitchElevator.getEncoder().getPosition());
         SmartDashboard.putNumber("elbow ang", elbowAngle);
 
-        double wristAngle = (-pitchIntake.getEncoder().getPosition() * Constants.Subsystems.Intake.WRIST_ROT_TO_DEGREE) + Constants.Subsystems.Intake.WRIST_ZERO_ANGLE;
+        double wristAngle = (-pitchIntake.getEncoder().getPosition() * Constants.Subsystems.Arm.WRIST_ROT_TO_DEGREE) + Constants.Subsystems.Arm.WRIST_ZERO_ANGLE;
         wristAngle += elbowAngle;
         SmartDashboard.putNumber("wrist ang raw", pitchIntake.getEncoder().getPosition());
         SmartDashboard.putNumber("wrist ang", wristAngle);
 
         SmartDashboard.putNumber("elev pos", rightElevator.getEncoder().getPosition());
         SmartDashboard.putNumber("wrist pos", leftPitchElevator.getEncoder().getPosition());
-        if (Constants.Subsystems.Elevator.NT_TUNE) {
+        if (Constants.Subsystems.Arm.NT_TUNE) {
             NTUpdate();
         }
     }
@@ -104,13 +104,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void detune() {
-        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT_TELEOP);
-        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT_TELEOP, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT_TELEOP);
+        pid.setOutputRange(Constants.Subsystems.Arm.ELEVATOR_MIN_OUTPUT_TELEOP, Constants.Subsystems.Arm.ELEVATOR_MAX_OUTPUT_TELEOP);
+        pitchPid.setOutputRange(Constants.Subsystems.Arm.PITCH_MIN_OUTPUT_TELEOP, Constants.Subsystems.Arm.PITCH_MAX_OUTPUT_TELEOP);
     }
 
     public void retune() {
-        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
-        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
+        pid.setOutputRange(Constants.Subsystems.Arm.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Arm.ELEVATOR_MAX_OUTPUT);
+        pitchPid.setOutputRange(Constants.Subsystems.Arm.PITCH_MIN_OUTPUT, Constants.Subsystems.Arm.PITCH_MAX_OUTPUT);
     }
 
     public void setPitch(ElevatorPitch pitch) {
@@ -191,30 +191,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     private void NTInit() {
-        SmartDashboard.putNumber("ELEVATOR_P", Constants.Subsystems.Elevator.ELEVATOR_P);
-        SmartDashboard.putNumber("ELEVATOR_I", Constants.Subsystems.Elevator.ELEVATOR_I);
-        SmartDashboard.putNumber("ELEVATOR_D", Constants.Subsystems.Elevator.ELEVATOR_D);
-        SmartDashboard.putNumber("PITCH_P", Constants.Subsystems.Elevator.PITCH_P);
-        SmartDashboard.putNumber("PITCH_I", Constants.Subsystems.Elevator.PITCH_I);
-        SmartDashboard.putNumber("PITCH_D", Constants.Subsystems.Elevator.PITCH_D);
+        SmartDashboard.putNumber("ELEVATOR_P", Constants.Subsystems.Arm.ELEVATOR_P);
+        SmartDashboard.putNumber("ELEVATOR_I", Constants.Subsystems.Arm.ELEVATOR_I);
+        SmartDashboard.putNumber("ELEVATOR_D", Constants.Subsystems.Arm.ELEVATOR_D);
+        SmartDashboard.putNumber("PITCH_P", Constants.Subsystems.Arm.PITCH_P);
+        SmartDashboard.putNumber("PITCH_I", Constants.Subsystems.Arm.PITCH_I);
+        SmartDashboard.putNumber("PITCH_D", Constants.Subsystems.Arm.PITCH_D);
     }
 
     private void setupPID() {
-        pid.setP(Constants.Subsystems.Elevator.ELEVATOR_P);
-        pid.setI(Constants.Subsystems.Elevator.ELEVATOR_I);
-        pid.setD(Constants.Subsystems.Elevator.ELEVATOR_D);
-        pid.setOutputRange(Constants.Subsystems.Elevator.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Elevator.ELEVATOR_MAX_OUTPUT);
+        pid.setP(Constants.Subsystems.Arm.ELEVATOR_P);
+        pid.setI(Constants.Subsystems.Arm.ELEVATOR_I);
+        pid.setD(Constants.Subsystems.Arm.ELEVATOR_D);
+        pid.setOutputRange(Constants.Subsystems.Arm.ELEVATOR_MIN_OUTPUT, Constants.Subsystems.Arm.ELEVATOR_MAX_OUTPUT);
         rightElevator.burnFlash();
 
-        pitchPid.setP(Constants.Subsystems.Elevator.PITCH_P);
-        pitchPid.setI(Constants.Subsystems.Elevator.PITCH_I);
-        pitchPid.setD(Constants.Subsystems.Elevator.PITCH_D);
-        pitchPid.setOutputRange(Constants.Subsystems.Elevator.PITCH_MIN_OUTPUT, Constants.Subsystems.Elevator.PITCH_MAX_OUTPUT);
+        pitchPid.setP(Constants.Subsystems.Arm.PITCH_P);
+        pitchPid.setI(Constants.Subsystems.Arm.PITCH_I);
+        pitchPid.setD(Constants.Subsystems.Arm.PITCH_D);
+        pitchPid.setOutputRange(Constants.Subsystems.Arm.PITCH_MIN_OUTPUT, Constants.Subsystems.Arm.PITCH_MAX_OUTPUT);
         leftPitchElevator.burnFlash();
 
-        intakePid.setP(Constants.Subsystems.Intake.INTAKE_P);
-        intakePid.setI(Constants.Subsystems.Intake.INTAKE_I);
-        intakePid.setD(Constants.Subsystems.Intake.INTAKE_D);
+        intakePid.setP(Constants.Subsystems.Arm.INTAKE_P);
+        intakePid.setI(Constants.Subsystems.Arm.INTAKE_I);
+        intakePid.setD(Constants.Subsystems.Arm.INTAKE_D);
         pitchIntake.burnFlash();
     }
 
