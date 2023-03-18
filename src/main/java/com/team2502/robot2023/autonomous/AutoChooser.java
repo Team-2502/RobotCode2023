@@ -12,7 +12,7 @@ public class AutoChooser {
         CommandBase getInstance(
                 DrivetrainSubsystem drivetrainSubsystem,
                 IntakeSubsystem intakeSubsystem,
-                ArmSubsystem elevatorSubsystem
+                ArmSubsystem armSubsystem
         );
     }
 

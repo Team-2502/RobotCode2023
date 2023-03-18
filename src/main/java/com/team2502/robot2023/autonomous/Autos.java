@@ -20,6 +20,15 @@ import com.team2502.robot2023.commands.TimeLeftCommand;
  * put new groups before the do nothing group
  * */
 public enum Autos { // first auto is default
+        ENGAGE((d,i,a) -> Commands.sequence( 
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetHeading),
+            Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+            Commands.deadline(new TimeLeftCommand(1), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
         LEAVE_COMMUNITY("Leave CT spawn", (d,i,e) -> Commands.sequence(
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
