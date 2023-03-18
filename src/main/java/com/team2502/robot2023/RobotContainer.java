@@ -71,13 +71,6 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setPitchSpeed(0.0), ELEVATOR));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
-                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
-        new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
-                .onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.7), INTAKE))
-                .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
-
         new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE_OUT)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(-0.3), ELEVATOR))
                 .onFalse(new InstantCommand(() -> ELEVATOR.setArmPitchSpeed(0.0), ELEVATOR));
@@ -100,6 +93,7 @@ public class RobotContainer {
 
         JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
 
+		// cube positions
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
             .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
@@ -112,6 +106,7 @@ public class RobotContainer {
             .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP));
 
+		// cone positions
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_GROUND_PICKUP, IntakePosition.CONE_GROUND));
@@ -127,6 +122,26 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_TOP, IntakePosition.CONE_TOP));
+
+		// cube style intake
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
+            .and(cubeButton)
+			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
+			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
+            .and(cubeButton)
+			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.7), INTAKE))
+			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+
+		// cone style intake
+        new JoystickButton(JOYSTICK_OPERATOR, OI.INTAKE)
+            .and(cubeButton.negate())
+			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(-0.7), INTAKE))
+			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.OUTAKE)
+            .and(cubeButton.negate())
+			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
+			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)

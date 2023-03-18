@@ -57,8 +57,8 @@ public final class Constants {
         public static final int MANIPULATOR_EXTEND = 6;
         public static final int MANIPULATOR_RETRACT = 7;
 
-        public static final int MANIPULATOR_GRAB = 2;
-        public static final int MANIPULATOR_RELEASE = 1;
+        public static final int MANIPULATOR_GRAB = 1;
+        public static final int MANIPULATOR_RELEASE = 2;
 
 
         public static final int RUN_CONVEYOR = 3;
@@ -248,14 +248,14 @@ public final class Constants {
             static {
                 List<AprilTag> tagList = new ArrayList<>(
                 Arrays.asList( // TODO: undo
-                    new AprilTag(8, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
+                    new AprilTag(1, new Pose3d(15.51358903, 1.071628143, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(2, new Pose3d(15.51358903, 2.748031496, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(3, new Pose3d(15.51358903, 4.424434849, 0.462788926, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(4, new Pose3d(16.17881636, 6.7498095, 0.695453391, new Rotation3d(0,0, Math.PI))),
                     new AprilTag(5, new Pose3d(0.361950724, 6.7498095, 0.695453391, new Rotation3d(0,0, 0))),
                     new AprilTag(6, new Pose3d(1.027432055, 4.424434849, 0.462788926, new Rotation3d(0,0, 0))),
                     new AprilTag(7, new Pose3d(1.027432055, 2.748031496, 0.462788926, new Rotation3d(0,0, 0))),
-                    new AprilTag(1, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
+                    new AprilTag(8, new Pose3d(1.027432055, 1.071628143, 0.462788926, new Rotation3d(0,0, 0)))
                     )
                 );
                 apriltagPositions = new AprilTagFieldLayout(tagList, 16.54, 8.02);
