@@ -20,10 +20,12 @@ public class IntakeSubsystem extends SubsystemBase {
         pitchIntake = new CANSparkMax(Constants.HardwareMap.INTAKE_PITCH, CANSparkMaxLowLevel.MotorType.kBrushless);
         intake = new CANSparkMax(Constants.HardwareMap.INTAKE, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        limitSwitch = new DigitalInput(Constants.HardwareMap.INTAKE_PITCH);
+        //limitSwitch = new DigitalInput(Constants.HardwareMap.INTAKE_PITCH);
 
         pitchIntake.setSmartCurrentLimit(39);
         intake.setSmartCurrentLimit(39);
+
+        pitchIntake.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         pid = pitchIntake.getPIDController();
         setupPid();

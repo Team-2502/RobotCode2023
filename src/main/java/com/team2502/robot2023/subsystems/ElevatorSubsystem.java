@@ -32,7 +32,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftPitchElevator = new CANSparkMax(Constants.HardwareMap.LEFT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
         rightPitchElevator = new CANSparkMax(Constants.HardwareMap.RIGHT_PITCH_ELEVATOR_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        leftElevator.follow(rightElevator, true);
+        // TODO get followers working
+        //leftElevator.follow(rightElevator, true);
+        //leftElevator.burnFlash();
+        leftElevator.restoreFactoryDefaults();
+        rightElevator.restoreFactoryDefaults();
+        leftElevator.setIdleMode(IdleMode.kBrake);
+        rightElevator.setIdleMode(IdleMode.kBrake);
+        leftElevator.burnFlash();
+        rightElevator.burnFlash();
 
         leftElevator.setSmartCurrentLimit(39);
         rightElevator.setSmartCurrentLimit(39);
@@ -44,10 +52,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         rightPitchElevator.follow(leftPitchElevator, true);
 
-        rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
-        rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
-        rightElevator.enableSoftLimit(SoftLimitDirection.kForward,true);
-        rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
+        //rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
+        //rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
+        //rightElevator.enableSoftLimit(SoftLimitDirection.kForward,true);
+        //rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
 
         limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_ELEVATOR);
 
@@ -102,6 +110,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public void setLinearSpeed(double speed) {
         rightElevator.set(speed);
+        leftElevator.set(-speed);
     }
 
     public void setPitchSpeed(double speed) {

@@ -19,7 +19,7 @@ public class DriveCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
     private final Joystick leftJoystick;
     private final Joystick rightJoystick;
-    private final XboxController controller;
+    //private final XboxController controller;
 
     private enum DriveController {
         Joystick,
@@ -38,9 +38,9 @@ public class DriveCommand extends CommandBase {
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Joystick joystickDriveLeft, Joystick joystickDriveRight, XboxController controller) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, Joystick joystickDriveLeft, Joystick joystickDriveRight) {
         this.drivetrain = drivetrain;
-        this.controller = controller;
+        //this.controller = controller;
         leftJoystick = joystickDriveLeft;
         rightJoystick = joystickDriveRight;
 
@@ -65,26 +65,6 @@ public class DriveCommand extends CommandBase {
         Translation2d centerOfRotation;
         drivetrain.setTurnNeutralMode(NeutralMode.Brake);
         drivetrain.setPowerNeutralMode(NeutralMode.Coast);
-
-        if (controllerEntry.getSelected() == DriveController.Xbox) {
-            switch(typeEntry.getSelected()) {
-                case RobotOriented:
-                    speeds = new ChassisSpeeds(deadzone(-controller.getLeftY()) * Drivetrain.MAX_VEL, deadzone(-controller.getLeftX())* Drivetrain.MAX_VEL, deadzone(controller.getRightX())*Drivetrain.MAX_ROT);
-                    //centerOfRotation = new Translation2d(deadzone(controller.getRightY()),deadzone(controller.getRightX()));
-                    centerOfRotation = new Translation2d(0, 0);
-                    drivetrain.setSpeeds(speeds, centerOfRotation);
-                    break;
-                case FieldOriented:
-                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            deadzone(-controller.getLeftY()) * Drivetrain.MAX_VEL,
-                            deadzone(-controller.getLeftX()) * Drivetrain.MAX_VEL,
-                            deadzone(controller.getRightX()) * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(deadzone(-drivetrain.getHeading())));
-                    centerOfRotation = new Translation2d(deadzone(controller.getRightY()),deadzone(controller.getRightX()));
-                    //centerOfRotation = new Translation2d(0, 0);
-                    drivetrain.setSpeeds(speeds, centerOfRotation);
-            }
-        } else {
             switch(typeEntry.getSelected()) {
                 case RobotOriented:
                     speeds = new ChassisSpeeds(-leftJoystick.getY()* Drivetrain.MAX_VEL, leftJoystick.getX()* Drivetrain.MAX_VEL, rightJoystick.getZ()*Drivetrain.MAX_ROT);
@@ -126,7 +106,6 @@ public class DriveCommand extends CommandBase {
                     break;
             }
         }
-    }
 
     @Override
     public void end(boolean interrupted) {
