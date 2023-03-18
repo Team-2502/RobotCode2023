@@ -215,27 +215,6 @@ public final class Constants {
             }
         }
 
-        public static final class Manipulator {
-            public static final double GRIPPER_P = 0.5;
-            public static final double GRIPPER_I = 0.0;
-            public static final double GRIPPER_D = 0.0;
-
-            public static enum ManipulatorPosition {
-                OPEN(8),
-                STOWED(41), // does not intersect stowed intake
-                CONE(115), // TODO : measure
-                CUBE(81),  // TODO : measure 
-                CLOSED(160);
-
-                public final double position;
-                private ManipulatorPosition(double position) {
-                    this.position = position;
-                }
-            }
-
-            
-        }
-
         public static final class Intake{
         }
 
