@@ -39,8 +39,8 @@ public final class Constants {
 
 
         // DBG
-        public static final int DEBUG_RUN = 9;
-        public static final int RESET_MODULES = 3;
+        public static final int DEBUG_RUN = 3;
+        public static final int RESET_MODULES = 10;
         public static final int CUBE_LAYER = 1;
         public static final int ELEVATOR_GROUND = 4;
         public static final int ELEVATOR_SINGLE = 2;

@@ -145,6 +145,7 @@ public class RobotContainer {
 
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
+			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
 			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/circle"));
     }
 
