@@ -46,6 +46,7 @@ public final class Constants {
         public static final int ELEVATOR_SINGLE = 2;
         public static final int ELEVATOR_MID = 5;
         public static final int ELEVATOR_TOP = 6;
+        public static final int INTAKE_PROTECT = 7;
 
         // Operator
         public static final int ELEVATOR_STO = 14;
@@ -142,6 +143,7 @@ public final class Constants {
 
             public static enum ElevatorPosition {
                 BOTTOM(0),
+                SLIGHT_EXTEND(13),
                 MIDDLE(-26.14), // TODO: measure
                 SAFE_PITCH(-29),
                 GROUND_PICKUP(-1.69),
@@ -302,8 +304,8 @@ public final class Constants {
             public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
-            public static final double MAX_VEL = 11; // driver speed gain (m/s)
-            public static final double MAX_ROT = 9; // driver rotation gain (rad/s)
+            public static final double MAX_VEL = 7; // driver speed gain (m/s) 11
+            public static final double MAX_ROT = 4; // driver rotation gain (rad/s) 9
             public static final double RET_VEL = 3; // driver speed gain (m/s)
             public static final double RET_ROT = 3; // driver rotation gain (rad/s)
                                                 

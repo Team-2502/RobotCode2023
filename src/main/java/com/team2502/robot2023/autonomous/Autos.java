@@ -1,5 +1,7 @@
 package com.team2502.robot2023.autonomous;
 
+import com.team2502.robot2023.Constants.Subsystems.Arm.*;
+import com.team2502.robot2023.commands.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -10,10 +12,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPitch;
 import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPosition;
 import com.team2502.robot2023.autonomous.AutoChooser.CommandFactory;
-import com.team2502.robot2023.commands.BalanceCommand;
-import com.team2502.robot2023.commands.FollowPathAbsoluteCommand;
-import com.team2502.robot2023.commands.YawLockedTranspose;
-import com.team2502.robot2023.commands.TimeLeftCommand;
 
 /**
  * class for autonomous command groups
@@ -34,6 +32,18 @@ public enum Autos { // first auto is default
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
             new FollowPathAbsoluteCommand(d, "testpath")
+        )),
+
+        PLACE_CUBE_GRAB_CUBE("Place and grab cube", (d,i,e) -> Commands.sequence(
+                new InstantCommand(d::resetPitch),
+                new InstantCommand(d::resetHeading),
+                new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
+                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+                Commands.deadline(Commands.waitSeconds(0.5), new InstantCommand(() -> i.setSpeed(-0.25))),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
+                new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup")
         )),
          
         DO_NOTHING("Do Nothing", ((d,i,a) -> new InstantCommand(d::resetHeading))); // always put last

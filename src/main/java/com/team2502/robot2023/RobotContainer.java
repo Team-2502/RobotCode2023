@@ -54,6 +54,9 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        SmartDashboard.putData("RP pose b", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(1.9, 4.45, Rotation2d.fromDegrees(0)))));
+        SmartDashboard.putData("B reset pose mid", new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(2, 2.75, Rotation2d.fromDegrees(0))), DRIVETRAIN));
+
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
@@ -143,10 +146,14 @@ public class RobotContainer {
 			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
 			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
+        // protect intake
+        new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT)
+                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.SLIGHT_EXTEND, IntakePosition.IN));
+
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
 			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
-			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/circle"));
+			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/blue-score-pickup"));
     }
 
     /**
