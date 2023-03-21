@@ -29,13 +29,13 @@ public enum Autos { // first auto is default
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
-        LEAVE_COMMUNITY("Leave CT spawn", (d,i,e) -> Commands.sequence(
+        LEAVE_COMMUNITY("Leave CT spawn", (d,i,a) -> Commands.sequence(
             new InstantCommand(d::resetHeading),
             new InstantCommand(() -> d.setPose(new Pose2d(14.693,4.678,Rotation2d.fromDegrees(180))), d),
             new FollowPathAbsoluteCommand(d, "testpath")
         )),
          
-        DO_NOTHING("Do Nothing", ((d,i,e) -> new InstantCommand(d::resetHeading))); // always put last
+        DO_NOTHING("Do Nothing", ((d,i,a) -> new InstantCommand(d::resetHeading))); // always put last
 
         Autos(String name, AutoChooser.CommandFactory commandFactory)
         {
