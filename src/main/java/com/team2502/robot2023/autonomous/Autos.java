@@ -23,6 +23,7 @@ public enum Autos { // first auto is default
         ENGAGE((d,i,a) -> Commands.sequence( 
             new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
+            new InstantCommand(d::resetRoll),
             Commands.deadline(Commands.waitSeconds(1.65), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
             Commands.deadline(new TimeLeftCommand(1), new BalanceCommand(d, false)),
             Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
