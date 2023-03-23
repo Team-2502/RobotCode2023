@@ -30,12 +30,12 @@ public final class Constants {
         public static final int RESET_HEADING = 3;
         public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
-        public static final int RET_MODE = 4;
 
         // Driver Left
         public static final int DRIVER_OUTAKE = 1;
         public static final int RAISE_INTAKE = 2;
         public static final int CUBE_GROUND = 3;
+        public static final int RET_MODE = 4;
 
 
         // DBG
@@ -118,14 +118,13 @@ public final class Constants {
 
     public static final class Subsystems {
         public static final class Leds {
-            public static final int PORT = 8; // pwm:
-            public static final int LED_COUNT = 50; // logical, not physical count (same on 2815)
-            public static final int FRAME_RATE = 15;
+            public static final int PORT = 9; // pwm:
+            public static final int LED_COUNT = 300; // logical, not physical count (same on 2815) - 50
+            public static final int FRAME_RATE = 5;
             public static final int FRAME_TIME = 1/FRAME_RATE; // seconds per frame
 
             public static final int LED_AHEAD = 0; // Led id corresponding to center of front
             public static final int LED_LEFT = LED_COUNT/4; // Led id corresponding to center of left side
-
         }
 
         public static final class Arm {
@@ -137,8 +136,8 @@ public final class Constants {
             public static final double ELEVATOR_P = 0.5;
             public static final double ELEVATOR_I = 0.0;
             public static final double ELEVATOR_D = 0.0;
-            public static final double ELEVATOR_MIN_OUTPUT = -1;
-            public static final double ELEVATOR_MAX_OUTPUT = 1;
+            public static final double ELEVATOR_MIN_OUTPUT = -0.75; // -1
+            public static final double ELEVATOR_MAX_OUTPUT = 0.75; // 1
             public static final double ELEVATOR_MIN_OUTPUT_TELEOP = -0.65;
             public static final double ELEVATOR_MAX_OUTPUT_TELEOP = 0.65;
             public static final double ELEVATOR_THRESHOLD = 1; // rotations until accepted
@@ -146,8 +145,8 @@ public final class Constants {
             public static final double PITCH_P = 0.5;
             public static final double PITCH_I = 0.0;
             public static final double PITCH_D = 0.0;
-            public static final double PITCH_MIN_OUTPUT = -1;
-            public static final double PITCH_MAX_OUTPUT = 1;
+            public static final double PITCH_MIN_OUTPUT = -0.5; // -1
+            public static final double PITCH_MAX_OUTPUT = 0.5; // 1
             public static final double PITCH_MIN_OUTPUT_TELEOP = -0.5;
             public static final double PITCH_MAX_OUTPUT_TELEOP = 0.5;
             public static final double PITCH_THRESHOLD = 1;
@@ -205,11 +204,12 @@ public final class Constants {
             public static enum IntakePosition {
                 // elbow, wrist
                 // (elbow ang), (wrist ang soli) on NT
-                IN(0,0),
+                IN(100,180),
                 OUT(0,0),
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
                 INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
+                PORTAL(107, 115),
                 CONE_GROUND(143,-9),
                 CONE_MID(316,127),
                 CONE_TOP(300,131), 
@@ -315,10 +315,10 @@ public final class Constants {
             public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
-            public static final double MAX_VEL = 7; // driver speed gain (m/s) 11
-            public static final double MAX_ROT = 4; // driver rotation gain (rad/s) 9
-            public static final double RET_VEL = 3; // driver speed gain (m/s)
-            public static final double RET_ROT = 3; // driver rotation gain (rad/s)
+            public static final double MAX_VEL = 7; // driver speed gain (m/s) 11 - 7
+            public static final double MAX_ROT = 3; // driver rotation gain (rad/s) 9 - 4
+            public static final double RET_VEL = 1; // driver speed gain (m/s)
+            public static final double RET_ROT = 1; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 2.7; // 0.6

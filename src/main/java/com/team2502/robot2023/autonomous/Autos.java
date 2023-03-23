@@ -38,12 +38,53 @@ public enum Autos { // first auto is default
                 new InstantCommand(d::resetPitch),
                 new InstantCommand(d::resetHeading),
                 new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
-                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
-                Commands.deadline(Commands.waitSeconds(0.5), new InstantCommand(() -> i.setSpeed(-0.25))),
+                new InstantCommand(() -> i.setSpeed(0.25)),
+                Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
-                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
-                new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup")
+                Commands.deadline(Commands.waitSeconds(8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup"), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                new InstantCommand(() -> i.setSpeed(0.25)),
+                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+                new InstantCommand(() -> i.setSpeed(0))
+        )),
+
+        PLACE_CUBE_AND_BALANCE("Place and balance left", (d,i,e) -> Commands.sequence(
+                new InstantCommand(d::resetPitch),
+                new InstantCommand(d::resetHeading),
+                new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
+                new InstantCommand(() -> i.setSpeed(0.25)),
+                Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.IN)),
+                Commands.deadline(Commands.waitSeconds(3), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-balance-left")),
+                Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+                Commands.deadline(Commands.waitSeconds(8), new BalanceCommand(d, false)),
+                //Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0))),
+                new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+        PLACE_CUBE_SHOOT_CUBE_BALANCE("Place, shoot, balance", (d,i,e) -> Commands.sequence(
+                new InstantCommand(d::resetPitch),
+                new InstantCommand(d::resetHeading),
+                new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
+                new InstantCommand(() -> i.setSpeed(0.25)),
+                Commands.deadline(Commands.waitSeconds(1), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
+                Commands.deadline(Commands.waitSeconds(2.85), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-1"), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                new InstantCommand(() -> i.setSpeed(0.25)),
+                Commands.deadline(Commands.waitSeconds(3.9), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-2"), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-1))),
+                new InstantCommand(() -> i.setSpeed(0)),
+                Commands.deadline(Commands.waitSeconds(1.6), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+                Commands.deadline(Commands.waitSeconds(5), new BalanceCommand(d, false))
+                //Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0)))
         )),
          
         DO_NOTHING("Do Nothing", ((d,i,a) -> new InstantCommand(d::resetHeading))); // always put last

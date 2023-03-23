@@ -45,6 +45,8 @@ public class RobotContainer {
     protected final ArmSubsystem ELEVATOR = new ArmSubsystem();
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
 
+    protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem();
+
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
 
@@ -59,6 +61,8 @@ public class RobotContainer {
 
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+
+        //new JoystickButton(JOYSTICK_DRIVE_LEFT, 8).whileTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.orbit_demo, 1));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
                 .onTrue(new InstantCommand(() -> ELEVATOR.setLinearSpeed(-0.5), ELEVATOR))
@@ -88,11 +92,11 @@ public class RobotContainer {
                 .onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
                 .onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
-        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND)
-                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
+        //new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND)
+        //        .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
 
-        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
-                .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
+        //new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
+        //        .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
 
         JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
 
@@ -116,7 +120,7 @@ public class RobotContainer {
 
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE)
             .and(cubeButton.negate())
-            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_SINGLE, IntakePosition.CONE_SINGLE));
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.PORTAL));
 
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
             .and(cubeButton.negate())
@@ -153,7 +157,7 @@ public class RobotContainer {
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
 			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
-			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/blue-score-pickup"));
+			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
     }
 
     /**

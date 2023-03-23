@@ -130,6 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setPitchSpeed(double speed) {
         leftPitchElevator.set(speed);
+        //rightPitchElevator.set(-speed);
     }
 
     public double getLinear() {

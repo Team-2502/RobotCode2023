@@ -10,10 +10,7 @@ import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Leds;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -40,13 +37,42 @@ public class LightstripSubsystem extends SubsystemBase {
             return false;
         });
         public static final Animation orbit_demo_simple = ((s,f)->{
-            s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,20,148,0);
+            s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,255,0,0);
             return false;
         });
         public static final Animation orbit_demo = ((s,f)->{
             Rotation2d angle = Rotation2d.fromDegrees(f*Leds.FRAME_TIME*90);
             Rotation2d offset = Rotation2d.fromDegrees(30);
             s.fillColor(angle.minus(offset),angle.plus(offset),Color.kPeru);
+            return false;
+        });
+        public static final Animation disabled = ((s,f) -> {
+            /*for (var i = 0; i < Leds.LED_COUNT; i += 2) {
+                s.buffer.setHSV(i, 0, 255, 255);
+            }*/
+            double rainbowFirstPixelRed = 0;
+            for (var i = 0; i < Leds.LED_COUNT; i++) {
+                final var red = (rainbowFirstPixelRed + (i * 180 / s.buffer.getLength())) % 180;
+                s.buffer.setRGB(i, (int) red, 0, 0);
+            }
+            rainbowFirstPixelRed += 3;
+            rainbowFirstPixelRed %= 180;
+            return false;
+        });
+        public static final Animation rainbow = ((s,f) -> {
+            double rainbowFirstPixelHue = 0;
+            for (var i = 0; i < Leds.LED_COUNT; i++) {
+                final var hue = (rainbowFirstPixelHue + (i * 180 / s.buffer.getLength())) % 180;
+                s.buffer.setHSV(i, (int) hue, 255, 128);
+            }
+            rainbowFirstPixelHue += 3;
+            rainbowFirstPixelHue %= 180;
+            return false;
+        });
+        public static final Animation intake = ((s,f) -> {
+            for (var i = 0; i < Leds.LED_COUNT; i++) {
+                s.buffer.setRGB(i, 180, 180, 180);
+            }
             return false;
         });
     };
@@ -114,16 +140,20 @@ public class LightstripSubsystem extends SubsystemBase {
          * @param mapFunction rotation to color transform
          */
         public void fillMap(Rotation2d from, Rotation2d to, Function<Rotation2d,Color> mapFunction) {
-            for (int i = getID(from); i != getID(to) % Leds.LED_COUNT; i++) {
+            /*for (int i = getID(from); i != getID(to) % Leds.LED_COUNT; i++) {
                 i %= Leds.LED_COUNT;
                 buffer.setLED(i, mapFunction.apply(getAngle(i)));
+            }*/
+            for (var i = 0; i < buffer.getLength(); i++) {
+                // Sets the specified LED to the RGB values for red
+                buffer.setRGB(i, 255, 0, 0);
             }
         }
     }
 
     public class ScheduledAnimation implements Comparable<ScheduledAnimation> {
         Animation animation;
-        int frameCount;
+        double frameCount;
         int order;
 
         ScheduledAnimation(Animation animation, int order) {
@@ -160,8 +190,10 @@ public class LightstripSubsystem extends SubsystemBase {
 
         animations = new ArrayList<ScheduledAnimation>(2);
 
-        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, 2));
-        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, -2));
+        //animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, 2));
+        //animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, -2));
+        animations.add(new ScheduledAnimation(Animations.disabled, 1));
+        //animations.add(new ScheduledAnimation(Animations.rainbow, 1));
     }
 
     @Override
@@ -176,13 +208,13 @@ public class LightstripSubsystem extends SubsystemBase {
         while (i.hasNext()) {
             ScheduledAnimation animation = i.next();
             animation.tick(strip);
-            strip.buffer.setRGB(5,255,148,0);
+            //strip.buffer.setRGB(5,255,148,0);
             strip.flush();
 //            if (animation.tick(strip)) {
             //               animations.remove(animation);
             //          }
         }
-        strip.buffer.setRGB(5,255,148,0);
+        //strip.buffer.setRGB(5,255,148,0);
         strip.flush();
     }
 

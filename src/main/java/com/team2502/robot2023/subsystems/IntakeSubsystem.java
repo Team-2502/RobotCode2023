@@ -35,4 +35,5 @@ public class IntakeSubsystem extends SubsystemBase {
         intake.set(speed);
     }
 
+    public boolean isRunning() { return intake.get() != 0; }
 }

@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 
+import com.team2502.robot2023.Constants;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -319,6 +320,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
         SmartDashboard.putNumber("FL Angle", FLRotation.getDegrees());
+        SmartDashboard.putNumber("FL mps", (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.FALCON_ENCODER_TICKS_PER_REV) / Drivetrain.SWERVE_DRIVE_GEAR_RATIO);
+        SmartDashboard.putNumber("FL targ mps", FLState.speedMetersPerSecond);
     }
 
     /** stop drivetrain by freezing all motors */
@@ -373,7 +376,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerBackLeft.setNeutralMode(nm);
         drivetrainPowerBackRight.setNeutralMode(nm);
         drivetrainPowerFrontLeft.setNeutralMode(nm);
-        drivetrainPowerFrontRight.stopMotor();
+        drivetrainPowerFrontRight.setNeutralMode(nm);
     }
 
     public void setTurnNeutralMode(NeutralMode nm) {
