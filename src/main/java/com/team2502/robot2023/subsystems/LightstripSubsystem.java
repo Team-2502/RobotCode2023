@@ -57,6 +57,14 @@ public class LightstripSubsystem extends SubsystemBase {
             }
             rainbowFirstPixelRed += 3;
             rainbowFirstPixelRed %= 180;
+
+            double rainbowFirstPixelRed1 = 0;
+            for (var i = 0; i < Leds.LED_COUNT; i++) {
+                final var red = (rainbowFirstPixelRed1 + (i * 180 / s.buffer.getLength())) % 180;
+                s.buffer.setRGB(i, (int) red, 0, 0);
+            }
+            rainbowFirstPixelRed1 -= 3;
+            rainbowFirstPixelRed1 %= 180;
             return false;
         });
         public static final Animation rainbow = ((s,f) -> {
