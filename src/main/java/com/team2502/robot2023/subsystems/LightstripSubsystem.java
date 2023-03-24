@@ -47,10 +47,9 @@ public class LightstripSubsystem extends SubsystemBase {
             return false;
         });
         public static final Animation disabled = ((s,f) -> {
-            /*for (var i = 0; i < Leds.LED_COUNT; i += 2) {
-                s.buffer.setHSV(i, 0, 255, 255);
+            for (var i = 0; i < Leds.LED_COUNT; i += 2) {
+                s.buffer.setRGB(i, 255, 0, 0);
             }
-             */
 
 /*
             double rainbowFirstPixelRed = 0;
@@ -61,9 +60,18 @@ public class LightstripSubsystem extends SubsystemBase {
             rainbowFirstPixelRed += 3;
             rainbowFirstPixelRed %= 180;*/
 
-            for (var i = 0; i < s.buffer.getLength(); i++) {
-                s.buffer.setRGB(i, 255, 0, 0);
-            }
+            /*
+            int red = 0;
+
+            for (var i = 0; i < Leds.LED_COUNT; i++) {
+                if (red < 255) {
+                    s.buffer.setRGB(i, red, 0, 0);
+                    red += 3;
+                } else {
+                    s.buffer.setRGB(i, red, 0, 0);
+                    red -= 3;
+                }
+            }*/
 
             return false;
         });
