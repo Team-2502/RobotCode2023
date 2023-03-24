@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    if (coastButton.get()) {
+    if (!coastButton.get()) {
       m_robotContainer.DRIVETRAIN.setPowerNeutralMode(NeutralMode.Coast);
       m_robotContainer.DRIVETRAIN.setTurnNeutralMode(NeutralMode.Coast);
       m_robotContainer.ELEVATOR.setAllIdle(CANSparkMax.IdleMode.kCoast);
