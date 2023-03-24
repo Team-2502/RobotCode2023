@@ -98,6 +98,13 @@ public class RobotContainer {
         //new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
         //        .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
 
+        new JoystickButton(JOYSTICK_OPERATOR, OI.DEFAULT_LED)
+                .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.disabled, 1));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.REQ_CONE)
+                .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.request_cone, 1));
+        new JoystickButton(JOYSTICK_OPERATOR, OI.REQ_CUBE)
+                .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.request_cube, 1));
+
         JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
 
 		// cube positions
@@ -116,7 +123,7 @@ public class RobotContainer {
 		// cone positions
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
             .and(cubeButton.negate())
-            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_GROUND_PICKUP, IntakePosition.CONE_GROUND));
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CONE_GROUND));
 
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE)
             .and(cubeButton.negate())
@@ -150,14 +157,14 @@ public class RobotContainer {
 			.onTrue(new InstantCommand(() -> INTAKE.setSpeed(0.7), INTAKE))
 			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
-        // protect intake
+        // stow
         new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT)
-                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.SLIGHT_EXTEND, IntakePosition.IN));
+                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.STOW));
 
 		// Debug
-        new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
+        //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
 			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
-			.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
+			//.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
     }
 
     /**

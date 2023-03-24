@@ -46,7 +46,7 @@ public final class Constants {
         public static final int ELEVATOR_SINGLE = 2;
         public static final int ELEVATOR_MID = 5;
         public static final int ELEVATOR_TOP = 6;
-        public static final int INTAKE_PROTECT = 7;
+        public static final int INTAKE_PROTECT = 3;
 
         // Operator
         public static final int ELEVATOR_STO = 14;
@@ -77,6 +77,10 @@ public final class Constants {
         public static final int INTAKE_IN = 4;
 
         public static final int MANIPULATOR_HOME = 16;
+
+        public static final int DEFAULT_LED = 13;
+        public static final int REQ_CONE = 12;
+        public static final int REQ_CUBE = 11;
     }
 
     public static final class HardwareMap {
@@ -134,7 +138,7 @@ public final class Constants {
             public static final double ELEVATOR_LIM_BOTTOM = 0;
 
             public static final double ELEVATOR_P = 0.5;
-            public static final double ELEVATOR_I = 0.0;
+            public static final double ELEVATOR_I = 0.0; // TODO: Adjust the integral. This will require retuning the presets. Start at 1.0 and go down.
             public static final double ELEVATOR_D = 0.0;
             public static final double ELEVATOR_MIN_OUTPUT = -0.75; // -1
             public static final double ELEVATOR_MAX_OUTPUT = 0.75; // 1
@@ -143,12 +147,12 @@ public final class Constants {
             public static final double ELEVATOR_THRESHOLD = 1; // rotations until accepted
 
             public static final double PITCH_P = 0.5;
-            public static final double PITCH_I = 0.0;
+            public static final double PITCH_I = 0; // TODO: Adjust the integral. This will require retuning the presets. Start at 1.0 and go down.
             public static final double PITCH_D = 0.0;
-            public static final double PITCH_MIN_OUTPUT = -0.5; // -1
-            public static final double PITCH_MAX_OUTPUT = 0.5; // 1
-            public static final double PITCH_MIN_OUTPUT_TELEOP = -0.5;
-            public static final double PITCH_MAX_OUTPUT_TELEOP = 0.5;
+            public static final double PITCH_MIN_OUTPUT = -0.4; // -1
+            public static final double PITCH_MAX_OUTPUT = 0.4; // 1
+            public static final double PITCH_MIN_OUTPUT_TELEOP = -0.4; // 0.5
+            public static final double PITCH_MAX_OUTPUT_TELEOP = 0.4;
             public static final double PITCH_THRESHOLD = 1;
 
             public static enum ElevatorPosition {
@@ -159,8 +163,8 @@ public final class Constants {
                 GROUND_PICKUP(-1.69),
                 CONE_SINGLE(0),
                 CONE_BOTTOM(0),
-                CUBE_MID(19), 
-                CUBE_TOP(57), 
+                CUBE_MID(29),
+                CUBE_TOP(70),
                 CONE_GROUND_PICKUP(9),
                 CONE_MID(60),
                 CONE_TOP(87),  
@@ -189,13 +193,14 @@ public final class Constants {
             }
 
             public static final double INTAKE_P = 0.5;
-            public static final double INTAKE_I = 0;
+            public static final double INTAKE_I = 0; // TODO: Adjust the integral. This will require retuning the presets. Start at 1.0 and go down.
             public static final double INTAKE_D = 0;
-            public static final double INTAKE_MIN_OUTPUT = -0.2;
-            public static final double INTAKE_MAX_OUTPUT = 0.2;
+            public static final double INTAKE_MIN_OUTPUT = 0; // 0.2
+            public static final double INTAKE_MAX_OUTPUT = 0;
 
-            public static final double ELBOW_ROT_TO_DEGREE = 360 / (48/30) / 80; // 80:1 gearbox 2:1 gears
-            public static final double WRIST_ROT_TO_DEGREE = 360 / 2 / 16; // 16:1 gearbox 2:1 chain
+            // These are calculated as integer arithmetic, not floating point
+            public static final double ELBOW_ROT_TO_DEGREE = 360 / (48 / 30) / 80; // 80:1 gearbox 2:1 gears - 4 using integer math, 2.8 using floating point
+            public static final double WRIST_ROT_TO_DEGREE = 360 / 2 / 16; // 16:1 gearbox 2:1 chain - 11 using integer math, 11.25 using floating point
 
             // zero degrees is level with floor ahead of robot
             public static final double ELBOW_ZERO_ANGLE = 80;
@@ -204,7 +209,7 @@ public final class Constants {
             public static enum IntakePosition {
                 // elbow, wrist
                 // (elbow ang), (wrist ang soli) on NT
-                IN(100,180),
+                /*IN(100,180),
                 OUT(0,0),
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
@@ -216,7 +221,22 @@ public final class Constants {
                 CONE_SINGLE(146,72), 
                 CUBE_GROUND(100,72),
                 CUBE_MID(316,138),
-                CUBE_TOP(336,127);
+                CUBE_TOP(336,127);*/
+
+                IN(100,180),
+                OUT(0,0),
+                STOW(27, 171),
+                LEVEL(0,0),
+                CONE_OUT(12,0),
+                INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
+                PORTAL(-137, 143),
+                CONE_GROUND(-75,-14),
+                CONE_MID(75,128),
+                CONE_TOP(71,135),
+                CONE_SINGLE(-104,100),
+                CUBE_GROUND(-144,90),
+                CUBE_MID(103,172),
+                CUBE_TOP(101,166);
 
                 public final double pitchElbow;
                 public final double pitchWrist;
@@ -318,7 +338,7 @@ public final class Constants {
             public static final double MAX_VEL = 7; // driver speed gain (m/s) 11 - 7
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s) 9 - 4
             public static final double RET_VEL = 1; // driver speed gain (m/s)
-            public static final double RET_ROT = 1; // driver rotation gain (rad/s)
+            public static final double RET_ROT = 0.25; // driver rotation gain (rad/s)
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 2.7; // 0.6

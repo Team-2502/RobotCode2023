@@ -49,22 +49,22 @@ public class LightstripSubsystem extends SubsystemBase {
         public static final Animation disabled = ((s,f) -> {
             /*for (var i = 0; i < Leds.LED_COUNT; i += 2) {
                 s.buffer.setHSV(i, 0, 255, 255);
-            }*/
+            }
+             */
+
+/*
             double rainbowFirstPixelRed = 0;
             for (var i = 0; i < Leds.LED_COUNT; i++) {
                 final var red = (rainbowFirstPixelRed + (i * 180 / s.buffer.getLength())) % 180;
                 s.buffer.setRGB(i, (int) red, 0, 0);
             }
             rainbowFirstPixelRed += 3;
-            rainbowFirstPixelRed %= 180;
+            rainbowFirstPixelRed %= 180;*/
 
-            double rainbowFirstPixelRed1 = 0;
-            for (var i = 0; i < Leds.LED_COUNT; i++) {
-                final var red = (rainbowFirstPixelRed1 + (i * 180 / s.buffer.getLength())) % 180;
-                s.buffer.setRGB(i, (int) red, 0, 0);
+            for (var i = 0; i < s.buffer.getLength(); i++) {
+                s.buffer.setRGB(i, 255, 0, 0);
             }
-            rainbowFirstPixelRed1 -= 3;
-            rainbowFirstPixelRed1 %= 180;
+
             return false;
         });
         public static final Animation rainbow = ((s,f) -> {

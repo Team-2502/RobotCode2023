@@ -59,7 +59,7 @@ public enum Autos { // first auto is default
                 Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
                 Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
-                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.IN)),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
                 Commands.deadline(Commands.waitSeconds(3), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-balance-left")),
                 Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
                 Commands.deadline(Commands.waitSeconds(8), new BalanceCommand(d, false)),
@@ -82,9 +82,8 @@ public enum Autos { // first auto is default
                 Commands.deadline(Commands.waitSeconds(3.9), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-2"), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID)),
                 Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-1))),
                 new InstantCommand(() -> i.setSpeed(0)),
-                Commands.deadline(Commands.waitSeconds(1.6), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
+                Commands.deadline(Commands.waitSeconds(1.6), new YawLockedTranspose(d, new ChassisSpeeds(-0.75,0,0))),
                 Commands.deadline(Commands.waitSeconds(5), new BalanceCommand(d, false))
-                //Commands.deadline(Commands.waitSeconds(.5), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0)))
         )),
          
         DO_NOTHING("Do Nothing", ((d,i,a) -> new InstantCommand(d::resetHeading))); // always put last
