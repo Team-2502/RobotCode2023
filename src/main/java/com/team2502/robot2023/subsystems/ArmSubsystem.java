@@ -1,5 +1,6 @@
 package com.team2502.robot2023.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -104,6 +105,14 @@ public class ArmSubsystem extends SubsystemBase {
     public void enableSoft(boolean enable) {
         rightElevator.enableSoftLimit(SoftLimitDirection.kForward,enable);
         rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,enable);
+    }
+
+    public void setAllIdle(IdleMode im) {
+        rightElevator.setIdleMode(im);
+        leftElevator.setIdleMode(im);
+        leftPitchElevator.setIdleMode(im);
+        rightPitchElevator.setIdleMode(im);
+        pitchIntake.setIdleMode(im);
     }
 
     public void detune() {
