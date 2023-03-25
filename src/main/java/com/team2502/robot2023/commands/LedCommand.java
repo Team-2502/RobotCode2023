@@ -26,9 +26,9 @@ public class LedCommand extends CommandBase {
     @Override
     public void execute() {
         if (isDisabled()) {
-            lightstrip.scheduleAnimation(LightstripSubsystem.Animations.disabled, 1);
+            //lightstrip.scheduleAnimation(LightstripSubsystem.Animations.disabled, 1);
         } if (isEnabled() && intake.isRunning()) {
-            lightstrip.scheduleAnimation(LightstripSubsystem.Animations.intake, 1);
+            //lightstrip.scheduleAnimation(LightstripSubsystem.Animations.intake, 1);
         }
     }
 }

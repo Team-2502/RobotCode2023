@@ -27,9 +27,10 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 3;
+        public static final int RESET_HEADING = 14;
         public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
+        public static final int ROTATE_ZERO = 3;
 
         // Driver Left
         public static final int DRIVER_OUTAKE = 1;
@@ -81,6 +82,8 @@ public final class Constants {
         public static final int DEFAULT_LED = 13;
         public static final int REQ_CONE = 12;
         public static final int REQ_CUBE = 11;
+
+        public static final int SHELF = 10;
     }
 
     public static final class HardwareMap {
@@ -209,21 +212,22 @@ public final class Constants {
             public static enum IntakePosition {
                 // elbow, wrist
                 // (elbow ang), (wrist ang soli) on NT
-                /*IN(100,180),
+                IN(246,169),
                 OUT(0,0),
                 LEVEL(0,0), 
                 CONE_OUT(12,0),
                 INIT(ELBOW_ZERO_ANGLE,WRIST_ZERO_ANGLE), // don't use as setpoint
                 PORTAL(107, 115),
-                CONE_GROUND(143,-9),
+                SHELF(227, -5),
+                CONE_GROUND(157,-36),
                 CONE_MID(316,127),
                 CONE_TOP(300,131), 
                 CONE_SINGLE(146,72), 
-                CUBE_GROUND(100,72),
+                CUBE_GROUND(100,78),
                 CUBE_MID(316,138),
-                CUBE_TOP(336,127);*/
+                CUBE_TOP(336,127);
 
-                IN(100,180),
+                /*IN(100,180),
                 OUT(0,0),
                 STOW(27, 171),
                 LEVEL(0,0),
@@ -236,7 +240,7 @@ public final class Constants {
                 CONE_SINGLE(-104,100),
                 CUBE_GROUND(-144,90),
                 CUBE_MID(103,172),
-                CUBE_TOP(101,166);
+                CUBE_TOP(101,166);*/
 
                 public final double pitchElbow;
                 public final double pitchWrist;

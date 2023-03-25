@@ -1,13 +1,13 @@
 package com.team2502.robot2023.commands;
 
 import com.team2502.robot2023.subsystems.LightstripSubsystem;
-import com.team2502.robot2023.subsystems.LightstripSubsystem.Animation;
-import com.team2502.robot2023.subsystems.LightstripSubsystem.ScheduledAnimation;
+//import com.team2502.robot2023.subsystems.LightstripSubsystem.Animation;
+//import com.team2502.robot2023.subsystems.LightstripSubsystem.ScheduledAnimation;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class RunAnimationCommand extends CommandBase {
-    LightstripSubsystem lightstrip;
+    /*LightstripSubsystem lightstrip;
     Animation animation;
     ScheduledAnimation handle;
     int order;
@@ -26,5 +26,5 @@ public class RunAnimationCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         lightstrip.cancelAnimation(handle);;
-    }
+    }*/
 }

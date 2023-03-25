@@ -62,6 +62,9 @@ public class RobotContainer {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
+        //new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.ROTATE_ZERO)
+        //        .whileTrue()
+
         //new JoystickButton(JOYSTICK_DRIVE_LEFT, 8).whileTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.orbit_demo, 1));
 
         new JoystickButton(JOYSTICK_OPERATOR, OI.ELEVATOR_EXTEND)
@@ -98,13 +101,13 @@ public class RobotContainer {
         //new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.CUBE_GROUND+1)
         //        .whileTrue(new AutoPickupCommand(DRIVETRAIN, ELEVATOR, true));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.DEFAULT_LED)
+        /*new JoystickButton(JOYSTICK_OPERATOR, OI.DEFAULT_LED)
                 .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.disabled, 1));
         new JoystickButton(JOYSTICK_OPERATOR, OI.REQ_CONE)
                 .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.request_cone, 1));
         new JoystickButton(JOYSTICK_OPERATOR, OI.REQ_CUBE)
                 .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.request_cube, 1));
-
+*/
         JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
 
 		// cube positions
@@ -128,6 +131,10 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE)
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.PORTAL));
+
+        new JoystickButton(JOYSTICK_OPERATOR, OI.SHELF)
+                .and(cubeButton.negate())
+                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.SHELF));
 
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
             .and(cubeButton.negate())
@@ -159,7 +166,7 @@ public class RobotContainer {
 
         // stow
         new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT)
-                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.STOW));
+                .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.IN));
 
 		// Debug
         //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
