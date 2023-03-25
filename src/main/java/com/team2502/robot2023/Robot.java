@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
     }
 
     if(!zeroButton.get()) {
-      m_robotContainer.DRIVETRAIN.zeroTurn();
       m_robotContainer.ELEVATOR.zeroElevator();
       m_robotContainer.ELEVATOR.zeroArm();
       m_robotContainer.ELEVATOR.zeroPitch();
