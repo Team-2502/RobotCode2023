@@ -435,6 +435,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return Math.max(Math.max(fl, fr), Math.max(bl, br));
     }
 
+    public void zeroTurn() {
+        drivetrainEncoderFrontRight.setPosition(0);
+        drivetrainEncoderFrontLeft.setPosition(0);
+        drivetrainEncoderBackRight.setPosition(0);
+        drivetrainEncoderBackLeft.setPosition(0);
+    }
+
     @Override
     public void periodic(){
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());

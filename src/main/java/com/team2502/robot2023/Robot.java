@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private DigitalInput coastButton;
+  private DigitalInput zeroButton;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
     LiveWindow.disableAllTelemetry(); // useful for debugging, huge network table/rio load
 
     coastButton = new DigitalInput(0);
+    zeroButton = new DigitalInput(1);
   }
 
   /**
@@ -79,6 +81,13 @@ public class Robot extends TimedRobot {
     } else {
       m_robotContainer.DRIVETRAIN.setTurnNeutralMode(NeutralMode.Brake);
       m_robotContainer.ELEVATOR.setAllIdle(CANSparkMax.IdleMode.kBrake);
+    }
+
+    if(!zeroButton.get()) {
+      m_robotContainer.DRIVETRAIN.zeroTurn();
+      m_robotContainer.ELEVATOR.zeroElevator();
+      m_robotContainer.ELEVATOR.zeroArm();
+      m_robotContainer.ELEVATOR.zeroPitch();
     }
   }
 
