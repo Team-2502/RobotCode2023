@@ -336,7 +336,8 @@ public final class Constants {
         }
         public static final class PhotonVision {
             public static final String CAMERA_NAME = "USB_2M_GS_camera";
-            public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
+            //public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.0, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
+            public static final Transform3d ROBOT_TO_PHOTONVISION = new Transform3d(new Translation3d(0.2, 0.5, 0.2349), new Rotation3d(0,0, Math.PI)); // position of camera relative to center of robot  TODO: measure accurately
         }
         public static final class Drivetrain {
             public static final double MAX_VEL = 7; // driver speed gain (m/s) 11 - 7
