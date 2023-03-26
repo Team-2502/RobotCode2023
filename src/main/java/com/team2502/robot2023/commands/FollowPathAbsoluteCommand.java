@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -56,6 +57,7 @@ public class FollowPathAbsoluteCommand extends CommandBase {
         if (elapsed.get() < path.getTotalTimeSeconds()) {
             Pose2d targ = path.sample(elapsed.get()).poseMeters;
             SmartDashboard.putNumber("TARGR", targ.getRotation().getDegrees());
+            targ = drivetrain.reflectPose(targ, Alliance.Red);
             drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),
                     
                     Rotation2d.fromDegrees(drivetrain.fieldOrientedOffset)

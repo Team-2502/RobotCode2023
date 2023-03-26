@@ -140,6 +140,35 @@ public class DrivetrainSubsystem extends SubsystemBase{
         alliance = DriverStation.getAlliance();
     }
 
+    public Alliance getAlliance() {
+        return alliance;
+    }
+
+    /** reflect pose to match current alliance
+     *
+     * this method is reversible, you can use it for closed loop control
+     *
+     * @param input pose for the given alliance
+     * @param onAlliance alliance for which to reflect poses
+     * @return pose for the alliance reported by FMS
+     */
+    public Pose2d reflectPose(Pose2d input, Alliance onAlliance) {
+        if (alliance == onAlliance) {
+            return reflect(input);
+        } else {
+            return input;
+        }
+    }
+
+    public Pose2d reflect(Pose2d input) {
+        return new Pose2d(
+                Field.FIELD_CENTER_X -input.getX(), 
+                input.getY(), 
+                Rotation2d.fromDegrees(90) // north
+                    .minus(input.getRotation())
+                );
+    }
+
     /** reflect pose to match current alliance
      *
      * this method is reversible, you can use it for closed loop control
@@ -147,18 +176,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param input pose for the red alliance
      * @return pose for the alliance reported by FMS
      */
-    private Pose2d reflectPose(Pose2d input) {
-        switch (alliance) {
-            case Blue:
-                return new Pose2d(
-                        Field.FIELD_CENTER_X -input.getX(), 
-                        input.getY(), 
-                        Rotation2d.fromDegrees(90) // north
-                            .minus(input.getRotation())
-                        );
-            default:
-                return input;
-        }
+    public Pose2d reflectPose(Pose2d input) {
+        return reflectPose(input, Alliance.Blue);
     }
 
     /**
@@ -238,7 +257,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void setPose(Pose2d pose) {
-        pose = reflectPose(pose);
+        pose = reflectPose(pose, Alliance.Red);
         setPoseRaw(pose);
     }
 
