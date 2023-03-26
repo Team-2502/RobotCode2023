@@ -125,16 +125,6 @@ public final class Constants {
     }
 
     public static final class Subsystems {
-        public static final class Leds {
-            public static final int PORT = 9; // pwm:
-            public static final int LED_COUNT = 300; // logical, not physical count (same on 2815) - 50
-            public static final int FRAME_RATE = 5;
-            public static final int FRAME_TIME = 1/FRAME_RATE; // seconds per frame
-
-            public static final int LED_AHEAD = 0; // Led id corresponding to center of front
-            public static final int LED_LEFT = LED_COUNT/4; // Led id corresponding to center of left side
-        }
-
         public static final class Arm {
             public static final boolean NT_TUNE = false;
 
