@@ -1,9 +1,13 @@
 package com.team2502.robot2023;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.geometry.Translation3d;
+
+import java.util.Comparator;
 
 /** class for any math beyond a line or two */
 public class Utils {
@@ -98,19 +102,5 @@ public class Utils {
 			    /
 			    Math.tan(Math.toRadians(targetElevation+ camElevation))
 		   );
-    }
-
-    public class Range {
-        private int low;
-        private int high;
-
-        public Range(int low, int high){
-            this.low = low;
-            this.high = high;
-        }
-
-        public boolean contains(int number){
-            return (number >= low && number <= high);
-        }
     }
 }

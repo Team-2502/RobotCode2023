@@ -358,7 +358,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
     /** get absolute robot pose */
     private Pose2d getRawPose() {
         Pose2d pose = odometry.getPoseMeters();
-        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        //pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        pose = new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(-getHeading()));
 
         return pose;
     }

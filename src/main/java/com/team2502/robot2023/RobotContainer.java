@@ -47,6 +47,8 @@ public class RobotContainer {
 
     protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem();
 
+    protected final PhotonVisionSubsystem VISION = new PhotonVisionSubsystem(DRIVETRAIN);
+
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
 
@@ -61,6 +63,9 @@ public class RobotContainer {
 
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
+
+        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.NEAREST_SCORE)
+                .whileTrue(new GotoNearestScoreCommand(DRIVETRAIN, VISION));
 
         //new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.ROTATE_ZERO)
         //        .whileTrue()
