@@ -51,6 +51,22 @@ public enum Autos { // first auto is default
                 new InstantCommand(() -> i.setSpeed(0))
         )),
 
+        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO((d,i,a) -> Commands.sequence( // score one cube mid, leave community and balance
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetHeading),
+            Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(a, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+            Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+            Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+            Commands.deadline(Commands.waitSeconds(0.6), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+            Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.INIT)),
+            Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), false)),
+            Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), false)),
+            Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), false)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+
         PLACE_CUBE_AND_BALANCE("Place and balance left", (d,i,e) -> Commands.sequence(
                 new InstantCommand(d::resetPitch),
                 new InstantCommand(d::resetHeading),
