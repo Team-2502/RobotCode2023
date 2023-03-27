@@ -160,12 +160,14 @@ public class DrivetrainSubsystem extends SubsystemBase{
         }
     }
 
+    // note: this implementation sucks and destroys telem
+    // rollback to 6b01b7b350786b713b6f86d647a87e1a9aa35e17
     public Pose2d reflect(Pose2d input) {
-        return new Pose2d(
-            (Field.FIELD_CENTER_X * 2.0) - input.getX(), 
-            input.getY(), 
-            input.getRotation().plus(Rotation2d.fromDegrees(180))
-        );
+        return new Pose2d(                                        
+            input.getX(),          
+            -input.getY(),                                         
+            input.getRotation()
+        );                                                        
     }
 
     /** reflect pose to match current alliance
