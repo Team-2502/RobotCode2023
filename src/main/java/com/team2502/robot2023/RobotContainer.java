@@ -177,14 +177,14 @@ public class RobotContainer {
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.IN));
 
 		// Debug
-        //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
-			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
-			//.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
-
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
-            .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))
-            .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), DRIVETRAIN))
-            .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/alliancetest"));
+			.whileTrue(new BalanceCommand(DRIVETRAIN, false));
+	    //	.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
+
+        //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
+        //    .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))
+        //    .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), DRIVETRAIN))
+        //    .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/alliancetest"));
     }
 
     /**
