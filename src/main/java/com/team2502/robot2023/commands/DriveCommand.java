@@ -31,6 +31,7 @@ public class DriveCommand extends CommandBase {
         FieldOriented,
         RobotOriented,
 	    FieldOrientedTwist,
+	    FieldOrientedTwistPow,
         RobotOrientedCenteredRot,
         VirtualTank,
         VirtualSplitArcade,
@@ -50,6 +51,7 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
         typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
         typeEntry.addOption("Robot Oriented", Drivetype.RobotOriented);
+        typeEntry.addOption("Field Pow", Drivetype.FieldOrientedTwistPow);
 	    typeEntry.setDefaultOption("Field Twist", Drivetype.FieldOrientedTwist);
         SmartDashboard.putData("Drive Type", typeEntry);
 
@@ -86,6 +88,15 @@ public class DriveCommand extends CommandBase {
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX()).rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     //centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
+                case FieldOrientedTwistPow:
+                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                            (leftJoystick.getY() * leftJoystick.getY() * leftJoystick.getY()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -(leftJoystick.getX()*leftJoystick.getX()*leftJoystick.getX()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -(rightJoystick.getZ()*rightJoystick.getZ()*rightJoystick.getZ()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
+                    centerOfRotation = new Translation2d(0, 0);
+                    drivetrain.setSpeeds(speeds, centerOfRotation);
+                    break;
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                             leftJoystick.getY() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
