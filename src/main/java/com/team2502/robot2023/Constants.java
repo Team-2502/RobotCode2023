@@ -225,7 +225,7 @@ public final class Constants {
                 CONE_MID(316,127),
                 CONE_TOP(300,131), 
                 CONE_SINGLE(146,72), 
-                CUBE_GROUND(100,78),
+                CUBE_GROUND(78,85),
                 CUBE_MID(316,138),
                 CUBE_TOP(336,127);
 
