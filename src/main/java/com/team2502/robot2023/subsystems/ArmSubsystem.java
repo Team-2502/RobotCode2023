@@ -56,10 +56,10 @@ public class ArmSubsystem extends SubsystemBase {
 
         rightPitchElevator.follow(leftPitchElevator, true);
 
-        //rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_BOTTOM);
-        //rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Elevator.ELEVATOR_LIM_TOP);
-        //rightElevator.enableSoftLimit(SoftLimitDirection.kForward,true);
-        //rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
+        rightElevator.setSoftLimit(SoftLimitDirection.kForward,(float) Constants.Subsystems.Arm.ELEVATOR_LIM_TOP);
+        rightElevator.setSoftLimit(SoftLimitDirection.kReverse,(float) Constants.Subsystems.Arm.ELEVATOR_LIM_BOTTOM);
+        rightElevator.enableSoftLimit(SoftLimitDirection.kForward,true);
+        rightElevator.enableSoftLimit(SoftLimitDirection.kReverse,true);
 
         limitSwitch = new DigitalInput(Constants.HardwareMap.SWITCH_ELEVATOR);
 

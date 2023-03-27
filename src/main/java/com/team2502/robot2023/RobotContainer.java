@@ -64,6 +64,9 @@ public class RobotContainer {
         JoystickButton ResetHeading = new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.RESET_HEADING);
         ResetHeading.whenPressed(new InstantCommand(DRIVETRAIN::resetHeading, DRIVETRAIN));
 
+        new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.ROTATE_ZERO)
+            .whenPressed(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
+
         new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.NEAREST_SCORE)
                 .whileTrue(new GotoNearestScoreCommand(DRIVETRAIN, VISION));
 
@@ -179,6 +182,7 @@ public class RobotContainer {
 			//.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
 
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
+            .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))
             .onTrue(new InstantCommand(() -> DRIVETRAIN.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), DRIVETRAIN))
             .whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/alliancetest"));
     }

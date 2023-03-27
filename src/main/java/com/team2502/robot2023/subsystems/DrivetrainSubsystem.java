@@ -162,11 +162,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     public Pose2d reflect(Pose2d input) {
         return new Pose2d(
-                Field.FIELD_CENTER_X -input.getX(), 
-                input.getY(), 
-                Rotation2d.fromDegrees(90) // north
-                    .minus(input.getRotation())
-                );
+            (Field.FIELD_CENTER_X * 2.0) - input.getX(), 
+            input.getY(), 
+            input.getRotation().plus(Rotation2d.fromDegrees(180))
+        );
     }
 
     /** reflect pose to match current alliance
@@ -241,8 +240,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param pose target pose
      */
     public void setGoalPose(Pose2d pose) {
-        pose = reflectPose(pose);
-
         controlMode = ControlModes.POSE;
 
         this.xPidController.setSetpoint(pose.getX());
@@ -371,7 +368,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     /** get red-aligned robot pose */
     public Pose2d getPose() {
-        return reflectPose(getRawPose());
+        return getRawPose();
     }
 
     /** get absolute robot pose */
