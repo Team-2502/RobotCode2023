@@ -34,20 +34,24 @@ public enum Autos { // first auto is default
             new FollowPathAbsoluteCommand(d, "testpath")
         )),
 
-        PLACE_CUBE_GRAB_CUBE("Place and grab cube", (d,i,e) -> Commands.sequence(
+        PLACE_CUBE_GRAB_CUBE("score two cubes from left", (d,i,e) -> Commands.sequence(
                 new InstantCommand(d::resetPitch),
                 new InstantCommand(d::resetHeading),
                 new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
-                new InstantCommand(() -> i.setSpeed(0.25)),
+                new InstantCommand(() -> i.setSpeed(0.2)),
                 Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
                 Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
                 Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
-                Commands.deadline(Commands.waitSeconds(8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup"), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
-                new InstantCommand(() -> i.setSpeed(0.25)),
-                Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID)),
-                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+                Commands.deadline(Commands.waitSeconds(8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup"), 
+                    Commands.sequence( // ground pickup on the way down, start raising early
+                        Commands.deadline(Commands.waitSeconds(5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP)),
+                        new InstantCommand(() -> i.setSpeed(0.2)),
+                        Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID))
+                        )
+                    ),
+                Commands.deadline(Commands.waitSeconds(0.25), new InstantCommand(() -> i.setSpeed(-0.25))),
                 new InstantCommand(() -> i.setSpeed(0))
         )),
 
