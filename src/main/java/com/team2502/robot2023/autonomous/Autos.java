@@ -51,7 +51,7 @@ public enum Autos { // first auto is default
                 new InstantCommand(() -> i.setSpeed(0))
         )),
 
-        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO((d,i,a) -> Commands.sequence( // score one cube mid, leave community and balance
+        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO("Place and balance from center, no odometry", (d,i,a) -> Commands.sequence(
             new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
             Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(a, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
@@ -67,7 +67,7 @@ public enum Autos { // first auto is default
         )),
 
 
-        PLACE_CUBE_AND_BALANCE("Place and balance left", (d,i,e) -> Commands.sequence(
+        PLACE_CUBE_AND_BALANCE("Place and balance from left side", (d,i,e) -> Commands.sequence( 
                 new InstantCommand(d::resetPitch),
                 new InstantCommand(d::resetHeading),
                 new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
@@ -75,7 +75,8 @@ public enum Autos { // first auto is default
                 Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
                 Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
-                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(Commands.waitSeconds(0.6), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.INIT)),
                 Commands.deadline(Commands.waitSeconds(3), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-balance-left")),
                 Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0))),
                 Commands.deadline(Commands.waitSeconds(8), new BalanceCommand(d, false)),
