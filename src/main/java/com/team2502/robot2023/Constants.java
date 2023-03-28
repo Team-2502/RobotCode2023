@@ -31,6 +31,7 @@ public final class Constants {
         public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
         public static final int ROTATE_ZERO = 3;
+        public static final int QUADRAGRAMENIZE = 4;
 
         // Driver Left
         public static final int DRIVER_OUTAKE = 1;

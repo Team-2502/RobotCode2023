@@ -177,6 +177,9 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT)
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.IN));
 
+        new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.QUADRAGRAMENIZE)
+                .whileTrue(new GotoNearest90Command(DRIVETRAIN));
+
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //  .whileTrue( new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0)));
