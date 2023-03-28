@@ -256,7 +256,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     }
 
     public void setPose(Pose2d pose) {
-        pose = reflectPose(pose, Alliance.Blue);
+        pose = reflectPose(pose, Alliance.Red);
         setPoseRaw(pose);
     }
 
