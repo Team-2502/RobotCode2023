@@ -119,13 +119,19 @@ public enum Autos { // first auto is default
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
                 Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
-                Commands.deadline(Commands.waitSeconds(2.85), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-1"), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
-                new InstantCommand(() -> i.setSpeed(0.25)),
-                Commands.deadline(Commands.waitSeconds(3.9), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-2"), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID)),
-                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-1))),
+                Commands.deadline(Commands.waitSeconds(2.85), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-1"), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP)),
+                Commands.deadline(Commands.waitSeconds(4.2), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-shoot-balance-2"), 
+                    new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID),
+                    Commands.sequence( // closest approach at 2.1s
+                        Commands.deadline(Commands.waitSeconds(2.1-0.25), new InstantCommand(() -> i.setSpeed(0.2))),
+                        Commands.deadline(Commands.waitSeconds(0.225), new InstantCommand(() -> i.setSpeed(-1)))
+                        )
+                    ),
                 new InstantCommand(() -> i.setSpeed(0)),
-                Commands.deadline(Commands.waitSeconds(1.6), new YawLockedTranspose(d, new ChassisSpeeds(-0.75,0,0))),
-                Commands.deadline(Commands.waitSeconds(5), new BalanceCommand(d, false))
+                Commands.deadline(Commands.waitSeconds(1.7), new YawLockedTranspose(d, new ChassisSpeeds(-0.8,0,0))),
+                Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
+                Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), false)),
+                new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
          
         DO_NOTHING("Do Nothing", ((d,i,a) -> new InstantCommand(d::resetHeading))); // always put last
