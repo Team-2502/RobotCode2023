@@ -78,7 +78,7 @@ public class YawLockedTranspose extends CommandBase {
 
     @Override
     public void execute() {
-        double rPower = -rPidController.calculate(Units.degreesToRadians(drivetrain.getHeading())) * 2.0;
+        double rPower = -rPidController.calculate(Units.degreesToRadians(drivetrain.getHeading()));
         drivetrain.setSpeeds(new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,rPower));
     }
 

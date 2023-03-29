@@ -65,11 +65,12 @@ public enum Autos { // first auto is default
                 Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
                 Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
-                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(Commands.waitSeconds(0.7), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
                 Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5))),
-                Commands.deadline(Commands.waitSeconds(8), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup-south"), 
+                Commands.deadline(Commands.waitSeconds(7), new FollowPathAbsoluteCommand(d, "../pathplanner/generatedJSON/blue-score-pickup-south"), 
                     Commands.sequence( // ground pickup on the way down, start raising early
-                        Commands.deadline(Commands.waitSeconds(5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP)),
+                        Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)), // don't drag intake
+                        Commands.deadline(Commands.waitSeconds(4), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP)),
                         new InstantCommand(() -> i.setSpeed(0.2)),
                         Commands.deadline(Commands.waitSeconds(2), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID))
                         )
@@ -86,10 +87,10 @@ public enum Autos { // first auto is default
             Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
             Commands.deadline(Commands.waitSeconds(0.6), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
             Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.INIT)),
-            Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), false)),
-            Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), false)),
+            Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
             Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
-            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), false)),
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO)),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
@@ -105,9 +106,9 @@ public enum Autos { // first auto is default
             Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
             Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-0.9,0,0), Mode.NAVX_ZERO)),
             Commands.waitSeconds(0.5),
-            Commands.deadline(Commands.waitSeconds(1.2), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(1.4), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0), Mode.NAVX_ZERO)),
             Commands.deadline(new TimeLeftCommand(0.5), new BalanceCommand(d, false)), // FMS reporting unwarrantied
-            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(.05), new InstantCommand(() -> d.setSpeeds(new ChassisSpeeds(0,0,1)))), // tread break
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
