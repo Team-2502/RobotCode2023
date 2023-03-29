@@ -10,7 +10,7 @@ import com.team2502.robot2023.Constants.Subsystems.Arm.ElevatorPosition;
 import com.team2502.robot2023.Constants.Subsystems.Arm.IntakePosition;
 import com.team2502.robot2023.autonomous.AutoChooser;
 import com.team2502.robot2023.commands.*;
-
+import com.team2502.robot2023.commands.YawLockedTranspose.Mode;
 import com.team2502.robot2023.subsystems.*;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -122,7 +123,7 @@ public class RobotContainer {
 		// cube positions
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
             .and(cubeButton)
-            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND));
+            .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP));
 
         new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
             .and(cubeButton)
@@ -183,8 +184,18 @@ public class RobotContainer {
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //  .whileTrue( new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0)));
-			.whileTrue(new BalanceCommand(DRIVETRAIN, false));
+			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
 	    //	.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
+            .onTrue(Commands.sequence(
+                new InstantCommand(DRIVETRAIN::resetHeading),
+                Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
+                Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
+                Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-0.9,0,0), Mode.NAVX_ZERO)),
+                Commands.waitSeconds(0.5),
+                Commands.deadline(Commands.waitSeconds(1.2), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(1.0,0,0), Mode.NAVX_ZERO)),
+                Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(DRIVETRAIN, false)),
+                Commands.deadline(Commands.waitSeconds(0.25), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO))
+                        ));
 
         //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //    .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))

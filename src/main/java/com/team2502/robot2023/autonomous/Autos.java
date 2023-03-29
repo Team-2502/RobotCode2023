@@ -2,6 +2,8 @@ package com.team2502.robot2023.autonomous;
 
 import com.team2502.robot2023.Constants.Subsystems.Arm.*;
 import com.team2502.robot2023.commands.*;
+import com.team2502.robot2023.commands.YawLockedTranspose.Mode;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -76,7 +78,7 @@ public enum Autos { // first auto is default
                 new InstantCommand(() -> i.setSpeed(0))
         )),
 
-        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO("PB center, no odo", (d,i,a) -> Commands.sequence(
+        ONE_CUBE_MID_ENGAGE_UNIHETERO("PB center, no odo", (d,i,a) -> Commands.sequence(
             new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
             Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(a, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
@@ -88,6 +90,24 @@ public enum Autos { // first auto is default
             Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), false)),
             Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(d, false)),
             Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), false)),
+            new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
+        )),
+
+        ONE_CUBE_MID_LEAVE_ENGAGE_UNIHETERO("PLB center, no odo", (d,i,a) -> Commands.sequence(
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetHeading),
+            Commands.deadline(Commands.waitSeconds(1), new SetArmSimpleCommand(a, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+            Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+            Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+            Commands.deadline(Commands.waitSeconds(0.6), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+            Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.INIT)),
+            Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-0.9,0,0), Mode.NAVX_ZERO)),
+            Commands.waitSeconds(0.5),
+            Commands.deadline(Commands.waitSeconds(1.2), new YawLockedTranspose(d, new ChassisSpeeds(0.9,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(new TimeLeftCommand(0.5), new BalanceCommand(d, false)), // FMS reporting unwarrantied
+            Commands.deadline(Commands.waitSeconds(.25), new YawLockedTranspose(d, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO)),
             new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
