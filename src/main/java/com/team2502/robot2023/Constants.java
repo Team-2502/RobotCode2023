@@ -27,10 +27,10 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 14;
+        public static final int RESET_HEADING = 14; // only use for odo dbg
         public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
-        public static final int ROTATE_ZERO = 3;
+        public static final int ROTATE_ZERO = 3; // teleop field zero
         public static final int QUADRAGRAMENIZE = 4;
 
         // Driver Left
