@@ -37,6 +37,9 @@ public class DriveCommand extends CommandBase {
         VirtualSplitArcade,
     }
 
+    private double dlxDrift;
+    private double dlyDrift;
+
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
@@ -64,6 +67,10 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (leftJoystick.getRawButton(OI.DRIFT_RESET)) {
+            resetDrift();
+        }
+
         ChassisSpeeds speeds;
         Translation2d centerOfRotation;
         drivetrain.setTurnNeutralMode(NeutralMode.Brake);
@@ -81,8 +88,8 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOriented:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            leftJoystick.getX() * Drivetrain.MAX_VEL,
+                            -(leftJoystick.getY()+dlyDrift) * Drivetrain.MAX_VEL,
+                            (leftJoystick.getX()+dlxDrift) * Drivetrain.MAX_VEL,
                             rightJoystick.getX() * Drivetrain.MAX_ROT,
                             Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX()).rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
@@ -118,6 +125,11 @@ public class DriveCommand extends CommandBase {
                     break;
             }
         }
+
+    private void resetDrift() {
+        dlxDrift = -leftJoystick.getX();
+        dlyDrift = -leftJoystick.getY();
+    }
 
     @Override
     public void end(boolean interrupted) {

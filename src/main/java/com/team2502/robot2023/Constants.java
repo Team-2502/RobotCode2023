@@ -39,7 +39,7 @@ public final class Constants {
         public static final int CUBE_GROUND = 3;
         public static final int RET_MODE = 4;
         public static final int NEAREST_SCORE = 3;
-
+        public static final int DRIFT_RESET = 8;
 
         // DBG
         public static final int DEBUG_RUN = 10;
