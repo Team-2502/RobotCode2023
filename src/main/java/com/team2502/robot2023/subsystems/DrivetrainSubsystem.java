@@ -468,7 +468,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         if (vision.newPoseThisFrame()) {
             Pose2d visionPose = vision.getPose();
-            setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
+            //setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
+            // TODO: 6b01b7b350786b713b6f86d647a87e1a9aa35e17
         }
 
         

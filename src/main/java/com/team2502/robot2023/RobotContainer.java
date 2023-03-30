@@ -74,8 +74,8 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, Constants.OI.ROTATE_ZERO)
             .whenPressed(new InstantCommand(DRIVETRAIN::resetOffset, DRIVETRAIN));
 
-        new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.NEAREST_SCORE)
-                .whileTrue(new GotoNearestScoreCommand(DRIVETRAIN, VISION));
+        //new JoystickButton(JOYSTICK_DRIVE_LEFT, OI.NEAREST_SCORE)
+        //        .whileTrue(new GotoNearestScoreCommand(DRIVETRAIN, VISION));
 
         //new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.ROTATE_ZERO)
         //        .whileTrue()
