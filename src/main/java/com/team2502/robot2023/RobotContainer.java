@@ -143,11 +143,11 @@ public class RobotContainer {
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CONE_GROUND));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_SINGLE))
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_SHELF))
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.PORTAL));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.SHELF).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_SHELF))
+        new JoystickButton(JOYSTICK_OPERATOR, OI.SHELF)
                 .and(cubeButton.negate())
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.SHELF));
 
@@ -180,7 +180,7 @@ public class RobotContainer {
 			.onFalse(new InstantCommand(() -> INTAKE.setSpeed(0.0), INTAKE));
 
         // stow
-        new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT)
+        new JoystickButton(JOYSTICK_FIGHT, OI.INTAKE_PROTECT).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_INTAKE_PROTECT))
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.IN));
 
         new JoystickButton(JOYSTICK_DRIVE_RIGHT, OI.QUADRAGRAMENIZE)

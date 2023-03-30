@@ -92,8 +92,8 @@ public final class Constants {
         public static final int OP_ELEVATOR_SINGLE = 2;
         public static final int OP_ELEVATOR_MID = 12;
         public static final int OP_ELEVATOR_TOP = 11;
-        public static final int OP_INTAKE_PROTECT = 15;
-        public static final int OP_SHELF = 16;
+        public static final int OP_INTAKE_PROTECT = 16;
+        public static final int OP_SHELF = 15;
     }
 
     public static final class HardwareMap {
@@ -234,7 +234,7 @@ public final class Constants {
                 CONE_MID(316,127),
                 CONE_TOP(300,131), 
                 CONE_SINGLE(146,72), 
-                CUBE_GROUND_PICKUP(100,53),
+                CUBE_GROUND_PICKUP(72,92),
                 CUBE_GROUND(100,78),
                 CUBE_MID(316,138),
                 CUBE_TOP(336,127);
