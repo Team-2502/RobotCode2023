@@ -27,7 +27,7 @@ public final class Constants {
         // Buttons
 
         // Driver Right
-        public static final int RESET_HEADING = 14;
+        public static final int RESET_HEADING = 8;
         public static final int DRIVER_INTAKE = 1;
         public static final int LOWER_INTAKE = 2;
         public static final int ROTATE_ZERO = 3;
