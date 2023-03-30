@@ -86,6 +86,14 @@ public final class Constants {
         public static final int REQ_CUBE = 11;
 
         public static final int SHELF = 10;
+
+        public static final int OP_CUBE_LAYER = 14;
+        public static final int OP_ELEVATOR_GROUND = 13;
+        public static final int OP_ELEVATOR_SINGLE = 2;
+        public static final int OP_ELEVATOR_MID = 12;
+        public static final int OP_ELEVATOR_TOP = 11;
+        public static final int OP_INTAKE_PROTECT = 15;
+        public static final int OP_SHELF = 16;
     }
 
     public static final class HardwareMap {

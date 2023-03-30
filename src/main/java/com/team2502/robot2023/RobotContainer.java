@@ -19,6 +19,8 @@ import com.team2502.robot2023.subsystems.ArmSubsystem;
 import com.team2502.robot2023.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +28,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.NetworkButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import com.team2502.robot2023.Constants.*;
 
 import java.util.Set;
@@ -118,39 +123,39 @@ public class RobotContainer {
         new JoystickButton(JOYSTICK_OPERATOR, OI.REQ_CUBE)
                 .onTrue(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.request_cube, 1));
 */
-        JoystickButton cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER);
+        Trigger cubeButton = new JoystickButton(JOYSTICK_FIGHT, OI.CUBE_LAYER).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_CUBE_LAYER));
 
 		// cube positions
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_GROUND))
             .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND_PICKUP));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_MID))
             .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_MID, IntakePosition.CUBE_MID));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_TOP))
             .and(cubeButton)
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP));
 
 		// cone positions
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_GROUND).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_GROUND))
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.CONE_GROUND));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_SINGLE).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_SINGLE))
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.PORTAL));
 
-        new JoystickButton(JOYSTICK_OPERATOR, OI.SHELF)
+        new JoystickButton(JOYSTICK_OPERATOR, OI.SHELF).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_SHELF))
                 .and(cubeButton.negate())
                 .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.BOTTOM, IntakePosition.SHELF));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_MID).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_MID))
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_MID, IntakePosition.CONE_MID));
 
-        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP)
+        new JoystickButton(JOYSTICK_FIGHT, OI.ELEVATOR_TOP).or(new JoystickButton(JOYSTICK_OPERATOR, OI.OP_ELEVATOR_TOP))
             .and(cubeButton.negate())
             .whileTrue(new SetArmSimpleCommand(ELEVATOR, ElevatorPosition.CONE_TOP, IntakePosition.CONE_TOP));
 
@@ -196,6 +201,7 @@ public class RobotContainer {
                 Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(DRIVETRAIN, false)),
                 Commands.deadline(Commands.waitSeconds(0.25), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO))
                         ));
+        new NetworkButton(NetworkTableInstance.getDefault().getBooleanTopic("testbtn"));
 
         //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //    .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))
