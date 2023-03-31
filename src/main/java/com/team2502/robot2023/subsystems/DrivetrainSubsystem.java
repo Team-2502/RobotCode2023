@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
     public PhotonVisionSubsystem vision;
 
     public DrivetrainSubsystem(){
-        vision = new PhotonVisionSubsystem(this);
+        //vision = new PhotonVisionSubsystem(this);
 
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
@@ -466,11 +466,11 @@ public class DrivetrainSubsystem extends SubsystemBase{
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
         pose = getRawPose();
 
-        if (vision.newPoseThisFrame()) {
-            Pose2d visionPose = vision.getPose();
-            //setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
-            // TODO: 6b01b7b350786b713b6f86d647a87e1a9aa35e17
-        }
+        //if (vision.newPoseThisFrame()) {
+        //    Pose2d visionPose = vision.getPose();
+        //    //setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
+        //    // TODO: 6b01b7b350786b713b6f86d647a87e1a9aa35e17
+        //}
 
         
 
@@ -502,7 +502,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         double[] position = {getRawPose().getX(), getRawPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
-        field.getObject("vision").setPose(vision.getPose());
+        //field.getObject("vision").setPose(vision.getPose());
 
         field.setRobotPose(getRawPose());
         SmartDashboard.putData("field", field);
