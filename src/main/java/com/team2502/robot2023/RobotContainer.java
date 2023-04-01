@@ -189,19 +189,19 @@ public class RobotContainer {
 		// Debug
         new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //  .whileTrue( new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0)));
-			//.whileTrue(new BalanceCommand(DRIVETRAIN, false));
+			.whileTrue(new BalanceCommand(DRIVETRAIN, false));
 	    //	.whileTrue( new FollowPathAbsoluteCommand(DRIVETRAIN, "../pathplanner/generatedJSON/forward-turn"));
-            .onTrue(Commands.sequence(
-                new InstantCommand(DRIVETRAIN::resetHeading),
-                Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
-                Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
-                Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-0.9,0,0), Mode.NAVX_ZERO)),
-                Commands.waitSeconds(0.5),
-                Commands.deadline(Commands.waitSeconds(1.2), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(1.0,0,0), Mode.NAVX_ZERO)),
-                Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(DRIVETRAIN, false)),
-                Commands.deadline(Commands.waitSeconds(0.25), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO))
-                        ));
-        new NetworkButton(NetworkTableInstance.getDefault().getBooleanTopic("testbtn"));
+        //    .onTrue(Commands.sequence(
+        //        new InstantCommand(DRIVETRAIN::resetHeading),
+        //        Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
+        //        Commands.deadline(Commands.waitSeconds(1.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
+        //        Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(-0.9,0,0), Mode.NAVX_ZERO)),
+        //        Commands.waitSeconds(0.5),
+        //        Commands.deadline(Commands.waitSeconds(1.2), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(1.0,0,0), Mode.NAVX_ZERO)),
+        //        Commands.deadline(new TimeLeftCommand(0.75), new BalanceCommand(DRIVETRAIN, false)),
+        //        Commands.deadline(Commands.waitSeconds(0.25), new YawLockedTranspose(DRIVETRAIN, new ChassisSpeeds(0,-.3,0), Mode.NAVX_ZERO))
+        //                ));
+        //new NetworkButton(NetworkTableInstance.getDefault().getBooleanTopic("testbtn"));
 
         //new JoystickButton(JOYSTICK_FIGHT, OI.DEBUG_RUN)
         //    .onTrue(new InstantCommand(() -> DRIVETRAIN.resetHeading()))

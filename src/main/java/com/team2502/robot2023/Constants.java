@@ -42,7 +42,7 @@ public final class Constants {
         public static final int DRIFT_RESET = 8;
 
         // DBG
-        public static final int DEBUG_RUN = 10;
+        public static final int DEBUG_RUN = 12;
         public static final int RESET_MODULES = 9;
         public static final int CUBE_LAYER = 1;
         public static final int ELEVATOR_GROUND = 4;
