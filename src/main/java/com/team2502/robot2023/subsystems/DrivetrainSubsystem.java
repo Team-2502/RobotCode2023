@@ -337,7 +337,12 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
+
         SmartDashboard.putNumber("FL Angle", FLRotation.getDegrees());
+        SmartDashboard.putNumber("FR Angle", FRRotation.getDegrees());
+        SmartDashboard.putNumber("BL Angle", BLRotation.getDegrees());
+        SmartDashboard.putNumber("BR Angle", BRRotation.getDegrees());
+
         SmartDashboard.putNumber("FL mps", (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.FALCON_ENCODER_TICKS_PER_REV) / Drivetrain.SWERVE_DRIVE_GEAR_RATIO);
         SmartDashboard.putNumber("FL targ mps", FLState.speedMetersPerSecond);
     }
