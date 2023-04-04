@@ -23,14 +23,29 @@ public class YawLockedTranspose extends CommandBase {
     private double yawGoal;
     private ChassisSpeeds speeds;
     private PIDController rPidController;
-    private boolean fieldOffset; // use teleop heading as goal
+    private Mode mode;
+    public enum Mode {
+        NAVX_ZERO,
+        FIELD_ZERO,
+        COMMAND_ZERO
+    }
+
+    public YawLockedTranspose(DrivetrainSubsystem drivetrain, ChassisSpeeds speeds, Mode mode) {
+        this.drivetrain = drivetrain;
+        yawGoal = drivetrain.getHeading();
+        this.speeds = speeds;
+        this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
+        this.mode = mode;
+
+        addRequirements(drivetrain);
+    }
 
     public YawLockedTranspose(DrivetrainSubsystem drivetrain, ChassisSpeeds speeds) {
         this.drivetrain = drivetrain;
         yawGoal = drivetrain.getHeading();
         this.speeds = speeds;
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
-        this.fieldOffset = false;
+        this.mode = Mode.FIELD_ZERO;
 
         addRequirements(drivetrain);
     }
@@ -40,21 +55,30 @@ public class YawLockedTranspose extends CommandBase {
         yawGoal = drivetrain.getHeading();
         this.speeds = speeds;
         this.rPidController = new PIDController(Drivetrain.DRIVETRAIN_TURN_P, Drivetrain.DRIVETRAIN_TURN_I, Drivetrain.DRIVETRAIN_TURN_D);
-        this.fieldOffset = fieldOffset;
+        this.mode = fieldOffset ? Mode.FIELD_ZERO : Mode.COMMAND_ZERO;
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
-        yawGoal = drivetrain.getHeading();
+        switch (mode) {
+            case FIELD_ZERO:
+                yawGoal = drivetrain.getHeading() + drivetrain.fieldOrientedOffset;
+                break;
+            case NAVX_ZERO:
+                yawGoal = 0;
+                break;
+            case COMMAND_ZERO:
+                yawGoal = drivetrain.getHeading();
+        }
 
-        if (fieldOffset) { yawGoal += drivetrain.fieldOrientedOffset; }
+        rPidController.setSetpoint(Units.degreesToRadians(yawGoal));
     }
 
     @Override
     public void execute() {
-        double rPower = -rPidController.calculate(Units.degreesToRadians(drivetrain.getHeading()-yawGoal));
+        double rPower = -rPidController.calculate(Units.degreesToRadians(drivetrain.getHeading()));
         drivetrain.setSpeeds(new ChassisSpeeds(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,rPower));
     }
 

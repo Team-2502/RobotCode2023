@@ -20,7 +20,7 @@ public class DriveCommand extends CommandBase {
     private final DrivetrainSubsystem drivetrain;
     private final Joystick leftJoystick;
     private final Joystick rightJoystick;
-    private final XboxController controller;
+    //private final XboxController controller;
 
     private enum DriveController {
         Joystick,
@@ -31,17 +31,21 @@ public class DriveCommand extends CommandBase {
         FieldOriented,
         RobotOriented,
 	    FieldOrientedTwist,
+	    FieldOrientedTwistPow,
         RobotOrientedCenteredRot,
         VirtualTank,
         VirtualSplitArcade,
     }
 
+    private double dlxDrift;
+    private double dlyDrift;
+
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Joystick joystickDriveLeft, Joystick joystickDriveRight, XboxController controller) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, Joystick joystickDriveLeft, Joystick joystickDriveRight) {
         this.drivetrain = drivetrain;
-        this.controller = controller;
+        //this.controller = controller;
         leftJoystick = joystickDriveLeft;
         rightJoystick = joystickDriveRight;
 
@@ -50,6 +54,7 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("Field Oriented", Drivetype.FieldOriented);
         typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
         typeEntry.addOption("Robot Oriented", Drivetype.RobotOriented);
+        typeEntry.addOption("Field Pow", Drivetype.FieldOrientedTwistPow);
 	    typeEntry.setDefaultOption("Field Twist", Drivetype.FieldOrientedTwist);
         SmartDashboard.putData("Drive Type", typeEntry);
 
@@ -62,30 +67,14 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (leftJoystick.getRawButton(OI.DRIFT_RESET)) {
+            resetDrift();
+        }
+
         ChassisSpeeds speeds;
         Translation2d centerOfRotation;
         drivetrain.setTurnNeutralMode(NeutralMode.Brake);
         drivetrain.setPowerNeutralMode(NeutralMode.Coast);
-
-        if (controllerEntry.getSelected() == DriveController.Xbox) {
-            switch(typeEntry.getSelected()) {
-                case RobotOriented:
-                    speeds = new ChassisSpeeds(deadzone(-controller.getLeftY()) * Drivetrain.MAX_VEL, deadzone(-controller.getLeftX())* Drivetrain.MAX_VEL, deadzone(controller.getRightX())*Drivetrain.MAX_ROT);
-                    //centerOfRotation = new Translation2d(deadzone(controller.getRightY()),deadzone(controller.getRightX()));
-                    centerOfRotation = new Translation2d(0, 0);
-                    drivetrain.setSpeeds(speeds, centerOfRotation);
-                    break;
-                case FieldOriented:
-                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            deadzone(-controller.getLeftY()) * Drivetrain.MAX_VEL,
-                            deadzone(-controller.getLeftX()) * Drivetrain.MAX_VEL,
-                            deadzone(controller.getRightX()) * Drivetrain.MAX_ROT,
-                            Rotation2d.fromDegrees(deadzone(-drivetrain.getHeading())));
-                    centerOfRotation = new Translation2d(deadzone(controller.getRightY()),deadzone(controller.getRightX()));
-                    //centerOfRotation = new Translation2d(0, 0);
-                    drivetrain.setSpeeds(speeds, centerOfRotation);
-            }
-        } else {
             switch(typeEntry.getSelected()) {
                 case RobotOriented:
                     speeds = new ChassisSpeeds(leftJoystick.getY()* Drivetrain.MAX_VEL, -leftJoystick.getX()* Drivetrain.MAX_VEL, -rightJoystick.getZ()*Drivetrain.MAX_ROT);
@@ -99,17 +88,27 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOriented:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            -leftJoystick.getY() * Drivetrain.MAX_VEL,
-                            leftJoystick.getX() * Drivetrain.MAX_VEL,
+                            -(leftJoystick.getY()+dlyDrift) * Drivetrain.MAX_VEL,
+                            (leftJoystick.getX()+dlxDrift) * Drivetrain.MAX_VEL,
                             rightJoystick.getX() * Drivetrain.MAX_ROT,
                             Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(rightJoystick.getY(),rightJoystick.getX()).rotateBy(Rotation2d.fromDegrees(-drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     //centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
+                case FieldOrientedTwistPow:
+                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                            (leftJoystick.getY() * leftJoystick.getY() * leftJoystick.getY()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -(leftJoystick.getX()*leftJoystick.getX()*leftJoystick.getX()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -(rightJoystick.getZ()*rightJoystick.getZ()*rightJoystick.getZ()) * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
+                    centerOfRotation = new Translation2d(0, 0);
+                    drivetrain.setSpeeds(speeds, centerOfRotation);
+                    break;
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            leftJoystick.getY() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -leftJoystick.getX() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL), -rightJoystick.getZ() * (rightJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            leftJoystick.getY() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -leftJoystick.getX() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -rightJoystick.getZ() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
@@ -126,6 +125,10 @@ public class DriveCommand extends CommandBase {
                     break;
             }
         }
+
+    private void resetDrift() {
+        dlxDrift = -leftJoystick.getX();
+        dlyDrift = -leftJoystick.getY();
     }
 
     @Override

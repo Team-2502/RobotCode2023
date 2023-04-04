@@ -2,6 +2,7 @@ package com.team2502.robot2023.commands;
 
 import java.io.IOException;
 
+import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -10,6 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -48,12 +50,19 @@ public class FollowPathAbsoluteCommand extends CommandBase {
         SmartDashboard.putNumber("FPR iy", path.sample(0).poseMeters.getY());
         SmartDashboard.putNumber("FPR cx", path.sample(elapsed.get()).poseMeters.getX());
         SmartDashboard.putNumber("FPR cy", path.sample(elapsed.get()).poseMeters.getY());
+        SmartDashboard.putNumber("FPR cr", path.sample(elapsed.get()).poseMeters.getRotation().getRadians());
         SmartDashboard.putNumber("FPR el", elapsed.get());
 
         
         if (elapsed.get() < path.getTotalTimeSeconds()) {
             Pose2d targ = path.sample(elapsed.get()).poseMeters;
-            drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),Rotation2d.fromDegrees(180)));
+            SmartDashboard.putNumber("TARGR", targ.getRotation().getDegrees());
+            targ = drivetrain.reflectPose(targ, Alliance.Red);
+            drivetrain.setGoalPose(new Pose2d(targ.getX(),targ.getY(),
+                    
+                    Rotation2d.fromDegrees(drivetrain.fieldOrientedOffset)
+                    ));
+                    //Rotation2d.fromDegrees(0/* TODO find if this from init */)));
         }
     }
 

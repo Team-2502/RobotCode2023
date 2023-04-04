@@ -6,6 +6,8 @@ package com.team2502.robot2023;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -26,6 +28,9 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  private DigitalInput coastButton;
+  private DigitalInput zeroButton;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,6 +41,9 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     LiveWindow.disableAllTelemetry(); // useful for debugging, huge network table/rio load
+
+    coastButton = new DigitalInput(0);
+    zeroButton = new DigitalInput(1);
   }
 
   /**
@@ -66,7 +74,21 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (!coastButton.get()) {
+      m_robotContainer.DRIVETRAIN.setTurnNeutralMode(NeutralMode.Coast);
+      m_robotContainer.ELEVATOR.setAllIdle(CANSparkMax.IdleMode.kCoast);
+    } else {
+      m_robotContainer.DRIVETRAIN.setTurnNeutralMode(NeutralMode.Brake);
+      m_robotContainer.ELEVATOR.setAllIdle(CANSparkMax.IdleMode.kBrake);
+    }
+
+    if(!zeroButton.get()) {
+      m_robotContainer.ELEVATOR.zeroElevator();
+      m_robotContainer.ELEVATOR.zeroArm();
+      m_robotContainer.ELEVATOR.zeroPitch();
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

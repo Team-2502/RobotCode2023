@@ -26,7 +26,7 @@ public class LimelightVisionSubsystem extends SubsystemBase {
     }
 
     @Override
-    //runs often the retrieve the newest values from the Limelight
+    //runs often to retrieve the newest values from the Limelight
     public void periodic() {
         NetworkTableEntry TARGET_X = Limelight.getEntry("x");
         NetworkTableEntry TARGET_Y = Limelight.getEntry("y");

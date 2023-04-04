@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.kauailabs.navx.frc.AHRS;
 
+import com.team2502.robot2023.Constants;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -77,10 +78,10 @@ public class DrivetrainSubsystem extends SubsystemBase{
 	private float rollOffset;
 	private float pitchOffset;
 
-    private PhotonVisionSubsystem vision;
+    public PhotonVisionSubsystem vision;
 
     public DrivetrainSubsystem(){
-        vision = new PhotonVisionSubsystem(this);
+        //vision = new PhotonVisionSubsystem(this);
 
         drivetrainPowerBackLeft = new WPI_TalonFX(HardwareMap.BL_DRIVE_MOTOR, "can0");
         drivetrainPowerFrontLeft = new WPI_TalonFX(HardwareMap.FL_DRIVE_MOTOR, "can0");
@@ -139,6 +140,36 @@ public class DrivetrainSubsystem extends SubsystemBase{
         alliance = DriverStation.getAlliance();
     }
 
+    public Alliance getAlliance() {
+        return alliance;
+    }
+
+    /** reflect pose to match current alliance
+     *
+     * this method is reversible, you can use it for closed loop control
+     *
+     * @param input pose for the given alliance
+     * @param onAlliance alliance for which to reflect poses
+     * @return pose for the alliance reported by FMS
+     */
+    public Pose2d reflectPose(Pose2d input, Alliance onAlliance) {
+        if (alliance == onAlliance) {
+            return reflect(input);
+        } else {
+            return input;
+        }
+    }
+
+    // note: this implementation sucks and destroys telem
+    // rollback to 6b01b7b350786b713b6f86d647a87e1a9aa35e17
+    public Pose2d reflect(Pose2d input) {
+        return new Pose2d(                                        
+            input.getX(),          
+            -input.getY(),                                         
+            input.getRotation()
+        );                                                        
+    }
+
     /** reflect pose to match current alliance
      *
      * this method is reversible, you can use it for closed loop control
@@ -146,18 +177,8 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param input pose for the red alliance
      * @return pose for the alliance reported by FMS
      */
-    private Pose2d reflectPose(Pose2d input) {
-        switch (alliance) {
-            case Blue:
-                return new Pose2d(
-                        Field.FIELD_CENTER_X -input.getX(), 
-                        input.getY(), 
-                        Rotation2d.fromDegrees(90) // north
-                            .minus(input.getRotation())
-                        );
-            default:
-                return input;
-        }
+    public Pose2d reflectPose(Pose2d input) {
+        return reflectPose(input, Alliance.Blue);
     }
 
     /**
@@ -221,20 +242,22 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * @param pose target pose
      */
     public void setGoalPose(Pose2d pose) {
-        pose = reflectPose(pose);
-
         controlMode = ControlModes.POSE;
 
         this.xPidController.setSetpoint(pose.getX());
         this.yPidController.setSetpoint(pose.getY());
         this.rPidController.setSetpoint(pose.getRotation().getRadians());
 
+        //SmartDashboard.putNumber("rSP", rPidController.getSetpoint());
+
+        //setSpeeds(new ChassisSpeeds(-(pose.getX() / 100), -(pose.getY() / 100), pose.getRotation().getRadians() / 100));
+
         field.getObject("target").setPose(pose);
     }
 
     public void setPose(Pose2d pose) {
-        pose = reflectPose(pose);
-        setPose(pose);
+        pose = reflectPose(pose, Alliance.Red);
+        setPoseRaw(pose);
     }
 
     public void setPoseRaw(Pose2d pose) {
@@ -314,7 +337,14 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         SmartDashboard.putNumber("FLmps ", FLState.speedMetersPerSecond);
         SmartDashboard.putNumber("FLTang", FLState.angle.getDegrees());
+
         SmartDashboard.putNumber("FL Angle", FLRotation.getDegrees());
+        SmartDashboard.putNumber("FR Angle", FRRotation.getDegrees());
+        SmartDashboard.putNumber("BL Angle", BLRotation.getDegrees());
+        SmartDashboard.putNumber("BR Angle", BRRotation.getDegrees());
+
+        SmartDashboard.putNumber("FL mps", (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.FALCON_ENCODER_TICKS_PER_REV) / Drivetrain.SWERVE_DRIVE_GEAR_RATIO);
+        SmartDashboard.putNumber("FL targ mps", FLState.speedMetersPerSecond);
     }
 
     /** stop drivetrain by freezing all motors */
@@ -345,13 +375,14 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
     /** get red-aligned robot pose */
     public Pose2d getPose() {
-        return reflectPose(getRawPose());
+        return getRawPose();
     }
 
     /** get absolute robot pose */
     private Pose2d getRawPose() {
         Pose2d pose = odometry.getPoseMeters();
-        pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        //pose = new Pose2d(pose.getX(), pose.getY(), pose.getRotation().plus(Rotation2d.fromDegrees(180)));
+        pose = new Pose2d(pose.getX(), pose.getY(), Rotation2d.fromDegrees(-getHeading()));
 
         return pose;
     }
@@ -369,7 +400,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainPowerBackLeft.setNeutralMode(nm);
         drivetrainPowerBackRight.setNeutralMode(nm);
         drivetrainPowerFrontLeft.setNeutralMode(nm);
-        drivetrainPowerFrontRight.stopMotor();
+        drivetrainPowerFrontRight.setNeutralMode(nm);
     }
 
     public void setTurnNeutralMode(NeutralMode nm) {
@@ -428,14 +459,23 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return Math.max(Math.max(fl, fr), Math.max(bl, br));
     }
 
+    public void zeroTurn() {
+        drivetrainEncoderFrontRight.setPosition(0);
+        drivetrainEncoderFrontLeft.setPosition(0);
+        drivetrainEncoderBackRight.setPosition(0);
+        drivetrainEncoderBackLeft.setPosition(0);
+    }
+
     @Override
     public void periodic(){
         Pose2d pose = odometry.update(Rotation2d.fromDegrees(-getHeading()), getModulePositions());
         pose = getRawPose();
 
-        if (vision.newPoseThisFrame()) {
-            setPoseRaw(vision.getPose());
-        }
+        //if (vision.newPoseThisFrame()) {
+        //    Pose2d visionPose = vision.getPose();
+        //    //setPoseRaw(new Pose2d(visionPose.getX(), visionPose.getY(), pose.getRotation()));
+        //    // TODO: 6b01b7b350786b713b6f86d647a87e1a9aa35e17
+        //}
 
         
 
@@ -449,13 +489,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
                 double xPower = xPidController.calculate(pose.getX());
                 double yPower = -yPidController.calculate(pose.getY());
                 //double rPower = rPidController.calculate(pose.getRotation().getRadians());
-                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()+180));
+                double rPower = -rPidController.calculate(Units.degreesToRadians(getHeading()));
 
                 SmartDashboard.putNumber("GTA xp", xPower);
                 SmartDashboard.putNumber("GTA yp", yPower);
                 SmartDashboard.putNumber("GTA rp", rPower);
 
-                ChassisSpeeds speeds = new ChassisSpeeds(xPower, yPower, rPower);
+                ChassisSpeeds speeds = new ChassisSpeeds(-xPower, -yPower, rPower);
                 //ChassisSpeeds speeds = new ChassisSpeeds(xTrap.calculate(xPower), yTrap.calculate(yPower), rTrap.calculate(rPower));
                 setSpeeds(speeds);
 
@@ -467,7 +507,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
         double[] position = {getRawPose().getX(), getRawPose().getY()};
         SmartDashboard.putNumberArray("Position", position);
         
-        field.getObject("vision").setPose(vision.getPose());
+        //field.getObject("vision").setPose(vision.getPose());
 
         field.setRobotPose(getRawPose());
         SmartDashboard.putData("field", field);
@@ -478,5 +518,6 @@ public class DrivetrainSubsystem extends SubsystemBase{
         SmartDashboard.putNumber("Meters Traveled", getMetersTraveled());
         SmartDashboard.putNumber("Turning Error", getHeading() + Rotation2d.fromDegrees(2).getDegrees());
         SmartDashboard.putNumber("pitch", getPitch());
+        SmartDashboard.putNumber("Current SP", rPidController.getSetpoint());
     }
 }
