@@ -48,10 +48,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private CANSparkMax drivetrainEncoderBackRight;
     private CANSparkMax drivetrainEncoderFrontRight;*/
 
-    /*private CANCoder drivetrainEncoderBackLeft;
+    private CANCoder drivetrainEncoderBackLeft;
     private CANCoder drivetrainEncoderFrontLeft;
     private CANCoder drivetrainEncoderBackRight;
-    private CANCoder drivetrainEncoderFrontRight;*/
+    private CANCoder drivetrainEncoderFrontRight;
 
     private Field2d field;
 
@@ -91,10 +91,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         drivetrainTurnFrontRight = new WPI_TalonFX(HardwareMap.FR_TURN_MOTOR, "can0");
         drivetrainTurnBackRight = new WPI_TalonFX(HardwareMap.BR_TURN_MOTOR, "can0");
 
-        /*drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER, "can0");
+        drivetrainEncoderBackLeft = new CANCoder(HardwareMap.BL_TURN_ENCODER, "can0");
         drivetrainEncoderFrontLeft = new CANCoder(HardwareMap.FL_TURN_ENCODER, "can0");
         drivetrainEncoderFrontRight = new CANCoder(HardwareMap.FR_TURN_ENCODER, "can0");
-        drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER, "can0");*/
+        drivetrainEncoderBackRight = new CANCoder(HardwareMap.BR_TURN_ENCODER, "can0");
 
         Translation2d m_frontLeftLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, -Drivetrain.SWERVE_LENGTH);
         Translation2d m_frontRightLocation = new Translation2d(Drivetrain.SWERVE_WIDTH, Drivetrain.SWERVE_LENGTH);
@@ -204,20 +204,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
-                //drivetrainEncoderFrontLeft.getPosition()
-                drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                drivetrainEncoderFrontLeft.getPosition()
+                //drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
-                //drivetrainEncoderFrontRight.getPosition()
-                drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                drivetrainEncoderFrontRight.getPosition()
+                //drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
-                //drivetrainEncoderBackLeft.getPosition()
-                drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                drivetrainEncoderBackLeft.getPosition()
+                //drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
-                //drivetrainEncoderBackRight.getPosition()
-                drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                drivetrainEncoderBackRight.getPosition()
+                //drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
 
         SwerveModulePosition FRPosition = new SwerveModulePosition(
