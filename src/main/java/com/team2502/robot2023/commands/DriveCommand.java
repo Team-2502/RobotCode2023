@@ -40,6 +40,9 @@ public class DriveCommand extends CommandBase {
     private double dlxDrift;
     private double dlyDrift;
 
+    private boolean tgoggla =  false;
+    private boolean prevTog = false;
+
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
@@ -70,6 +73,14 @@ public class DriveCommand extends CommandBase {
         if (leftJoystick.getRawButton(OI.DRIFT_RESET)) {
             resetDrift();
         }
+
+        boolean tog = leftJoystick.getRawButton(OI.RET_MODE);
+        if (prevTog != tog && tog) {
+            tgoggla = !tgoggla;
+        }
+        prevTog = tog;
+
+        SmartDashboard.putBoolean("iosajioj", tgoggla);
 
         ChassisSpeeds speeds;
         Translation2d centerOfRotation;
@@ -106,9 +117,9 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            leftJoystick.getY() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -leftJoystick.getX() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -rightJoystick.getZ() * (leftJoystick.getRawButton(OI.RET_MODE) ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            leftJoystick.getY() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -leftJoystick.getX() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -rightJoystick.getZ() * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
