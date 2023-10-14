@@ -54,7 +54,8 @@ public enum Autos { // first auto is default
                         )
                     ),
                 Commands.deadline(Commands.waitSeconds(0.25), new InstantCommand(() -> i.setSpeed(-0.25))),
-                new InstantCommand(() -> i.setSpeed(0))
+                new InstantCommand(() -> i.setSpeed(0)),
+                new InstantCommand(() -> {d.setPowerNeutralMode(NeutralMode.Brake); d.stop();})
         )),
 
         PLACE_CUBE_GRAB_CUBE_SOUTH("PP right", (d,i,e) -> Commands.sequence(

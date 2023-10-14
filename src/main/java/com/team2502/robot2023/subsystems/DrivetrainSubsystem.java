@@ -21,17 +21,15 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.team2502.robot2023.Utils;
 import com.team2502.robot2023.Constants.HardwareMap;
 import com.team2502.robot2023.Constants.Subsystems.Field;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import java.lang.Math;
 
-
-public class DrivetrainSubsystem extends SubsystemBase{
+public class DrivetrainSubsystem extends SubsystemBase {
     private SwerveDriveKinematics kinematics;
     private SwerveDriveOdometry odometry;
 
@@ -185,6 +183,7 @@ public class DrivetrainSubsystem extends SubsystemBase{
      * call once after aligning turn motors after motor rebuild
      * ensures that swerve zeros persist across restarts
      */
+    /*
     public void setSwerveInit() {
         drivetrainEncoderFrontLeft.configMagnetOffset(
                 drivetrainEncoderFrontLeft.getAbsolutePosition());
@@ -201,20 +200,24 @@ public class DrivetrainSubsystem extends SubsystemBase{
         drivetrainEncoderBackRight.configMagnetOffset(
                 drivetrainEncoderBackRight.getAbsolutePosition());
         drivetrainEncoderBackRight.setPositionToAbsolute();
-    }
+    }*/
 
     private SwerveModulePosition[] getModulePositions() {
         Rotation2d FLRotation = Rotation2d.fromDegrees(
                 drivetrainEncoderFrontLeft.getPosition()
+                //drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
                 drivetrainEncoderFrontRight.getPosition()
+                //drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
                 drivetrainEncoderBackLeft.getPosition()
+                //drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
                 drivetrainEncoderBackRight.getPosition()
+                //drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
         );
 
         SwerveModulePosition FRPosition = new SwerveModulePosition(
@@ -300,23 +303,23 @@ public class DrivetrainSubsystem extends SubsystemBase{
 
         Rotation2d FLRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderFrontLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-            //drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                -drivetrainEncoderFrontLeft.getPosition()
+            drivetrainTurnFrontLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                //-drivetrainEncoderFrontLeft.getPosition()
         );
         Rotation2d FRRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderFrontRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-            //drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                -drivetrainEncoderFrontRight.getPosition()
+            drivetrainTurnFrontRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                //-drivetrainEncoderFrontRight.getPosition()
         );
         Rotation2d BLRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderBackLeft.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-            //drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                -drivetrainEncoderBackLeft.getPosition()
+            drivetrainTurnBackLeft.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                //-drivetrainEncoderBackLeft.getPosition()
         );
         Rotation2d BRRotation = Rotation2d.fromDegrees(
             //drivetrainEncoderBackRight.getAlternateEncoder(Drivetrain.SWERVE_ENCODER_COUNTS_PER_REV).getPosition()/360
-            //drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
-                -drivetrainEncoderBackRight.getPosition()
+            drivetrainTurnBackRight.getSelectedSensorPosition() * Drivetrain.SWERVE_FALCON_ENCODER_COUNTS_TO_DEGREES
+                //-drivetrainEncoderBackRight.getPosition()
         );
         
         SwerveModuleState FLState = SwerveModuleState.optimize(moduleStates[0], FLRotation);
@@ -459,12 +462,13 @@ public class DrivetrainSubsystem extends SubsystemBase{
         return Math.max(Math.max(fl, fr), Math.max(bl, br));
     }
 
+    /*
     public void zeroTurn() {
         drivetrainEncoderFrontRight.setPosition(0);
         drivetrainEncoderFrontLeft.setPosition(0);
         drivetrainEncoderBackRight.setPosition(0);
         drivetrainEncoderBackLeft.setPosition(0);
-    }
+    }*/
 
     @Override
     public void periodic(){
