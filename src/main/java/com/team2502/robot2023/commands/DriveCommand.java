@@ -31,6 +31,7 @@ public class DriveCommand extends CommandBase {
         FieldOriented,
         RobotOriented,
 	    FieldOrientedTwist,
+	    FieldOrientedTwistRet,
 	    FieldOrientedTwistPow,
         RobotOrientedCenteredRot,
         VirtualTank,
@@ -58,7 +59,8 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("nolan mode", Drivetype.RobotOrientedCenteredRot);
         typeEntry.addOption("Robot Oriented", Drivetype.RobotOriented);
         typeEntry.addOption("Field Pow", Drivetype.FieldOrientedTwistPow);
-	    typeEntry.setDefaultOption("Field Twist", Drivetype.FieldOrientedTwist);
+	    typeEntry.addOption("Field Twist", Drivetype.FieldOrientedTwist);
+	    typeEntry.setDefaultOption("Super Loud Olympic Winning", Drivetype.FieldOrientedTwistPow);
         SmartDashboard.putData("Drive Type", typeEntry);
 
         controllerEntry.addOption("Joystick", DriveController.Joystick);
@@ -120,6 +122,15 @@ public class DriveCommand extends CommandBase {
                             leftJoystick.getY() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
                             -leftJoystick.getX() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
                             -rightJoystick.getZ() * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
+                    centerOfRotation = new Translation2d(0, 0);
+                    drivetrain.setSpeeds(speeds, centerOfRotation);
+                    break;
+                case FieldOrientedTwistRet:
+                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                            leftJoystick.getY() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -leftJoystick.getX() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -rightJoystick.getZ() * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT) * 0.65,
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
