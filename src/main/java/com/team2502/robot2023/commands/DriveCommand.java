@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.team2502.robot2023.Constants.OI;
 import com.team2502.robot2023.Constants.Subsystems.Drivetrain;
 import com.team2502.robot2023.subsystems.DrivetrainSubsystem;
+import com.team2502.robot2023.Utils;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -128,9 +129,9 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOrientedTwistRet:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            leftJoystick.getY() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
-                            -leftJoystick.getX() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
-                            -rightJoystick.getZ() * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT) * 0.65,
+                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getY()) * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getX()) * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.07, rightJoystick.getZ()) * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT) * 0.65,
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
