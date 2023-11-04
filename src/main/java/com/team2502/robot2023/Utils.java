@@ -109,9 +109,10 @@ public class Utils {
      * @param minInput start of input deadzone
      * @param minOutput start of mapped deadzone
      * @param x value to map
+     * @param scale gain
      * @return transformed x
     */
-    public static double deadzone(double minInput, double minOutput, double x) {
+    public static double deadzone(double minInput, double minOutput, double x, double scale) {
         boolean sign = x > 0.0;
         x = sign ? x : -x;
         double inputRange = 1.0 - minInput;
@@ -125,6 +126,21 @@ public class Utils {
         // this is some kind of affine transformation
         double inputAdjusted = (x-minInput) * inputRange;
 
-        return inputAdjusted / outpuRange + minOutput;
+        inputAdjusted *= scale;
+
+        double outputAjusted = inputAdjusted / outpuRange + minOutput;
+
+        return sign ? outputAjusted : -outputAjusted;
+    }
+
+    /**
+     * map x from one deadzone to another
+     * @param minInput start of input deadzone
+     * @param minOutput start of mapped deadzone
+     * @param x value to map
+     * @return transformed x
+    */
+    public static double deadzone(double minInput, double minOutput, double x) {
+        return deadzone(minInput, minOutput, x, 1.0);
     }
 }

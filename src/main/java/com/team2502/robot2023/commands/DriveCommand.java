@@ -33,6 +33,7 @@ public class DriveCommand extends CommandBase {
         RobotOriented,
 	    FieldOrientedTwist,
 	    FieldOrientedTwistRet,
+	    FieldOrientedTwistRetDead,
 	    FieldOrientedTwistPow,
         RobotOrientedCenteredRot,
         VirtualTank,
@@ -42,7 +43,7 @@ public class DriveCommand extends CommandBase {
     private double dlxDrift;
     private double dlyDrift;
 
-    private boolean tgoggla =  false;
+    private boolean slowmode =  false;
     private boolean prevTog = false;
 
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
@@ -61,7 +62,8 @@ public class DriveCommand extends CommandBase {
         typeEntry.addOption("Robot Oriented", Drivetype.RobotOriented);
         typeEntry.addOption("Field Pow", Drivetype.FieldOrientedTwistPow);
 	    typeEntry.addOption("Field Twist", Drivetype.FieldOrientedTwist);
-	    typeEntry.setDefaultOption("Super Loud Olympic Winning", Drivetype.FieldOrientedTwistPow);
+	    typeEntry.addOption("Super Loud Olympic Winning", Drivetype.FieldOrientedTwistRet);
+	    typeEntry.setDefaultOption("Dead", Drivetype.FieldOrientedTwistRetDead);
         SmartDashboard.putData("Drive Type", typeEntry);
 
         controllerEntry.addOption("Joystick", DriveController.Joystick);
@@ -79,11 +81,11 @@ public class DriveCommand extends CommandBase {
 
         boolean tog = leftJoystick.getRawButton(OI.RET_MODE);
         if (prevTog != tog && tog) {
-            tgoggla = !tgoggla;
+            slowmode = !slowmode;
         }
         prevTog = tog;
 
-        SmartDashboard.putBoolean("iosajioj", tgoggla);
+        SmartDashboard.putBoolean("iosajioj", slowmode);
 
         ChassisSpeeds speeds;
         Translation2d centerOfRotation;
@@ -120,18 +122,27 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOrientedTwist:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            leftJoystick.getY() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -leftJoystick.getX() * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -rightJoystick.getZ() * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            leftJoystick.getY() * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -leftJoystick.getX() * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -rightJoystick.getZ() * (slowmode ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
                     break;
                 case FieldOrientedTwistRet:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getY()) * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
-                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getX()) * (tgoggla ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
-                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.07, rightJoystick.getZ()) * (tgoggla ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT) * 0.65,
+                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getY()) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.08, leftJoystick.getX()) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL) * 0.65,
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.07, rightJoystick.getZ()) * (slowmode ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT) * 0.65,
+                            Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
+                    centerOfRotation = new Translation2d(0, 0);
+                    drivetrain.setSpeeds(speeds, centerOfRotation);
+                    break;
+                case FieldOrientedTwistRetDead:
+                    speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getY(), 0.45 * 0.6) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getX(), 0.45 * 0.6) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.04, rightJoystick.getZ(), 0.55 * 0.6) * (slowmode ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);
