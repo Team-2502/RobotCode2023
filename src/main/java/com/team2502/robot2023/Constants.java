@@ -136,8 +136,8 @@ public final class Constants {
     public static final class Subsystems {
         public static final class Leds {
             public static final int PORT = 7; // pwm:
-            public static final int LED_COUNT = 50; // logical, not physical count (same on 2815)
-            public static final int FRAME_RATE = 15;
+            public static final int LED_COUNT = 84; // logical, not physical count (same on 2815)
+            public static final int FRAME_RATE = 1;
             public static final int FRAME_TIME = 1/FRAME_RATE; // seconds per frame
 
             public static final int LED_AHEAD = 0; // Led id corresponding to center of front

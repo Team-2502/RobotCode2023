@@ -3,20 +3,19 @@ package com.team2502.robot2023.subsystems;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.function.Function;
 
-import com.team2502.robot2023.Constants;
 import com.team2502.robot2023.Constants.Subsystems.Leds;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static edu.wpi.first.wpilibj.DriverStation.isDisabled;
 
 public class LightstripSubsystem extends SubsystemBase {
 
@@ -24,6 +23,8 @@ public class LightstripSubsystem extends SubsystemBase {
      * 
      * {@link Animation}s that need to accept data inputs should be defined elsewhere
      * */
+    static ArmSubsystem armSubsystem;
+
     public static final class Animations {
         public static final Animation off = ((s,f)->{
             for (int i = 0; i < Leds.LED_COUNT; i++) {
@@ -41,6 +42,34 @@ public class LightstripSubsystem extends SubsystemBase {
         });
         public static final Animation orbit_demo_simple = ((s,f)->{
             s.buffer.setRGB((int) (f/8)%Leds.LED_COUNT,20,148,0);
+            return false;
+        });
+        public static final Animation runtime = ((s,f)->{
+            if (isDisabled()) {
+                for (int i = 0; i < Leds.LED_COUNT; i++) {
+                    s.buffer.setRGB(i, 255, 0, 0);
+                }
+            } /*else if (armSubsystem.nearSetPoint(5.)) {
+                for (int i = 0; i < Leds.LED_COUNT; i++) {
+                    // Blue is green? Perhaps this represents the friends we made along the way
+                    s.buffer.setRGB(i, 0, 0, 255);
+                }
+            }*/ else {
+                for (int i = 0; i < Leds.LED_COUNT; i++) {
+                    if (i % 2 == 0) {
+                        if ((f % 2 == 0)) {
+                            s.buffer.setRGB(i, 0, 255, 0);
+                        } else {
+                            s.buffer.setRGB(i, 255, 0, 0);
+                        }
+                    }
+                    else { if ((f % 2 == 0)) {
+                        s.buffer.setRGB(i, 255, 0, 0);
+                    } else {
+                        s.buffer.setRGB(i, 0, 255, 0);
+                    } }
+                }
+            }
             return false;
         });
         public static final Animation orbit_demo = ((s,f)->{
@@ -153,15 +182,16 @@ public class LightstripSubsystem extends SubsystemBase {
     ArrayList<ScheduledAnimation> animations;
     Timer frameTimer;
 
-    public LightstripSubsystem() {
+    public LightstripSubsystem(ArmSubsystem armSubsystem) {
+        this.armSubsystem = armSubsystem;
         strip = new Lightstrip(Leds.PORT,Leds.LED_COUNT);
         frameTimer = new Timer();
         frameTimer.start();
 
-        animations = new ArrayList<ScheduledAnimation>(2);
+        animations = new ArrayList<ScheduledAnimation>(1);
 
-        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, 2));
-        animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, -2));
+        animations.add(new ScheduledAnimation(Animations.runtime, 1));
+        //animations.add(new ScheduledAnimation(Animations.orbit_demo_simple, -2));
     }
 
     @Override
@@ -176,13 +206,13 @@ public class LightstripSubsystem extends SubsystemBase {
         while (i.hasNext()) {
             ScheduledAnimation animation = i.next();
             animation.tick(strip);
-            strip.buffer.setRGB(5,255,148,0);
+            //strip.buffer.setRGB(5,255,148,0);
             strip.flush();
 //            if (animation.tick(strip)) {
  //               animations.remove(animation);
   //          }
         }
-        strip.buffer.setRGB(5,255,148,0);
+        //strip.buffer.setRGB(5,255,148,0);
         strip.flush();
     }
 

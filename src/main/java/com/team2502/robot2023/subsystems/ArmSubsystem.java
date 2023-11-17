@@ -1,6 +1,5 @@
 package com.team2502.robot2023.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -130,6 +129,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void set(ElevatorPosition pos) {
+        SmartDashboard.putNumber("Elev Target", pos.position);
         rightElevator.getPIDController().setReference(pos.position, CANSparkMax.ControlType.kPosition);
     }
 
@@ -160,10 +160,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmWrist(IntakePosition position) {
+        SmartDashboard.putNumber("Wrist Target", position.pitchWrist);
         pitchIntake.getPIDController().setReference(position.pitchWrist, CANSparkMax.ControlType.kPosition);
     }
 
     public void setArmPitch(IntakePosition position) {
+        SmartDashboard.putNumber("Elbow Target", position.pitchElbow);
         leftPitchElevator.getPIDController().setReference(position.pitchElbow, CANSparkMax.ControlType.kPosition);
     }
 
@@ -205,6 +207,26 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void zeroElevator() {
         rightElevator.getEncoder().setPosition(0);
+    }
+
+    public boolean nearSetPoint(Double range) {
+        /*return currentIntakePosition.pitchElbow - range <= leftPitchElevator.getEncoder().getPosition() && leftPitchElevator.getEncoder().getPosition() >= currentIntakePosition.pitchElbow + range &&
+                currentIntakePosition.pitchWrist - range <= pitchIntake.getEncoder().getPosition() && pitchIntake.getEncoder().getPosition() >= currentIntakePosition.pitchWrist + range &&
+                currentElevatorPosition.position - range <= leftElevator.getEncoder().getPosition() && leftElevator.getEncoder().getPosition() >= currentElevatorPosition.position + range;*
+         */
+
+        double elevTarget = SmartDashboard.getNumber("Elev Target", 0);
+        double actualElev = leftElevator.getEncoder().getPosition();
+
+        double pitchTarget = SmartDashboard.getNumber("Pitch Target", 0);
+        double actualPitch = leftPitchElevator.getEncoder().getPosition();
+
+        double wristTarget = SmartDashboard.getNumber("Wrist Target", 0);
+        double actualWrist = pitchIntake.getEncoder().getPosition();
+
+        return (elevTarget - range) <= actualElev && actualElev <= (elevTarget + range) &&
+                (pitchTarget - range) <= actualPitch && actualPitch <= (pitchTarget + range) &&
+                (wristTarget - range) <= actualWrist && actualWrist <= (wristTarget + range);
     }
 
     private void NTInit() {

@@ -52,12 +52,13 @@ public class RobotContainer {
     protected final ArmSubsystem ELEVATOR = new ArmSubsystem();
     protected final IntakeSubsystem INTAKE = new IntakeSubsystem();
 
-    protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem();
+    protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem(ELEVATOR);
 
-    protected final PhotonVisionSubsystem VISION = new PhotonVisionSubsystem(DRIVETRAIN);
+    // protected final PhotonVisionSubsystem VISION = new PhotonVisionSubsystem(DRIVETRAIN);
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));
+        //LIGHTSTRIP.setDefaultCommand(new RunAnimationCommand(LIGHTSTRIP, LightstripSubsystem.Animations.orbit_demo_simple, 1));
 
         AutoChooser.putToSmartDashboard();
 
