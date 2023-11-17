@@ -54,7 +54,7 @@ public class RobotContainer {
 
     protected final LightstripSubsystem LIGHTSTRIP = new LightstripSubsystem();
 
-    protected final PhotonVisionSubsystem VISION = new PhotonVisionSubsystem(DRIVETRAIN);
+    //protected final PhotonVisionSubsystem VISION = new PhotonVisionSubsystem(DRIVETRAIN);
 
     public RobotContainer() {
         DRIVETRAIN.setDefaultCommand(new DriveCommand(DRIVETRAIN, JOYSTICK_DRIVE_LEFT, JOYSTICK_DRIVE_RIGHT));

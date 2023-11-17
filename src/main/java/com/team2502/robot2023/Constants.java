@@ -148,7 +148,7 @@ public final class Constants {
         public static final class Arm {
             public static final boolean NT_TUNE = false;
 
-            public static final double ELEVATOR_LIM_TOP = 85;
+            public static final double ELEVATOR_LIM_TOP = 90;
             public static final double ELEVATOR_LIM_BOTTOM = 0;
 
             public static final double ELEVATOR_P = 0.5;
