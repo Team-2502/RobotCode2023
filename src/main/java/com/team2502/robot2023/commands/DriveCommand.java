@@ -48,7 +48,6 @@ public class DriveCommand extends CommandBase {
     private boolean prevTog = false;
 
     private boolean slower = false;
-
     private final SendableChooser<Drivetype> typeEntry = new SendableChooser<>();
     private final SendableChooser<DriveController> controllerEntry = new SendableChooser<>();
 
