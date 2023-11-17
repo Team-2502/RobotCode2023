@@ -36,6 +36,18 @@ public enum Autos { // first auto is default
             new FollowPathAbsoluteCommand(d, "testpath")
         )),
 
+        PLACE_CUBE("P", (d,i,e) -> Commands.sequence(
+                new InstantCommand(d::resetPitch),
+                new InstantCommand(d::resetHeading),
+                new InstantCommand(() -> d.setPose(new Pose2d(1.75, 4.45, Rotation2d.fromDegrees(0))), d),
+                new InstantCommand(() -> i.setSpeed(0.2)),
+                Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(e, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+                Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+                Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(e, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+                Commands.deadline(new InstantCommand(() -> i.setSpeed(0.5)))
+        )),
+
         PLACE_CUBE_GRAB_CUBE("PP left", (d,i,e) -> Commands.sequence(
                 new InstantCommand(d::resetPitch),
                 new InstantCommand(d::resetHeading),

@@ -355,6 +355,10 @@ public final class Constants {
             public static final double MAX_ROT = 3; // driver rotation gain (rad/s) 9 - 4
             public static final double RET_VEL = 1; // driver speed gain (m/s)
             public static final double RET_ROT = 0.25; // driver rotation gain (rad/s)
+            public static final double OI_DEADZONE_XY = 0.02; // Joystick deadzone 
+            public static final double OI_DEADZONE_Z = 0.03; // Joystick twist deadzone 
+            public static final double DEADZONE_XY = 0.05; // Transpose deadzone
+            public static final double DEADZONE_THETA = 0.05; // Rotation deadzone
                                                 
             // constants for pose control
             public static final double DRIVETRAIN_MOVE_P = 2.7; // 0.6

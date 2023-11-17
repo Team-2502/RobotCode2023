@@ -103,4 +103,44 @@ public class Utils {
 			    Math.tan(Math.toRadians(targetElevation+ camElevation))
 		   );
     }
+
+    /**
+     * map x from one deadzone to another
+     * @param minInput start of input deadzone
+     * @param minOutput start of mapped deadzone
+     * @param x value to map
+     * @param scale gain
+     * @return transformed x
+    */
+    public static double deadzone(double minInput, double minOutput, double x, double scale) {
+        boolean sign = x > 0.0;
+        x = sign ? x : -x;
+        double inputRange = 1.0 - minInput;
+        double outpuRange = 1.0 - minOutput;
+
+        // below input deadzone return 0
+        if (x < minInput) {
+            return 0;
+        }
+
+        // this is some kind of affine transformation
+        double inputAdjusted = (x-minInput) * inputRange;
+
+        inputAdjusted *= scale;
+
+        double outputAjusted = inputAdjusted / outpuRange + minOutput;
+
+        return sign ? outputAjusted : -outputAjusted;
+    }
+
+    /**
+     * map x from one deadzone to another
+     * @param minInput start of input deadzone
+     * @param minOutput start of mapped deadzone
+     * @param x value to map
+     * @return transformed x
+    */
+    public static double deadzone(double minInput, double minOutput, double x) {
+        return deadzone(minInput, minOutput, x, 1.0);
+    }
 }
