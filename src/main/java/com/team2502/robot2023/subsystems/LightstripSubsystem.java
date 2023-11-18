@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.wpilibj.DriverStation.isDisabled;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class LightstripSubsystem extends SubsystemBase {
 
@@ -45,9 +48,12 @@ public class LightstripSubsystem extends SubsystemBase {
             return false;
         });
         public static final Animation runtime = ((s,f)->{
+            boolean red = (DriverStation.getAlliance() == Alliance.Red);
+            Color8Bit alliance = red ? Leds.RED : Leds.BLU;
+
             if (isDisabled()) {
                 for (int i = 0; i < Leds.LED_COUNT; i++) {
-                    s.buffer.setRGB(i, 255, 0, 0);
+                    s.buffer.setLED(i, alliance);
                 }
             } /*else if (armSubsystem.nearSetPoint(5.)) {
                 for (int i = 0; i < Leds.LED_COUNT; i++) {
@@ -58,15 +64,15 @@ public class LightstripSubsystem extends SubsystemBase {
                 for (int i = 0; i < Leds.LED_COUNT; i++) {
                     if (i % 2 == 0) {
                         if ((f % 2 == 0)) {
-                            s.buffer.setRGB(i, 0, 255, 0);
+                            s.buffer.setLED(i, alliance);
                         } else {
-                            s.buffer.setRGB(i, 255, 0, 0);
+                            s.buffer.setLED(i, Leds.WHI);
                         }
                     }
                     else { if ((f % 2 == 0)) {
-                        s.buffer.setRGB(i, 255, 0, 0);
+                        s.buffer.setLED(i, Leds.WHI);
                     } else {
-                        s.buffer.setRGB(i, 0, 255, 0);
+                        s.buffer.setLED(i, alliance);
                     } }
                 }
             }
@@ -202,7 +208,6 @@ public class LightstripSubsystem extends SubsystemBase {
         Collections.sort(animations);
         Iterator<ScheduledAnimation> i = animations.iterator();
 
-        SmartDashboard.putNumber("ani count",animations.size());
         while (i.hasNext()) {
             ScheduledAnimation animation = i.next();
             animation.tick(strip);
