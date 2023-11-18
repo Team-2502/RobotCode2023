@@ -202,7 +202,12 @@ public class LightstripSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!frameTimer.advanceIfElapsed(1/Leds.FRAME_RATE)) {
+        double timeLeft = Timer.getMatchTime();
+        timeLeft = timeLeft < 0.5 ? 100.0 : timeLeft;
+
+        double frametime = timeLeft * (1.0/15.0);
+
+        if (!frameTimer.advanceIfElapsed(frametime)) {
             return;
         }
         Collections.sort(animations);
