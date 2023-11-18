@@ -140,9 +140,9 @@ public class DriveCommand extends CommandBase {
                     break;
                 case FieldOrientedTwistRetDead:
                     speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getY(), 0.45 * 0.6) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getX(), 0.45 * 0.6) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
-                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.04, rightJoystick.getZ(), 0.55 * 0.6) * (slowmode ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
+                            Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getY(), 0.45) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_XY, 0.04, leftJoystick.getX(), 0.45) * (slowmode ? Drivetrain.RET_VEL : Drivetrain.MAX_VEL),
+                            -Utils.deadzone(Drivetrain.OI_DEADZONE_Z, 0.04, rightJoystick.getZ(), 0.55) * (slowmode ? Drivetrain.RET_ROT : Drivetrain.MAX_ROT),
                             Rotation2d.fromDegrees(drivetrain.getHeading()+drivetrain.fieldOrientedOffset));
                     centerOfRotation = new Translation2d(0, 0);
                     drivetrain.setSpeeds(speeds, centerOfRotation);

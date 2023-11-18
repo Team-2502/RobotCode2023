@@ -346,6 +346,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("BL Angle", BLRotation.getDegrees());
         SmartDashboard.putNumber("BR Angle", BRRotation.getDegrees());
 
+        SmartDashboard.putNumber("Robot Pitch", getRoll());
+
         SmartDashboard.putNumber("FL mps", (drivetrainPowerFrontLeft.getSelectedSensorVelocity() / Drivetrain.FALCON_ENCODER_TICKS_PER_REV) / Drivetrain.SWERVE_DRIVE_GEAR_RATIO);
         SmartDashboard.putNumber("FL targ mps", FLState.speedMetersPerSecond);
     }
@@ -429,18 +431,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return navX.getAngle();
     }
 
-    public void resetPitch() {
+    public void resetRoll() {
         pitchOffset = navX.getRoll();
     }
 
-    public void resetRoll() {
+    public void resetPitch() {
         rollOffset = navX.getPitch();
     }
 
-    public double getRoll() {
+    public double getPitch() {
         return navX.getPitch()-rollOffset; // rio sideways
     }
-    public double getPitch() {
+    public double getRoll() {
         return navX.getRoll()-pitchOffset; // rio sideways
     }
 

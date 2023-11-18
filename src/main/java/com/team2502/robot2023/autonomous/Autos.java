@@ -92,6 +92,19 @@ public enum Autos { // first auto is default
                 new InstantCommand(() -> i.setSpeed(0))
         )),
 
+        ONE_CUBE_MID_ENGAGE_UNIHETERO_ETERNAL("PB center, no odo, never stop", (d,i,a) -> Commands.sequence(
+            new InstantCommand(d::resetPitch),
+            new InstantCommand(d::resetHeading),
+            Commands.deadline(Commands.waitSeconds(2.25), new SetArmSimpleCommand(a, ElevatorPosition.CUBE_TOP, IntakePosition.CUBE_TOP)),
+            Commands.deadline(Commands.waitSeconds(0.125), new InstantCommand(() -> i.setSpeed(-0.25))),
+            Commands.deadline(new InstantCommand(() -> i.setSpeed(0))),
+            Commands.deadline(Commands.waitSeconds(0.6), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.CUBE_GROUND)),
+            Commands.deadline(Commands.waitSeconds(1.5), new SetArmSimpleCommand(a, ElevatorPosition.BOTTOM, IntakePosition.INIT)),
+            Commands.deadline(Commands.waitSeconds(0.37), new YawLockedTranspose(d, new ChassisSpeeds(-.8,0,0), Mode.NAVX_ZERO)),
+            Commands.deadline(Commands.waitSeconds(0.5), new YawLockedTranspose(d, new ChassisSpeeds(-1,0,0), Mode.NAVX_ZERO)),
+            new BalanceCommand(d, false)
+        )),
+
         ONE_CUBE_MID_ENGAGE_UNIHETERO("PB center, no odo", (d,i,a) -> Commands.sequence(
             new InstantCommand(d::resetPitch),
             new InstantCommand(d::resetHeading),
