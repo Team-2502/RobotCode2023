@@ -8,6 +8,7 @@ import java.util.*;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -136,13 +137,16 @@ public final class Constants {
     public static final class Subsystems {
         public static final class Leds {
             public static final int PORT = 7; // pwm:
-            public static final int LED_COUNT = 50; // logical, not physical count (same on 2815)
-            public static final int FRAME_RATE = 15;
+            public static final int LED_COUNT = 84; // logical, not physical count (same on 2815)
+            public static final int FRAME_RATE = 1;
             public static final int FRAME_TIME = 1/FRAME_RATE; // seconds per frame
 
             public static final int LED_AHEAD = 0; // Led id corresponding to center of front
             public static final int LED_LEFT = LED_COUNT/4; // Led id corresponding to center of left side
 
+            public static final Color8Bit RED = new Color8Bit(255,0,0);
+            public static final Color8Bit BLU = new Color8Bit(0,255,0);
+            public static final Color8Bit WHI = new Color8Bit(188,188,188);
         }
 
         public static final class Arm {
